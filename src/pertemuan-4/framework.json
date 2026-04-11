@@ -1,112 +1,882 @@
-[
-  {
-    "id": 1,
-    "name": "React",
-    "description": "A JavaScript library for building user interfaces.",
-    "details": {
-      "developer": "Meta (Facebook)",
-      "releaseYear": 2013,
-      "officialWebsite": "https://react.dev/"
+﻿[
+    {
+        "id":  1,
+        "name":  "React",
+        "category":  "Library",
+        "location":  "Global",
+        "rating":  4.9,
+        "image":  "https://picsum.photos/seed/react-01/800/600",
+        "details":  {
+                        "developer":  "Meta",
+                        "releaseYear":  2013,
+                        "officialWebsite":  "https://react.dev/"
+                    },
+        "contact":  {
+                        "email":  "hello@react.dev",
+                        "support":  "https://react.dev/community",
+                        "phone":  "+1-000-000-0001"
+                    },
+        "coordinates":  {
+                            "latitude":  37.7749,
+                            "longitude":  -122.4194
+                        }
     },
-    "tags": ["JavaScript", "Library", "UI", "Component-Based"]
-  },
-  {
-    "id": 2,
-    "name": "Vue",
-    "description": "The Progressive JavaScript Framework.",
-    "details": {
-      "developer": "Evan You",
-      "releaseYear": 2014,
-      "officialWebsite": "https://vuejs.org/"
+    {
+        "id":  2,
+        "name":  "Vue",
+        "category":  "Framework",
+        "location":  "Rumbai",
+        "rating":  4.8,
+        "image":  "https://picsum.photos/seed/vue-02/800/600",
+        "details":  {
+                        "developer":  "Evan You",
+                        "releaseYear":  2014,
+                        "officialWebsite":  "https://vuejs.org/"
+                    },
+        "contact":  {
+                        "email":  "team@vuejs.org",
+                        "support":  "https://vuejs.org/about/community/",
+                        "phone":  "+1-000-000-0002"
+                    },
+        "coordinates":  {
+                            "latitude":  37.3382,
+                            "longitude":  -121.8863
+                        }
     },
-    "tags": ["JavaScript", "Framework", "Reactive", "Lightweight"]
-  },
-  {
-    "id": 3,
-    "name": "Angular",
-    "description": "One framework. Mobile & desktop.",
-    "details": {
-      "developer": "Google",
-      "releaseYear": 2010,
-      "officialWebsite": "https://angular.io/"
+    {
+        "id":  3,
+        "name":  "Angular",
+        "category":  "Framework",
+        "location":  "Rumbai",
+        "rating":  4.6,
+        "image":  "https://picsum.photos/seed/angular-03/800/600",
+        "details":  {
+                        "developer":  "Google",
+                        "releaseYear":  2010,
+                        "officialWebsite":  "https://angular.dev/"
+                    },
+        "contact":  {
+                        "email":  "angular@google.com",
+                        "support":  "https://angular.dev/community",
+                        "phone":  "+1-000-000-0003"
+                    },
+        "coordinates":  {
+                            "latitude":  37.422,
+                            "longitude":  -122.0841
+                        }
     },
-    "tags": ["JavaScript", "Framework", "TypeScript", "Enterprise"]
-  },
-  {
-    "id": 4,
-    "name": "Svelte",
-    "description": "Cybernetically enhanced web apps.",
-    "details": {
-      "developer": "Rich Harris",
-      "releaseYear": 2016,
-      "officialWebsite": "https://svelte.dev/"
+    {
+        "id":  4,
+        "name":  "Svelte",
+        "category":  "Compiler",
+        "location":  "PCR",
+        "rating":  4.7,
+        "image":  "https://picsum.photos/seed/svelte-04/800/600",
+        "details":  {
+                        "developer":  "Rich Harris",
+                        "releaseYear":  2016,
+                        "officialWebsite":  "https://svelte.dev/"
+                    },
+        "contact":  {
+                        "email":  "hello@svelte.dev",
+                        "support":  "https://svelte.dev/chat",
+                        "phone":  "+44-0000-000004"
+                    },
+        "coordinates":  {
+                            "latitude":  51.5072,
+                            "longitude":  -0.1276
+                        }
     },
-    "tags": ["JavaScript", "Compiler", "Reactive", "Lightweight"]
-  },
-  {
-    "id": 5,
-    "name": "Next.js",
-    "description": "The React Framework for Production.",
-    "details": {
-      "developer": "Vercel",
-      "releaseYear": 2016,
-      "officialWebsite": "https://nextjs.org/"
+    {
+        "id":  5,
+        "name":  "Next.js",
+        "category":  "Framework",
+        "location":  "Global",
+        "rating":  4.9,
+        "image":  "https://picsum.photos/seed/next-05/800/600",
+        "details":  {
+                        "developer":  "Vercel",
+                        "releaseYear":  2016,
+                        "officialWebsite":  "https://nextjs.org/"
+                    },
+        "contact":  {
+                        "email":  "support@vercel.com",
+                        "support":  "https://vercel.com/support",
+                        "phone":  "+1-000-000-0005"
+                    },
+        "coordinates":  {
+                            "latitude":  40.7128,
+                            "longitude":  -74.006
+                        }
     },
-    "tags": ["React", "Framework", "SSR", "Static Generation"]
-  },
-  {
-    "id": 6,
-    "name": "Nuxt.js",
-    "description": "The Intuitive Vue Framework.",
-    "details": {
-      "developer": "Nuxt Labs",
-      "releaseYear": 2016,
-      "officialWebsite": "https://nuxt.com/"
+    {
+        "id":  6,
+        "name":  "Nuxt",
+        "category":  "Framework",
+        "location":  "PCR",
+        "rating":  4.7,
+        "image":  "https://picsum.photos/seed/nuxt-06/800/600",
+        "details":  {
+                        "developer":  "Nuxt Labs",
+                        "releaseYear":  2016,
+                        "officialWebsite":  "https://nuxt.com/"
+                    },
+        "contact":  {
+                        "email":  "hello@nuxt.com",
+                        "support":  "https://nuxt.com/community",
+                        "phone":  "+33-000-000-006"
+                    },
+        "coordinates":  {
+                            "latitude":  48.8566,
+                            "longitude":  2.3522
+                        }
     },
-    "tags": ["Vue", "Framework", "SSR", "Static Generation"]
-  },
-  {
-    "id": 7,
-    "name": "Gatsby",
-    "description": "Fast in every way that matters.",
-    "details": {
-      "developer": "Gatsby Inc.",
-      "releaseYear": 2015,
-      "officialWebsite": "https://www.gatsbyjs.com/"
+    {
+        "id":  7,
+        "name":  "Gatsby",
+        "category":  "Static Site",
+        "location":  "Rumbai",
+        "rating":  4.3,
+        "image":  "https://picsum.photos/seed/gatsby-07/800/600",
+        "details":  {
+                        "developer":  "Netlify",
+                        "releaseYear":  2015,
+                        "officialWebsite":  "https://www.gatsbyjs.com/"
+                    },
+        "contact":  {
+                        "email":  "support@gatsbyjs.com",
+                        "support":  "https://www.gatsbyjs.com/contact/",
+                        "phone":  "+1-000-000-0007"
+                    },
+        "coordinates":  {
+                            "latitude":  34.0522,
+                            "longitude":  -118.2437
+                        }
     },
-    "tags": ["React", "Static Site", "SEO", "GraphQL"]
-  },
-  {
-    "id": 8,
-    "name": "Ember",
-    "description": "A framework for ambitious web developers.",
-    "details": {
-      "developer": "Ember Core Team",
-      "releaseYear": 2011,
-      "officialWebsite": "https://emberjs.com/"
+    {
+        "id":  8,
+        "name":  "Ember",
+        "category":  "Framework",
+        "location":  "Rumbai",
+        "rating":  4.1,
+        "image":  "https://picsum.photos/seed/ember-08/800/600",
+        "details":  {
+                        "developer":  "Ember Core Team",
+                        "releaseYear":  2011,
+                        "officialWebsite":  "https://emberjs.com/"
+                    },
+        "contact":  {
+                        "email":  "team@emberjs.com",
+                        "support":  "https://emberjs.com/community/",
+                        "phone":  "+1-000-000-0008"
+                    },
+        "coordinates":  {
+                            "latitude":  47.6062,
+                            "longitude":  -122.3321
+                        }
     },
-    "tags": ["JavaScript", "Framework", "Convention over Configuration"]
-  },
-  {
-    "id": 9,
-    "name": "Meteor",
-    "description": "Build apps fast, simple, scalable.",
-    "details": {
-      "developer": "Meteor Software",
-      "releaseYear": 2012,
-      "officialWebsite": "https://www.meteor.com/"
+    {
+        "id":  9,
+        "name":  "Meteor",
+        "category":  "Fullstack",
+        "location":  "Global",
+        "rating":  4.0,
+        "image":  "https://picsum.photos/seed/meteor-09/800/600",
+        "details":  {
+                        "developer":  "Meteor Software",
+                        "releaseYear":  2012,
+                        "officialWebsite":  "https://www.meteor.com/"
+                    },
+        "contact":  {
+                        "email":  "info@meteor.com",
+                        "support":  "https://www.meteor.com/support",
+                        "phone":  "+1-000-000-0009"
+                    },
+        "coordinates":  {
+                            "latitude":  39.7392,
+                            "longitude":  -104.9903
+                        }
     },
-    "tags": ["Full-Stack", "JavaScript", "Realtime", "Web & Mobile"]
-  },
-  {
-    "id": 10,
-    "name": "Backbone.js",
-    "description": "Give your JS app some Backbone.",
-    "details": {
-      "developer": "Jeremy Ashkenas",
-      "releaseYear": 2010,
-      "officialWebsite": "https://backbonejs.org/"
+    {
+        "id":  10,
+        "name":  "Backbone",
+        "category":  "Library",
+        "location":  "Rumbai",
+        "rating":  3.9,
+        "image":  "https://picsum.photos/seed/backbone-10/800/600",
+        "details":  {
+                        "developer":  "Jeremy Ashkenas",
+                        "releaseYear":  2010,
+                        "officialWebsite":  "https://backbonejs.org/"
+                    },
+        "contact":  {
+                        "email":  "hello@backbonejs.org",
+                        "support":  "https://backbonejs.org/",
+                        "phone":  "+1-000-000-0010"
+                    },
+        "coordinates":  {
+                            "latitude":  40.4406,
+                            "longitude":  -79.9959
+                        }
     },
-    "tags": ["JavaScript", "Library", "MVC", "Lightweight"]
-  }
+    {
+        "id":  11,
+        "name":  "SolidJS",
+        "category":  "Library",
+        "location":  "PCR",
+        "rating":  4.8,
+        "image":  "https://picsum.photos/seed/solid-11/800/600",
+        "details":  {
+                        "developer":  "Ryan Carniato",
+                        "releaseYear":  2018,
+                        "officialWebsite":  "https://www.solidjs.com/"
+                    },
+        "contact":  {
+                        "email":  "team@solidjs.com",
+                        "support":  "https://www.solidjs.com/community",
+                        "phone":  "+1-000-000-0011"
+                    },
+        "coordinates":  {
+                            "latitude":  52.52,
+                            "longitude":  13.405
+                        }
+    },
+    {
+        "id":  12,
+        "name":  "Astro",
+        "category":  "Framework",
+        "location":  "Global",
+        "rating":  4.8,
+        "image":  "https://picsum.photos/seed/astro-12/800/600",
+        "details":  {
+                        "developer":  "VoidZero",
+                        "releaseYear":  2021,
+                        "officialWebsite":  "https://astro.build/"
+                    },
+        "contact":  {
+                        "email":  "team@astro.build",
+                        "support":  "https://astro.build/chat/",
+                        "phone":  "+1-000-000-0012"
+                    },
+        "coordinates":  {
+                            "latitude":  1.3521,
+                            "longitude":  103.8198
+                        }
+    },
+    {
+        "id":  13,
+        "name":  "Qwik",
+        "category":  "Framework",
+        "location":  "Rumbai",
+        "rating":  4.4,
+        "image":  "https://picsum.photos/seed/qwik-13/800/600",
+        "details":  {
+                        "developer":  "Builder.io",
+                        "releaseYear":  2022,
+                        "officialWebsite":  "https://qwik.dev/"
+                    },
+        "contact":  {
+                        "email":  "hello@qwik.dev",
+                        "support":  "https://qwik.dev/community/",
+                        "phone":  "+1-000-000-0013"
+                    },
+        "coordinates":  {
+                            "latitude":  30.2672,
+                            "longitude":  -97.7431
+                        }
+    },
+    {
+        "id":  14,
+        "name":  "Remix",
+        "category":  "Framework",
+        "location":  "Global",
+        "rating":  4.5,
+        "image":  "https://picsum.photos/seed/remix-14/800/600",
+        "details":  {
+                        "developer":  "Shopify",
+                        "releaseYear":  2021,
+                        "officialWebsite":  "https://remix.run/"
+                    },
+        "contact":  {
+                        "email":  "support@remix.run",
+                        "support":  "https://remix.run/community",
+                        "phone":  "+1-000-000-0014"
+                    },
+        "coordinates":  {
+                            "latitude":  43.6532,
+                            "longitude":  -79.3832
+                        }
+    },
+    {
+        "id":  15,
+        "name":  "Alpine.js",
+        "category":  "Library",
+        "location":  "PCR",
+        "rating":  4.2,
+        "image":  "https://picsum.photos/seed/alpine-15/800/600",
+        "details":  {
+                        "developer":  "Caleb Porzio",
+                        "releaseYear":  2020,
+                        "officialWebsite":  "https://alpinejs.dev/"
+                    },
+        "contact":  {
+                        "email":  "hello@alpinejs.dev",
+                        "support":  "https://alpinejs.dev/learn",
+                        "phone":  "+1-000-000-0015"
+                    },
+        "coordinates":  {
+                            "latitude":  45.4642,
+                            "longitude":  9.19
+                        }
+    },
+    {
+        "id":  16,
+        "name":  "Laravel",
+        "category":  "Fullstack",
+        "location":  "Global",
+        "rating":  4.9,
+        "image":  "https://picsum.photos/seed/laravel-16/800/600",
+        "details":  {
+                        "developer":  "Taylor Otwell",
+                        "releaseYear":  2011,
+                        "officialWebsite":  "https://laravel.com/"
+                    },
+        "contact":  {
+                        "email":  "support@laravel.com",
+                        "support":  "https://laravel.com/docs",
+                        "phone":  "+1-000-000-0016"
+                    },
+        "coordinates":  {
+                            "latitude":  32.7767,
+                            "longitude":  -96.797
+                        }
+    },
+    {
+        "id":  17,
+        "name":  "Django",
+        "category":  "Fullstack",
+        "location":  "PCR",
+        "rating":  4.7,
+        "image":  "https://picsum.photos/seed/django-17/800/600",
+        "details":  {
+                        "developer":  "Django Software Foundation",
+                        "releaseYear":  2005,
+                        "officialWebsite":  "https://www.djangoproject.com/"
+                    },
+        "contact":  {
+                        "email":  "hello@djangoproject.com",
+                        "support":  "https://www.djangoproject.com/community/",
+                        "phone":  "+44-0000-000017"
+                    },
+        "coordinates":  {
+                            "latitude":  51.1657,
+                            "longitude":  10.4515
+                        }
+    },
+    {
+        "id":  18,
+        "name":  "Flask",
+        "category":  "Library",
+        "location":  "Rumbai",
+        "rating":  4.4,
+        "image":  "https://picsum.photos/seed/flask-18/800/600",
+        "details":  {
+                        "developer":  "Pallets",
+                        "releaseYear":  2010,
+                        "officialWebsite":  "https://flask.palletsprojects.com/"
+                    },
+        "contact":  {
+                        "email":  "support@palletsprojects.com",
+                        "support":  "https://flask.palletsprojects.com/",
+                        "phone":  "+1-000-000-0018"
+                    },
+        "coordinates":  {
+                            "latitude":  36.1699,
+                            "longitude":  -115.1398
+                        }
+    },
+    {
+        "id":  19,
+        "name":  "Node",
+        "category":  "Runtime",
+        "location":  "Global",
+        "rating":  4.8,
+        "image":  "https://picsum.photos/seed/node-19/800/600",
+        "details":  {
+                        "developer":  "OpenJS Foundation",
+                        "releaseYear":  2009,
+                        "officialWebsite":  "https://nodejs.org/"
+                    },
+        "contact":  {
+                        "email":  "hello@nodejs.org",
+                        "support":  "https://nodejs.org/en/help/",
+                        "phone":  "+1-000-000-0019"
+                    },
+        "coordinates":  {
+                            "latitude":  37.0902,
+                            "longitude":  -95.7129
+                        }
+    },
+    {
+        "id":  20,
+        "name":  "Express",
+        "category":  "Framework",
+        "location":  "Rumbai",
+        "rating":  4.5,
+        "image":  "https://picsum.photos/seed/express-20/800/600",
+        "details":  {
+                        "developer":  "OpenJS Foundation",
+                        "releaseYear":  2010,
+                        "officialWebsite":  "https://expressjs.com/"
+                    },
+        "contact":  {
+                        "email":  "info@expressjs.com",
+                        "support":  "https://expressjs.com/en/resources.html",
+                        "phone":  "+1-000-000-0020"
+                    },
+        "coordinates":  {
+                            "latitude":  25.7617,
+                            "longitude":  -80.1918
+                        }
+    },
+    {
+        "id":  21,
+        "name":  "Preact",
+        "category":  "Library",
+        "location":  "Global",
+        "rating":  4.4,
+        "image":  "https://picsum.photos/seed/framework-21/800/600",
+        "details":  {
+                        "developer":  "Preact Team",
+                        "releaseYear":  2015,
+                        "officialWebsite":  "https://preactjs.com/"
+                    },
+        "contact":  {
+                        "email":  "hello+framework-21@example.com",
+                        "support":  "https://preactjs.com/",
+                        "phone":  "+1-000-000-0021"
+                    },
+        "coordinates":  {
+                            "latitude":  52.3676,
+                            "longitude":  4.9041
+                        }
+    },
+    {
+        "id":  22,
+        "name":  "Lit",
+        "category":  "Library",
+        "location":  "Rumbai",
+        "rating":  4.3,
+        "image":  "https://picsum.photos/seed/framework-22/800/600",
+        "details":  {
+                        "developer":  "Google",
+                        "releaseYear":  2018,
+                        "officialWebsite":  "https://lit.dev/"
+                    },
+        "contact":  {
+                        "email":  "hello+framework-22@example.com",
+                        "support":  "https://lit.dev/",
+                        "phone":  "+1-000-000-0022"
+                    },
+        "coordinates":  {
+                            "latitude":  37.422,
+                            "longitude":  -122.0841
+                        }
+    },
+    {
+        "id":  23,
+        "name":  "Fresh",
+        "category":  "Framework",
+        "location":  "Global",
+        "rating":  4.2,
+        "image":  "https://picsum.photos/seed/framework-23/800/600",
+        "details":  {
+                        "developer":  "Deno",
+                        "releaseYear":  2022,
+                        "officialWebsite":  "https://fresh.deno.dev/"
+                    },
+        "contact":  {
+                        "email":  "hello+framework-23@example.com",
+                        "support":  "https://fresh.deno.dev/",
+                        "phone":  "+1-000-000-0023"
+                    },
+        "coordinates":  {
+                            "latitude":  35.6762,
+                            "longitude":  139.6503
+                        }
+    },
+    {
+        "id":  24,
+        "name":  "Blitz",
+        "category":  "Framework",
+        "location":  "Rumbai",
+        "rating":  4,
+        "image":  "https://picsum.photos/seed/framework-24/800/600",
+        "details":  {
+                        "developer":  "Blitz Team",
+                        "releaseYear":  2020,
+                        "officialWebsite":  "https://blitzjs.com/"
+                    },
+        "contact":  {
+                        "email":  "hello+framework-24@example.com",
+                        "support":  "https://blitzjs.com/",
+                        "phone":  "+1-000-000-0024"
+                    },
+        "coordinates":  {
+                            "latitude":  40.7128,
+                            "longitude":  -74.006
+                        }
+    },
+    {
+        "id":  25,
+        "name":  "AdonisJS",
+        "category":  "Framework",
+        "location":  "PCR",
+        "rating":  4.5,
+        "image":  "https://picsum.photos/seed/framework-25/800/600",
+        "details":  {
+                        "developer":  "Harminder Virk",
+                        "releaseYear":  2015,
+                        "officialWebsite":  "https://adonisjs.com/"
+                    },
+        "contact":  {
+                        "email":  "hello+framework-25@example.com",
+                        "support":  "https://adonisjs.com/",
+                        "phone":  "+1-000-000-0025"
+                    },
+        "coordinates":  {
+                            "latitude":  50.1109,
+                            "longitude":  8.6821
+                        }
+    },
+    {
+        "id":  26,
+        "name":  "NestJS",
+        "category":  "Framework",
+        "location":  "Global",
+        "rating":  4.8,
+        "image":  "https://picsum.photos/seed/framework-26/800/600",
+        "details":  {
+                        "developer":  "Kamil Mysliwiec",
+                        "releaseYear":  2017,
+                        "officialWebsite":  "https://nestjs.com/"
+                    },
+        "contact":  {
+                        "email":  "hello+framework-26@example.com",
+                        "support":  "https://nestjs.com/",
+                        "phone":  "+1-000-000-0026"
+                    },
+        "coordinates":  {
+                            "latitude":  52.2297,
+                            "longitude":  21.0122
+                        }
+    },
+    {
+        "id":  27,
+        "name":  "Fastify",
+        "category":  "Framework",
+        "location":  "PCR",
+        "rating":  4.6,
+        "image":  "https://picsum.photos/seed/framework-27/800/600",
+        "details":  {
+                        "developer":  "Fastify Team",
+                        "releaseYear":  2016,
+                        "officialWebsite":  "https://fastify.dev/"
+                    },
+        "contact":  {
+                        "email":  "hello+framework-27@example.com",
+                        "support":  "https://fastify.dev/",
+                        "phone":  "+1-000-000-0027"
+                    },
+        "coordinates":  {
+                            "latitude":  41.9028,
+                            "longitude":  12.4964
+                        }
+    },
+    {
+        "id":  28,
+        "name":  "Hapi",
+        "category":  "Framework",
+        "location":  "Rumbai",
+        "rating":  4.1,
+        "image":  "https://picsum.photos/seed/framework-28/800/600",
+        "details":  {
+                        "developer":  "OpenJS Foundation",
+                        "releaseYear":  2011,
+                        "officialWebsite":  "https://hapi.dev/"
+                    },
+        "contact":  {
+                        "email":  "hello+framework-28@example.com",
+                        "support":  "https://hapi.dev/",
+                        "phone":  "+1-000-000-0028"
+                    },
+        "coordinates":  {
+                            "latitude":  47.6062,
+                            "longitude":  -122.3321
+                        }
+    },
+    {
+        "id":  29,
+        "name":  "Koa",
+        "category":  "Framework",
+        "location":  "Global",
+        "rating":  4.2,
+        "image":  "https://picsum.photos/seed/framework-29/800/600",
+        "details":  {
+                        "developer":  "TJ Holowaychuk",
+                        "releaseYear":  2013,
+                        "officialWebsite":  "https://koajs.com/"
+                    },
+        "contact":  {
+                        "email":  "hello+framework-29@example.com",
+                        "support":  "https://koajs.com/",
+                        "phone":  "+1-000-000-0029"
+                    },
+        "coordinates":  {
+                            "latitude":  1.3521,
+                            "longitude":  103.8198
+                        }
+    },
+    {
+        "id":  30,
+        "name":  "Sails",
+        "category":  "Framework",
+        "location":  "Rumbai",
+        "rating":  3.9,
+        "image":  "https://picsum.photos/seed/framework-30/800/600",
+        "details":  {
+                        "developer":  "Sails Company",
+                        "releaseYear":  2012,
+                        "officialWebsite":  "https://sailsjs.com/"
+                    },
+        "contact":  {
+                        "email":  "hello+framework-30@example.com",
+                        "support":  "https://sailsjs.com/",
+                        "phone":  "+1-000-000-0030"
+                    },
+        "coordinates":  {
+                            "latitude":  38.9072,
+                            "longitude":  -77.0369
+                        }
+    },
+    {
+        "id":  31,
+        "name":  "Ionic",
+        "category":  "Framework",
+        "location":  "Global",
+        "rating":  4.4,
+        "image":  "https://picsum.photos/seed/framework-31/800/600",
+        "details":  {
+                        "developer":  "Ionic Team",
+                        "releaseYear":  2013,
+                        "officialWebsite":  "https://ionicframework.com/"
+                    },
+        "contact":  {
+                        "email":  "hello+framework-31@example.com",
+                        "support":  "https://ionicframework.com/",
+                        "phone":  "+1-000-000-0031"
+                    },
+        "coordinates":  {
+                            "latitude":  51.5072,
+                            "longitude":  -0.1276
+                        }
+    },
+    {
+        "id":  32,
+        "name":  "Expo",
+        "category":  "Framework",
+        "location":  "Rumbai",
+        "rating":  4.7,
+        "image":  "https://picsum.photos/seed/framework-32/800/600",
+        "details":  {
+                        "developer":  "Expo",
+                        "releaseYear":  2016,
+                        "officialWebsite":  "https://expo.dev/"
+                    },
+        "contact":  {
+                        "email":  "hello+framework-32@example.com",
+                        "support":  "https://expo.dev/",
+                        "phone":  "+1-000-000-0032"
+                    },
+        "coordinates":  {
+                            "latitude":  37.7749,
+                            "longitude":  -122.4194
+                        }
+    },
+    {
+        "id":  33,
+        "name":  "Electron",
+        "category":  "Runtime",
+        "location":  "Global",
+        "rating":  4.3,
+        "image":  "https://picsum.photos/seed/framework-33/800/600",
+        "details":  {
+                        "developer":  "OpenJS Foundation",
+                        "releaseYear":  2013,
+                        "officialWebsite":  "https://www.electronjs.org/"
+                    },
+        "contact":  {
+                        "email":  "hello+framework-33@example.com",
+                        "support":  "https://www.electronjs.org/",
+                        "phone":  "+1-000-000-0033"
+                    },
+        "coordinates":  {
+                            "latitude":  34.0522,
+                            "longitude":  -118.2437
+                        }
+    },
+    {
+        "id":  34,
+        "name":  "Tauri",
+        "category":  "Framework",
+        "location":  "PCR",
+        "rating":  4.6,
+        "image":  "https://picsum.photos/seed/framework-34/800/600",
+        "details":  {
+                        "developer":  "Tauri Programme",
+                        "releaseYear":  2020,
+                        "officialWebsite":  "https://tauri.app/"
+                    },
+        "contact":  {
+                        "email":  "hello+framework-34@example.com",
+                        "support":  "https://tauri.app/",
+                        "phone":  "+1-000-000-0034"
+                    },
+        "coordinates":  {
+                            "latitude":  48.2082,
+                            "longitude":  16.3738
+                        }
+    },
+    {
+        "id":  35,
+        "name":  "Capacitor",
+        "category":  "Framework",
+        "location":  "Global",
+        "rating":  4.2,
+        "image":  "https://picsum.photos/seed/framework-35/800/600",
+        "details":  {
+                        "developer":  "Ionic Team",
+                        "releaseYear":  2019,
+                        "officialWebsite":  "https://capacitorjs.com/"
+                    },
+        "contact":  {
+                        "email":  "hello+framework-35@example.com",
+                        "support":  "https://capacitorjs.com/",
+                        "phone":  "+1-000-000-0035"
+                    },
+        "coordinates":  {
+                            "latitude":  55.7558,
+                            "longitude":  37.6173
+                        }
+    },
+    {
+        "id":  36,
+        "name":  "Ruby on Rails",
+        "category":  "Fullstack",
+        "location":  "Global",
+        "rating":  4.6,
+        "image":  "https://picsum.photos/seed/framework-36/800/600",
+        "details":  {
+                        "developer":  "Rails Core",
+                        "releaseYear":  2004,
+                        "officialWebsite":  "https://rubyonrails.org/"
+                    },
+        "contact":  {
+                        "email":  "hello+framework-36@example.com",
+                        "support":  "https://rubyonrails.org/",
+                        "phone":  "+1-000-000-0036"
+                    },
+        "coordinates":  {
+                            "latitude":  35.6895,
+                            "longitude":  139.6917
+                        }
+    },
+    {
+        "id":  37,
+        "name":  "Spring",
+        "category":  "Framework",
+        "location":  "Global",
+        "rating":  4.8,
+        "image":  "https://picsum.photos/seed/framework-37/800/600",
+        "details":  {
+                        "developer":  "VMware",
+                        "releaseYear":  2002,
+                        "officialWebsite":  "https://spring.io/"
+                    },
+        "contact":  {
+                        "email":  "hello+framework-37@example.com",
+                        "support":  "https://spring.io/",
+                        "phone":  "+1-000-000-0037"
+                    },
+        "coordinates":  {
+                            "latitude":  49.2827,
+                            "longitude":  -123.1207
+                        }
+    },
+    {
+        "id":  38,
+        "name":  "ASP.NET Core",
+        "category":  "Framework",
+        "location":  "Rumbai",
+        "rating":  4.7,
+        "image":  "https://picsum.photos/seed/framework-38/800/600",
+        "details":  {
+                        "developer":  "Microsoft",
+                        "releaseYear":  2016,
+                        "officialWebsite":  "https://dotnet.microsoft.com/apps/aspnet"
+                    },
+        "contact":  {
+                        "email":  "hello+framework-38@example.com",
+                        "support":  "https://dotnet.microsoft.com/apps/aspnet",
+                        "phone":  "+1-000-000-0038"
+                    },
+        "coordinates":  {
+                            "latitude":  47.6426,
+                            "longitude":  -122.1391
+                        }
+    },
+    {
+        "id":  39,
+        "name":  "Phoenix",
+        "category":  "Framework",
+        "location":  "PCR",
+        "rating":  4.5,
+        "image":  "https://picsum.photos/seed/framework-39/800/600",
+        "details":  {
+                        "developer":  "Phoenix Team",
+                        "releaseYear":  2014,
+                        "officialWebsite":  "https://www.phoenixframework.org/"
+                    },
+        "contact":  {
+                        "email":  "hello+framework-39@example.com",
+                        "support":  "https://www.phoenixframework.org/",
+                        "phone":  "+1-000-000-0039"
+                    },
+        "coordinates":  {
+                            "latitude":  53.3498,
+                            "longitude":  -6.2603
+                        }
+    },
+    {
+        "id":  40,
+        "name":  "Actix",
+        "category":  "Framework",
+        "location":  "PCR",
+        "rating":  4.3,
+        "image":  "https://picsum.photos/seed/framework-40/800/600",
+        "details":  {
+                        "developer":  "Actix Team",
+                        "releaseYear":  2018,
+                        "officialWebsite":  "https://actix.rs/"
+                    },
+        "contact":  {
+                        "email":  "hello+framework-40@example.com",
+                        "support":  "https://actix.rs/",
+                        "phone":  "+1-000-000-0040"
+                    },
+        "coordinates":  {
+                            "latitude":  52.52,
+                            "longitude":  13.405
+                        }
+    }
 ]
