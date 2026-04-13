@@ -2,7 +2,9 @@ import { FaBell, FaSearch } from "react-icons/fa";
 import { FcAreaChart } from "react-icons/fc";
 import { SlSettings } from "react-icons/sl";
 
-export default function Header() {
+
+// Header atas untuk pencarian, notifikasi, dan profil pengguna.
+export default function Header({ searchValue, onSearchChange }) {
 	return (
 		<div id="header-container">
 			{/* Search Bar */}
@@ -11,6 +13,9 @@ export default function Header() {
 					id="search-input"
 					type="text"
 					placeholder="Search Here..."
+					value={searchValue}
+					onChange={onSearchChange}
+					aria-label="Search dashboard cards and menus"
 				/>
 				<FaSearch id="search-icon" />
 			</div>
@@ -32,7 +37,7 @@ export default function Header() {
 				{/* Profile Section */}
 				<div id="profile-container">
 					<span id="profile-text">
-						Hello, <b>Anugrah Putra</b>
+						Hello, <b></b>
 					</span>
 					<img
 						id="profile-avatar"
