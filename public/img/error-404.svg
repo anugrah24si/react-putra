@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 170" fill="none">
+  <rect x="6" y="6" width="228" height="158" rx="22" fill="#F8FAFF" stroke="#D8E4F7"/>
+  <text x="120" y="92" text-anchor="middle" font-size="72" font-family="Poppins, sans-serif" font-weight="700" fill="#1F4E95">404</text>
+  <text x="120" y="126" text-anchor="middle" font-size="18" font-family="Poppins, sans-serif" fill="#3B82F6">Page Not Found</text>
+</svg>
