@@ -1,18 +1,110 @@
-import { useMemo, useState } from "react";
-import { Route, Routes, useLocation } from "react-router-dom";
+import React, { Suspense, useMemo, useState } from "react";
+import { Navigate, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import "./App.css";
-import Sidebar from "./layout/Sidebar";
-import Header from "./layout/Header";
-import PageHeader from "./components/PageHeader";
-import ErrorPage from "./components/ErrorPage";
-import Dashboard from "./pages/Dashboard";
-import Orders from "./pages/Orders";
-import Customers from "./pages/Customers";
-import NotFound from "./pages/NotFound";
-import ordersSeed from "./data/orders.json";
-import customersSeed from "./data/customers.json";
+import customerSeed from "./data/customers.json";
+import orderSeed from "./data/orders.json";
+//import Loading from "./components/Loading";
+// import Orders from "./pages/Main/Orders";
+// import MainLayout from "./layout/MainLayout";
+// import Dashboard from "./pages/Main/Dashboard";
+// import Customers from "./pages/Main/Customers";
+// import NotFound from "./pages/Main/NotFound";
+// import AuthLayout from "./layout/AuthLayout";
+// import Login from "./pages/Auth/Login";
+// import Register from "./pages/Auth/Register";
+// import Forgot from "./pages/Auth/Forgot";
 
-function parseCurrency(value) {
+const MainLayout = React.lazy(() => import("./layout/MainLayout"));
+const Dashboard = React.lazy(() => import("./pages/Dashboard"));
+const Orders = React.lazy(() => import("./pages/Main/Orders"));
+const Customers = React.lazy(() => import("./pages/Main/Customers"));
+const Products = React.lazy(() => import("./pages/Main/Products"));
+const DoctorsAndStaff = React.lazy(() => import("./pages/Main/DoctorsAndStaff"));
+const ProductDetail = React.lazy(() => import("./pages/ProductDetail"));
+const NotFound = React.lazy(() => import("./pages/Main/NotFound"));
+const AuthLayout = React.lazy(() => import("./layout/AuthLayout"));
+const Login = React.lazy(() => import("./pages/Auth/Login"));
+const Register = React.lazy(() => import("./pages/Auth/Register"));
+const Forgot = React.lazy(() => import("./pages/Auth/Forgot"));
+const Loading = React.lazy(() => import("./components/Loading"));
+
+
+
+
+// Data awal untuk menu sidebar
+const initialMenuItems = [
+    { id: "dashboard", label: "Dashboard", removable: false },
+    { id: "orders", label: "Orders", removable: false },
+    { id: "customers", label: "Customers", removable: false },
+    { id: "products", label: "Products", removable: false },
+    { id: "doctors-and-staff", label: "Doctors & Staff", removable: false },
+];
+
+const orderStatusMap = {
+    Pending: "Preparing",
+    Completed: "Delivered",
+    Cancelled: "Canceled",
+};
+
+function buildOrderRows(rawOrders) {
+    return rawOrders.map((order) => ({
+        id: order.orderId,
+        customer: order.customerName,
+        item: "Treatment Booking",
+        total: formatRupiah(order.totalPrice),
+        status: orderStatusMap[order.status] ?? order.status,
+        date: order.orderDate,
+    }));
+}
+
+function buildCustomerRows(rawCustomers, rawOrders) {
+    const summaryByCustomer = rawOrders.reduce((summary, order) => {
+        const key = order.customerName.trim().toLowerCase();
+        const orderDate = order.orderDate ?? "";
+        const totalPrice = Number(order.totalPrice || 0);
+        const currentSummary = summary[key] ?? {
+            totalSpent: 0,
+            totalOrder: 0,
+            lastVisit: "",
+        };
+
+        summary[key] = {
+            totalSpent: currentSummary.totalSpent + totalPrice,
+            totalOrder: currentSummary.totalOrder + 1,
+            lastVisit: orderDate > currentSummary.lastVisit ? orderDate : currentSummary.lastVisit,
+        };
+
+        return summary;
+    }, {});
+
+    return rawCustomers.map((customer) => {
+        const summary = summaryByCustomer[customer.customerName.trim().toLowerCase()] ?? {
+            totalSpent: 0,
+            totalOrder: 0,
+            lastVisit: "",
+        };
+
+        return {
+            id: customer.customerId,
+            name: customer.customerName,
+            email: customer.email,
+            phone: customer.phone,
+            lastVisit: summary.lastVisit || "-",
+            totalSpent: formatRupiah(summary.totalSpent),
+            status: "Active",
+            city: "Unknown",
+            tier: customer.loyalty,
+            totalOrder: summary.totalOrder,
+        };
+    });
+}
+
+/**
+ * parseRupiah - Mengubah teks rupiah seperti Rp.78.000 menjadi angka
+ * @param {string|number} value - Nilai dalam format rupiah atau angka
+ * @returns {number} Nilai dalam bentuk angka untuk keperluan kalkulasi
+ */
+function parseRupiah(value) {
     const onlyDigits = String(value).replace(/[^0-9]/g, "");
     return Number(onlyDigits || 0);
 }
@@ -23,8 +115,11 @@ function parseCurrency(value) {
  * @returns {string} Nilai terformat dalam bentuk Rp.XX.XXX
  */
 function formatRupiah(value) {
-    return `Rp.${new Intl.NumberFormat("id-ID").format(value)}`;
+    return `Rp ${new Intl.NumberFormat("id-ID").format(value)}`;
 }
+
+const orderRows = buildOrderRows(orderSeed);
+const customerRows = buildCustomerRows(customerSeed, orderSeed);
 
 /**
  * getNextId - Menghasilkan ID 3 digit berikutnya dari daftar item
@@ -34,13 +129,11 @@ function formatRupiah(value) {
  */
 function getNextId(items) {
     const maxId = items.reduce((maxValue, item) => {
-        const numeric = Number(
-            String(item.orderId || item.customerId || "0").replace(/[^0-9]/g, ""),
-        );
+        const numeric = Number(String(item.id).replace(/[^0-9]/g, ""));
         return numeric > maxValue ? numeric : maxValue;
     }, 0);
 
-    return maxId + 1;
+    return String(maxId + 1).padStart(3, "0");
 }
 
 /**
@@ -53,33 +146,26 @@ function getNextId(items) {
  * - State management untuk data orders, customers, dan menu
  */
 export default function App() {
-    const { pathname } = useLocation();
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    const activeSection = useMemo(() => {
+        const path = location.pathname;
+        if (path.startsWith("/orders")) return "orders";
+        if (path.startsWith("/customers")) return "customers";
+        if (path.startsWith("/products")) return "products";
+        if (path.startsWith("/doctors-and-staff")) return "doctors-and-staff";
+        return "dashboard";
+    }, [location.pathname]);
+
     // State untuk menyimpan nilai input search
     const [searchQuery, setSearchQuery] = useState("");
-    const [ordersData, setOrdersData] = useState(() =>
-        ordersSeed.map((order) => ({
-            ...order,
-            totalPrice: formatRupiah(order.totalPrice),
-        })),
-    );
-    const [customersData, setCustomersData] = useState(customersSeed);
-    const [showOrderForm, setShowOrderForm] = useState(false);
-    const [showCustomerForm, setShowCustomerForm] = useState(false);
-
-    const activeSection =
-        pathname === "/"
-            ? "dashboard"
-            : pathname.startsWith("/orders")
-              ? "orders"
-              : pathname.startsWith("/customers")
-                ? "customers"
-                : pathname.startsWith("/errors/400")
-                  ? "error-400"
-                  : pathname.startsWith("/errors/401")
-                    ? "error-401"
-                    : pathname.startsWith("/errors/403")
-                      ? "error-403"
-                      : "dashboard";
+    // State untuk menyimpan daftar menu di sidebar
+    const [menuItems, setMenuItems] = useState(initialMenuItems);
+    // State untuk menyimpan data orders
+    const [ordersData, setOrdersData] = useState(orderRows);
+    // State untuk menyimpan data customers
+    const [customersData, setCustomersData] = useState(customerRows);
 
     /**
      * dashboardCards - Menghitung statistik dashboard dari data orders
@@ -87,21 +173,30 @@ export default function App() {
      * Menggunakan useMemo agar hanya dihitung ulang saat ordersData berubah
      */
     const dashboardCards = useMemo(() => {
-        const totalOrders = ordersData.length;
-        const totalDelivered = ordersData.filter((item) => item.status === "Completed").length;
-        const totalCanceled = ordersData.filter((item) => item.status === "Cancelled").length;
         const totalRevenue = ordersData.reduce(
-            (total, item) => total + (item.status === "Cancelled" ? 0 : parseCurrency(item.totalPrice)),
+            (total, item) => total + (item.status === "Canceled" ? 0 : parseRupiah(item.total)),
             0,
         );
 
+        const activeClients = customersData.length;
+        const appointments = ordersData.length;
+        const treatmentSessions = ordersData.filter((item) => item.status === "Delivered").length;
+
         return [
-            { id: "orders", icon: "cart", value: String(totalOrders), label: "Total Orders" },
-            { id: "delivered", icon: "truck", value: String(totalDelivered), label: "Total Delivered" },
-            { id: "canceled", icon: "ban", value: String(totalCanceled), label: "Total Canceled" },
-            { id: "revenue", icon: "money", value: formatRupiah(totalRevenue), label: "Total Revenue" },
+            { id: "revenue", value: formatRupiah(totalRevenue), label: "Total Revenue", delta: "+12.5%" },
+            { id: "clients", value: String(activeClients), label: "Active Clients", delta: "+8.2%" },
+            { id: "appointments", value: String(appointments), label: "Appointments", delta: "+23.1%" },
+            { id: "treatments", value: String(treatmentSessions), label: "Treatment Sessions", delta: "-2.4%" },
         ];
-    }, [ordersData]);
+    }, [customersData.length, ordersData]);
+
+    /**
+     * filteredMenuItems - Menu yang sudah difilter berdasarkan search
+     * Saat ini mengembalikan semua menu (tidak difilter)
+     */
+    const filteredMenuItems = useMemo(() => {
+        return menuItems;
+    }, [menuItems]);
 
     /**
      * filteredDashboardCards - Kartu dashboard yang difilter berdasarkan search query
@@ -131,7 +226,7 @@ export default function App() {
         }
 
         return ordersData.filter((order) =>
-            [order.orderId, order.customerName, order.status, order.orderDate]
+            [order.id, order.customer, order.item, order.status]
                 .join(" ")
                 .toLowerCase()
                 .includes(query),
@@ -150,12 +245,30 @@ export default function App() {
         }
 
         return customersData.filter((customer) =>
-            [customer.customerId, customer.customerName, customer.email, customer.phone, customer.loyalty]
+            [
+                customer.id,
+                customer.name,
+                customer.email,
+                customer.city,
+                customer.tier,
+                customer.phone,
+                customer.status,
+            ]
                 .join(" ")
                 .toLowerCase()
                 .includes(query),
         );
     }, [activeSection, customersData, searchQuery]);
+
+    /**
+     * handleSectionChange - Mengubah menu yang sedang aktif
+     * Dipanggil saat user mengklik menu di sidebar
+     */
+    function handleSectionChange(sectionId) {
+        // Active menu is derived from URL; Link handles navigation.
+        // Keep callback for Sidebar API compatibility.
+        return sectionId;
+    }
 
     /**
      * handleSearchChange - Menangani perubahan input search
@@ -165,75 +278,131 @@ export default function App() {
         setSearchQuery(event.target.value);
     }
 
+    /**
+     * handleAddMenu - Menambahkan menu baru ke sidebar
+     * Menu baru bernama "Menu N" dan dapat dihapus (removable: true)
+     */
+    function handleAddMenu() {
+        const newNumber = menuItems.filter((item) => item.id.startsWith("menu-")).length + 1;
+
+        setMenuItems((currentItems) => [
+            ...currentItems,
+            {
+                id: `menu-${newNumber}`,
+                label: `Menu ${newNumber}`,
+                removable: true,
+            },
+        ]);
+    }
+
+    /**
+     * handleAddOrder - Menambahkan order baru dari form Orders
+     * Juga sinkronisasi dengan data customers
+     */
     function handleAddOrder(orderPayload) {
-        const nextOrderNumber = String(getNextId(ordersData)).padStart(3, "0");
-        const normalizedTotal = formatRupiah(parseCurrency(orderPayload.totalPrice));
+        const newOrderId = getNextId(ordersData);
+        const normalizedTotal = formatRupiah(parseRupiah(orderPayload.total));
+        const today = new Date().toISOString().slice(0, 10);
+        const orderAmount = parseRupiah(normalizedTotal);
 
         setOrdersData((currentOrders) => [
             {
-                orderId: `ORD-${nextOrderNumber}`,
-                customerName: orderPayload.customerName.trim(),
+                id: `ORD-${newOrderId}`,
+                customer: orderPayload.customer.trim(),
+                item: orderPayload.item.trim(),
+                total: normalizedTotal,
                 status: orderPayload.status,
-                totalPrice: normalizedTotal,
-                orderDate: orderPayload.orderDate,
+                date: today,
             },
             ...currentOrders,
         ]);
 
-        setShowOrderForm(false);
+        // Sinkronkan customer: jika sudah ada, totalOrder naik; jika belum, buat baru
+        setCustomersData((currentCustomers) => {
+            const targetName = orderPayload.customer.trim().toLowerCase();
+            const existingCustomer = currentCustomers.find(
+                (customer) => customer.name.toLowerCase() === targetName,
+            );
+
+            if (existingCustomer) {
+                return currentCustomers.map((customer) =>
+                    customer.name.toLowerCase() === targetName
+                        ? {
+                              ...customer,
+                              totalOrder: Number(customer.totalOrder || 0) + 1,
+                              lastVisit: today,
+                              status: "Active",
+                              totalSpent: formatRupiah(parseRupiah(customer.totalSpent) + orderAmount),
+                          }
+                        : customer,
+                );
+            }
+
+            return [
+                {
+                    id: `CUST-${getNextId(currentCustomers)}`,
+                    name: orderPayload.customer.trim(),
+                    email: `${orderPayload.customer.trim().replace(/\s+/g, "").toLowerCase()}@email.com`,
+                    phone: "-",
+                    lastVisit: today,
+                    totalSpent: formatRupiah(orderAmount),
+                    status: "Active",
+                    totalOrder: 1,
+                    city: "Unknown",
+                    tier: "Bronze",
+                },
+                ...currentCustomers,
+            ];
+        });
     }
 
     /**
      * handleAddCustomer - Menambahkan customer baru dari form Customers
      */
     function handleAddCustomer(customerPayload) {
-        const nextCustomerNumber = String(getNextId(customersData)).padStart(3, "0");
+        const newCustomerId = getNextId(customersData);
+        const today = new Date().toISOString().slice(0, 10);
 
         setCustomersData((currentCustomers) => [
             {
-                customerId: `CUS-${nextCustomerNumber}`,
-                customerName: customerPayload.customerName.trim(),
+                id: `CUST-${newCustomerId}`,
+                name: customerPayload.name.trim(),
                 email: customerPayload.email.trim(),
-                phone: customerPayload.phone.trim(),
-                loyalty: customerPayload.loyalty,
+                phone: (customerPayload.phone ?? "").trim() || "-",
+                lastVisit: customerPayload.lastVisit || today,
+                totalSpent: formatRupiah(parseRupiah(customerPayload.totalSpent || 0)),
+                status: customerPayload.status || "Active",
+                totalOrder: Number(customerPayload.totalOrder || 0),
+                city: typeof customerPayload.city === "string" ? customerPayload.city.trim() : "Unknown",
+                tier: customerPayload.tier || "Bronze",
             },
             ...currentCustomers,
         ]);
-
-        setShowCustomerForm(false);
     }
 
     /**
-     * pageTitle - Menentukan judul halaman sesuai route yang aktif
+     * handleRemoveMenu - Menghapus menu dari sidebar
+     * Hanya menu dengan removable=true yang boleh dihapus
+     * Jika menu yang dihapus adalah yang aktif, fokus berpindah ke menu lain
      */
-    const pageTitle =
-        activeSection === "orders"
-            ? "Orders"
-            : activeSection === "customers"
-              ? "Customers"
-                            : activeSection === "error-400"
-                                ? "Error 400"
-                                : activeSection === "error-401"
-                                    ? "Error 401"
-                                    : activeSection === "error-403"
-                                        ? "Error 403"
-              : "Dashboard";
+    function handleRemoveMenu(menuId) {
+        setMenuItems((currentItems) => {
+            const targetItem = currentItems.find((item) => item.id === menuId);
 
-    /**
-     * pageBreadcrumb - Menentukan breadcrumb sesuai route yang aktif
-     */
-    const pageBreadcrumb =
-        activeSection === "orders"
-                        ? ["Home", "Orders", "Order List"]
-            : activeSection === "customers"
-                            ? ["Home", "Customers", "Customer List"]
-                            : activeSection === "error-400"
-                                ? ["Home", "Error", "400"]
-                                : activeSection === "error-401"
-                                    ? ["Home", "Error", "401"]
-                                    : activeSection === "error-403"
-                                        ? ["Home", "Error", "403"]
-                                        : ["Home", "Dashboard"];
+            // Hanya menu dengan removable=true yang boleh dihapus
+            if (!targetItem?.removable) {
+                return currentItems;
+            }
+
+            const nextItems = currentItems.filter((item) => item.id !== menuId);
+
+            if (activeSection === menuId) {
+                navigate("/");
+            }
+
+            return nextItems;
+        });
+    }
 
     // Mengecek apakah data kosong untuk menampilkan pesan empty state
     const isDashboardEmpty = filteredDashboardCards.length === 0;
@@ -241,131 +410,86 @@ export default function App() {
     const isCustomersEmpty = filteredCustomers.length === 0;
 
     return (
-        <div className="min-h-screen bg-latar font-poppins text-teks">
-            <div className="flex min-h-screen flex-col lg:flex-row">
-                {/* Sidebar Navigation */}
-                <Sidebar />
+        <Suspense fallback={<Loading />}>
+            <Routes>
+                {/* Auth routes (explicit paths) */}
+                <Route element={<AuthLayout />}>
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
+                    <Route path="/forgot" element={<Forgot />} />
+                </Route>
 
-                {/* Main Content Area dengan Routes */}
-                <main className="flex-1 p-4 md:p-6 xl:p-8">
-                    <Header
+                {/* Main app (wrapped by MainLayout) */}
+                <Route
+                    element={<MainLayout
+                        activeSection={activeSection}
+                        menuItems={filteredMenuItems}
+                        onMenuClick={handleSectionChange}
+                        onAddMenu={handleAddMenu}
+                        onRemoveMenu={handleRemoveMenu}
                         searchValue={searchQuery}
                         onSearchChange={handleSearchChange}
+                    />}
+                >
+                    {/* Redirect /dashboard → / agar tidak masuk NotFound */}
+                    <Route path="/dashboard" element={<Navigate to="/" replace />} />
+
+                    <Route
+                        path="/"
+                        element={
+                            <Dashboard
+                                cards={filteredDashboardCards}
+                                orders={filteredOrders}
+                                isEmpty={isDashboardEmpty}
+                            />
+                        }
                     />
-                    <div className="mt-6 space-y-6">
-                        <PageHeader
-                            title={pageTitle}
-                            breadcrumb={pageBreadcrumb}
-                        >
-                            {activeSection === "orders" ? (
-                                <button
-                                    id="add-button"
-                                    type="button"
-                                    onClick={() => setShowOrderForm((current) => !current)}
-                                >
-                                    {showOrderForm ? "Tutup Form" : "Add Orders"}
-                                </button>
-                            ) : null}
-                            {activeSection === "customers" ? (
-                                <button
-                                    id="add-button"
-                                    type="button"
-                                    onClick={() => setShowCustomerForm((current) => !current)}
-                                >
-                                    {showCustomerForm ? "Tutup Form" : "Add Customer"}
-                                </button>
-                            ) : null}
-                        </PageHeader>
 
-                        {/* 
-                            Routes Component - Menampilkan komponen sesuai dengan URL path
-                            Setiap <Route> mendefinisikan path dan element yang akan ditampilkan
-                            path="/" untuk Dashboard, path="/orders" untuk Orders, dll.
-                        */}
-                        <Routes>
-                            {/* Route untuk halaman Dashboard (path: /) */}
-                            <Route
-                                path="/"
-                                element={
-                                    <Dashboard
-                                        activeSection={activeSection}
-                                        cards={filteredDashboardCards}
-                                        orders={filteredOrders}
-                                        customers={filteredCustomers}
-                                        onAddOrder={handleAddOrder}
-                                        onAddCustomer={handleAddCustomer}
-                                        searchQuery={searchQuery}
-                                        isEmpty={isDashboardEmpty}
-                                        isOrdersEmpty={isOrdersEmpty}
-                                        isCustomersEmpty={isCustomersEmpty}
-                                    />
-                                }
+                    <Route
+                        path="/orders"
+                        element={
+                            <Orders
+                                orders={filteredOrders}
+                                onAddOrder={handleAddOrder}
+                                isEmpty={isOrdersEmpty}
                             />
+                        }
+                    />
 
-                            {/* Route untuk halaman Orders (path: /orders) */}
-                            <Route
-                                path="/orders"
-                                element={
-                                    <Orders
-                                        orders={filteredOrders}
-                                        onAddOrder={handleAddOrder}
-                                        isEmpty={isOrdersEmpty}
-                                        showForm={showOrderForm}
-                                    />
-                                }
+                    <Route
+                        path="/customers"
+                        element={
+                            <Customers
+                                customers={filteredCustomers}
+                                onAddCustomer={handleAddCustomer}
+                                isEmpty={isCustomersEmpty}
                             />
+                        }
+                    />
 
-                            {/* Route untuk halaman Customers (path: /customers) */}
-                            <Route
-                                path="/customers"
-                                element={
-                                    <Customers
-                                        customers={filteredCustomers}
-                                        onAddCustomer={handleAddCustomer}
-                                        isEmpty={isCustomersEmpty}
-                                        showForm={showCustomerForm}
-                                    />
-                                }
-                            />
+                    {/* Route untuk halaman Products - Menampilkan daftar semua produk */}
+                    <Route
+                        path="/products"
+                        element={<Products />}
+                    />
 
-                            <Route
-                                path="/errors/400"
-                                element={
-                                    <ErrorPage
-                                        errorCode="400"
-                                        description="Bad Request"
-                                        image="/img/error-400.svg"
-                                    />
-                                }
-                            />
-                            <Route
-                                path="/errors/401"
-                                element={
-                                    <ErrorPage
-                                        errorCode="401"
-                                        description="Unauthorized"
-                                        image="/img/error-401.svg"
-                                    />
-                                }
-                            />
-                            <Route
-                                path="/errors/403"
-                                element={
-                                    <ErrorPage
-                                        errorCode="403"
-                                        description="Forbidden"
-                                        image="/img/error-403.svg"
-                                    />
-                                }
-                            />
+                    {/* Route untuk halaman Doctors & Staff - Mengelola tim medis dan staf */}
+                    <Route
+                        path="/doctors-and-staff"
+                        element={<DoctorsAndStaff />}
+                    />
 
-                            {/* Route untuk halaman 404 Not Found (path: *) */}
-                            {/* path="*" mencocokkan semua URL yang belum terdefinisi */}
-                            <Route path="*" element={<NotFound />} />
-                        </Routes>
-                    </div>
-                </main>
-            </div>
-        </div>
+                    {/* Route dinamis untuk halaman ProductDetail - Menerima ID produk dari URL */}
+                    <Route
+                        path="/products/:id"
+                        element={<ProductDetail />}
+                    />
+
+                </Route>
+
+                {/* Global fallback - NotFound standalone tanpa sidebar */}
+                <Route path="*" element={<NotFound />} />
+            </Routes>
+        </Suspense>
     );
 }

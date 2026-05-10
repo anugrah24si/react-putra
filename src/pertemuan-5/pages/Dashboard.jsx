@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { createElement, useState } from "react";
 import { FaShoppingCart, FaTruck, FaBan, FaDollarSign } from "react-icons/fa";
 
 // Kartu ringkasan dashboard untuk menampilkan statistik utama.
-function StatCard({ id, icon: Icon, value, label }) {
+function StatCard({ id, icon, value, label }) {
     return (
         <div
             id={
@@ -16,7 +16,7 @@ function StatCard({ id, icon: Icon, value, label }) {
             }
         >
             <div className="stat-icon">
-                <Icon />
+                {createElement(icon)}
             </div>
             <div className="stat-info">
                 <span className="stat-count">{value}</span>

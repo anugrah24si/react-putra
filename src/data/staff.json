@@ -1,0 +1,98 @@
+[
+  {
+    "id": "STF-001",
+    "name": "Dr. Amelia Chen",
+    "role": "Doctor",
+    "specialization": "Dermatology & Aesthetic Medicine",
+    "status": "Active",
+    "email": "amelia.chen@lumiereclinic.com",
+    "phone": "+62 812-3456-7890",
+    "schedule": "Mon - Fri, 09:00 - 17:00",
+    "location": "Jakarta Central",
+    "image": "https://api.dicebear.com/7.x/avataaars/svg?seed=Amelia"
+  },
+  {
+    "id": "STF-002",
+    "name": "Dr. Sarah Williams",
+    "role": "Doctor",
+    "specialization": "Cosmetic Surgery",
+    "status": "Active",
+    "email": "sarah.williams@lumiereclinic.com",
+    "phone": "+62 813-4567-8901",
+    "schedule": "Mon - Sat, 10:00 - 18:00",
+    "location": "Jakarta Central",
+    "image": "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah"
+  },
+  {
+    "id": "STF-003",
+    "name": "Jessica Martinez",
+    "role": "Nurse",
+    "specialization": "Aesthetic Nursing",
+    "status": "Active",
+    "email": "jessica.martinez@lumiereclinic.com",
+    "phone": "+62 814-5678-9012",
+    "schedule": "Tue - Sat, 08:00 - 16:00",
+    "location": "Jakarta Central",
+    "image": "https://api.dicebear.com/7.x/avataaars/svg?seed=Jessica"
+  },
+  {
+    "id": "STF-004",
+    "name": "Emily Johnson",
+    "role": "Therapist",
+    "specialization": "Facial & Skin Therapy",
+    "status": "Active",
+    "email": "emily.johnson@lumiereclinic.com",
+    "phone": "+62 815-6789-0123",
+    "schedule": "Mon - Fri, 09:00 - 17:00",
+    "location": "Jakarta Central",
+    "image": "https://api.dicebear.com/7.x/avataaars/svg?seed=Emily"
+  },
+  {
+    "id": "STF-005",
+    "name": "Dr. Michael Chang",
+    "role": "Doctor",
+    "specialization": "Laser & Non-Surgical Procedures",
+    "status": "On Leave",
+    "email": "michael.chang@lumiereclinic.com",
+    "phone": "+62 816-7890-1234",
+    "schedule": "Wed - Sun, 11:00 - 19:00",
+    "location": "Jakarta South",
+    "image": "https://api.dicebear.com/7.x/avataaars/svg?seed=Michael"
+  },
+  {
+    "id": "STF-006",
+    "name": "Sophie Anderson",
+    "role": "Therapist",
+    "specialization": "Body Contouring & Massage",
+    "status": "Active",
+    "email": "sophie.anderson@lumiereclinic.com",
+    "phone": "+62 817-8901-2345",
+    "schedule": "Mon - Fri, 10:00 - 18:00",
+    "location": "Jakarta South",
+    "image": "https://api.dicebear.com/7.x/avataaars/svg?seed=Sophie"
+  },
+  {
+    "id": "STF-007",
+    "name": "Amanda Lee",
+    "role": "Receptionist",
+    "specialization": "Customer Service & Front Desk",
+    "status": "Active",
+    "email": "amanda.lee@lumiereclinic.com",
+    "phone": "+62 818-9012-3456",
+    "schedule": "Mon - Sat, 08:00 - 17:00",
+    "location": "Jakarta Central",
+    "image": "https://api.dicebear.com/7.x/avataaars/svg?seed=Amanda"
+  },
+  {
+    "id": "STF-008",
+    "name": "Rachel Kim",
+    "role": "Nurse",
+    "specialization": "Post-Treatment Care",
+    "status": "Active",
+    "email": "rachel.kim@lumiereclinic.com",
+    "phone": "+62 819-0123-4567",
+    "schedule": "Mon - Fri, 09:00 - 17:00",
+    "location": "Jakarta South",
+    "image": "https://api.dicebear.com/7.x/avataaars/svg?seed=Rachel"
+  }
+]

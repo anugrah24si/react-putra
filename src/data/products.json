@@ -1,0 +1,302 @@
+[
+  {
+    "id": 1,
+    "title": "Essence Mascara Lash Princess",
+    "code": "PROD-001",
+    "category": "Makeup",
+    "brand": "Essence",
+    "price": 99900,
+    "stock": 45,
+    "thumbnail": "/product_makeup_eye.png"
+  },
+  {
+    "id": 2,
+    "title": "Eyeshadow Palette with Mirror",
+    "code": "PROD-002",
+    "category": "Makeup",
+    "brand": "MAC",
+    "price": 249900,
+    "stock": 32,
+    "thumbnail": "/product_makeup_face.png"
+  },
+  {
+    "id": 3,
+    "title": "Powder Canister",
+    "code": "PROD-003",
+    "category": "Makeup",
+    "brand": "Revlon",
+    "price": 149900,
+    "stock": 28,
+    "thumbnail": "/product_makeup_face.png"
+  },
+  {
+    "id": 4,
+    "title": "Red Lipstick",
+    "code": "PROD-004",
+    "category": "Makeup",
+    "brand": "NARS",
+    "price": 199900,
+    "stock": 55,
+    "thumbnail": "/product_lipstick.png"
+  },
+  {
+    "id": 5,
+    "title": "Hydrating Face Serum",
+    "code": "PROD-005",
+    "category": "Skincare",
+    "brand": "Kiehl's",
+    "price": 299900,
+    "stock": 40,
+    "thumbnail": "/product_skincare.png"
+  },
+  {
+    "id": 6,
+    "title": "Anti-Aging Moisturizer",
+    "code": "PROD-006",
+    "category": "Skincare",
+    "brand": "Estée Lauder",
+    "price": 449900,
+    "stock": 25,
+    "thumbnail": "/product_skincare.png"
+  },
+  {
+    "id": 7,
+    "title": "Facial Cleanser Foam",
+    "code": "PROD-007",
+    "category": "Skincare",
+    "brand": "Neutrogena",
+    "price": 89900,
+    "stock": 60,
+    "thumbnail": "/product_skincare.png"
+  },
+  {
+    "id": 8,
+    "title": "Vitamin C Face Serum",
+    "code": "PROD-008",
+    "category": "Skincare",
+    "brand": "Olay",
+    "price": 179900,
+    "stock": 38,
+    "thumbnail": "/product_skincare.png"
+  },
+  {
+    "id": 9,
+    "title": "Sheet Face Mask",
+    "code": "PROD-009",
+    "category": "Treatment",
+    "brand": "Mediheal",
+    "price": 49900,
+    "stock": 120,
+    "thumbnail": "/product_treatment.png"
+  },
+  {
+    "id": 10,
+    "title": "Clay Face Mask",
+    "code": "PROD-010",
+    "category": "Treatment",
+    "brand": "Aztec Secret",
+    "price": 139900,
+    "stock": 35,
+    "thumbnail": "/product_treatment.png"
+  },
+  {
+    "id": 11,
+    "title": "Hair Treatment Oil",
+    "code": "PROD-011",
+    "category": "Hair Care",
+    "brand": "Argan Oil",
+    "price": 159900,
+    "stock": 42,
+    "thumbnail": "/product_haircare.png"
+  },
+  {
+    "id": 12,
+    "title": "Shampoo Premium",
+    "code": "PROD-012",
+    "category": "Hair Care",
+    "brand": "Pantene",
+    "price": 119900,
+    "stock": 68,
+    "thumbnail": "/product_haircare.png"
+  },
+  {
+    "id": 13,
+    "title": "Conditioner Glossy",
+    "code": "PROD-013",
+    "category": "Hair Care",
+    "brand": "L'Oreal",
+    "price": 129900,
+    "stock": 50,
+    "thumbnail": "/product_haircare.png"
+  },
+  {
+    "id": 14,
+    "title": "Facial Sunscreen SPF 50",
+    "code": "PROD-014",
+    "category": "Skincare",
+    "brand": "Coppertone",
+    "price": 139900,
+    "stock": 45,
+    "thumbnail": "/product_skincare.png"
+  },
+  {
+    "id": 15,
+    "title": "Acne Spot Treatment",
+    "code": "PROD-015",
+    "category": "Treatment",
+    "brand": "Proactive",
+    "price": 119900,
+    "stock": 52,
+    "thumbnail": "/product_treatment.png"
+  },
+  {
+    "id": 16,
+    "title": "Eye Contour Cream",
+    "code": "PROD-016",
+    "category": "Skincare",
+    "brand": "Clinique",
+    "price": 249900,
+    "stock": 33,
+    "thumbnail": "/product_skincare.png"
+  },
+  {
+    "id": 17,
+    "title": "Lip Balm Hydrating",
+    "code": "PROD-017",
+    "category": "Makeup",
+    "brand": "Burt's Bees",
+    "price": 59900,
+    "stock": 80,
+    "thumbnail": "/product_lipstick.png"
+  },
+  {
+    "id": 18,
+    "title": "Foundation Full Coverage",
+    "code": "PROD-018",
+    "category": "Makeup",
+    "brand": "Urban Decay",
+    "price": 299900,
+    "stock": 29,
+    "thumbnail": "/product_makeup_face.png"
+  },
+  {
+    "id": 19,
+    "title": "Blush Palette",
+    "code": "PROD-019",
+    "category": "Makeup",
+    "brand": "Benefit",
+    "price": 179900,
+    "stock": 36,
+    "thumbnail": "/product_makeup_face.png"
+  },
+  {
+    "id": 20,
+    "title": "Exfoliating Scrub",
+    "code": "PROD-020",
+    "category": "Treatment",
+    "brand": "St. Ives",
+    "price": 79900,
+    "stock": 71,
+    "thumbnail": "/product_treatment.png"
+  },
+  {
+    "id": 21,
+    "title": "Toner Balancing",
+    "code": "PROD-021",
+    "category": "Skincare",
+    "brand": "Thayers",
+    "price": 109900,
+    "stock": 58,
+    "thumbnail": "/product_skincare.png"
+  },
+  {
+    "id": 22,
+    "title": "Night Cream Repair",
+    "code": "PROD-022",
+    "category": "Skincare",
+    "brand": "Olay",
+    "price": 149900,
+    "stock": 44,
+    "thumbnail": "/product_skincare.png"
+  },
+  {
+    "id": 23,
+    "title": "Eyeliner Liquid",
+    "code": "PROD-023",
+    "category": "Makeup",
+    "brand": "Maybelline",
+    "price": 69900,
+    "stock": 85,
+    "thumbnail": "/product_makeup_eye.png"
+  },
+  {
+    "id": 24,
+    "title": "Eyebrow Pencil",
+    "code": "PROD-024",
+    "category": "Makeup",
+    "brand": "Anastasia Beverly Hills",
+    "price": 139900,
+    "stock": 47,
+    "thumbnail": "/product_makeup_eye.png"
+  },
+  {
+    "id": 25,
+    "title": "Kojic Acid Soap",
+    "code": "PROD-025",
+    "category": "Treatment",
+    "brand": "Likas",
+    "price": 49900,
+    "stock": 110,
+    "thumbnail": "/product_treatment.png"
+  },
+  {
+    "id": 26,
+    "title": "Hyaluronic Acid Serum",
+    "code": "PROD-026",
+    "category": "Skincare",
+    "brand": "The Ordinary",
+    "price": 89900,
+    "stock": 76,
+    "thumbnail": "/product_skincare.png"
+  },
+  {
+    "id": 27,
+    "title": "Niacinamide Face Serum",
+    "code": "PROD-027",
+    "category": "Skincare",
+    "brand": "Minimalist",
+    "price": 99900,
+    "stock": 54,
+    "thumbnail": "/product_skincare.png"
+  },
+  {
+    "id": 28,
+    "title": "BB Cream Natural",
+    "code": "PROD-028",
+    "category": "Makeup",
+    "brand": "Missha",
+    "price": 119900,
+    "stock": 39,
+    "thumbnail": "/product_makeup_face.png"
+  },
+  {
+    "id": 29,
+    "title": "Micellar Water Cleanser",
+    "code": "PROD-029",
+    "category": "Skincare",
+    "brand": "Bioderma",
+    "price": 129900,
+    "stock": 63,
+    "thumbnail": "/product_skincare.png"
+  },
+  {
+    "id": 30,
+    "title": "Hydrogel Eye Patches",
+    "code": "PROD-030",
+    "category": "Treatment",
+    "brand": "Patchology",
+    "price": 159900,
+    "stock": 28,
+    "thumbnail": "/product_treatment.png"
+  }
+]
