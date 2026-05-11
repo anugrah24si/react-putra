@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 import { Users, UserCheck, Clock, Plus, UserPlus, Filter, X } from 'lucide-react';
 import { StaffCard, StaffProfileModal, StaffForm, StatsCard } from '../../components/PageHeader';
 import staffData from '../../data/staff.json';
-import '../../styles/staff.css';
+import '../../styles/dashboard-home.css';
 
 const ROLES = ['Doctor', 'Nurse', 'Therapist', 'Receptionist'];
 const EMPTY_STAFF_FORM = { 
@@ -96,29 +96,33 @@ export default function DoctorsAndStaff() {
   }
 
   return (
-    <div className="staff-page">
+    <div className="med-staff-page">
       {/* Header */}
-      <div className="staff-page__header">
-        <h1 className="staff-page__title">Doctors & Staff</h1>
-        <p className="staff-page__subtitle">Manage your medical team and staff members</p>
+      <div className="med-orders__head">
+        <div>
+          <h1 className="med-orders__title">Doctors & Staff</h1>
+          <p className="med-orders__subtitle">Manage your medical team and staff members</p>
+        </div>
       </div>
 
       {/* Action Bar */}
-      <div className="staff-page__actions">
+      <div className="med-orders__actions">
         <div style={{ flex: 1 }}>
           <div style={{ position: 'relative', maxWidth: '576px' }}>
             <input
               type="text"
               placeholder="Search doctors, staff, specializations..."
-              className="staff-page__search"
+              className="med-search__input"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
             <svg
+              className="med-search__icon"
               style={{
                 position: 'absolute',
                 left: '16px',
-                top: '13px',
+                top: '50%',
+                transform: 'translateY(-50%)',
                 width: '20px',
                 height: '20px',
               }}
@@ -129,12 +133,12 @@ export default function DoctorsAndStaff() {
                 cx="8.5"
                 cy="8.5"
                 r="5.5"
-                stroke="#8B8581"
+                stroke="currentColor"
                 strokeWidth="1.67"
               />
               <path
                 d="M13 13L17 17"
-                stroke="#8B8581"
+                stroke="currentColor"
                 strokeWidth="1.67"
                 strokeLinecap="round"
               />
@@ -142,21 +146,21 @@ export default function DoctorsAndStaff() {
           </div>
         </div>
 
-        <div className="staff-page__action-group">
+        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
           {/* Filter Button */}
           <div style={{ position: 'relative' }}>
             <button 
-              className="staff-page__filter"
+              className="med-btn med-btn--ghost"
               onClick={() => setShowFilter(v => !v)}
             >
               <Filter size={16} />
               <span>Filter</span>
             </button>
             {showFilter && (
-              <div className="staff-filter-pop">
-                <p className="staff-filter-pop__label">Role</p>
+              <div className="med-filter-pop">
+                <p className="med-filter-pop__label">Role</p>
                 <select 
-                  className="staff-input" 
+                  className="med-select" 
                   value={filterRole} 
                   onChange={(e) => { 
                     setFilterRole(e.target.value); 
@@ -172,7 +176,7 @@ export default function DoctorsAndStaff() {
 
           {/* Add Staff Button */}
           <button 
-            className="staff-page__btn staff-page__btn--primary"
+            className="med-btn med-btn--primary"
             onClick={() => setAddOpen(true)}
           >
             <Plus size={16} />
@@ -182,7 +186,7 @@ export default function DoctorsAndStaff() {
       </div>
 
       {/* Stats Cards */}
-      <div className="stats-grid">
+      <div className="med-stats-grid">
         <StatsCard
           label="Total Staff"
           value={stats.totalStaff}
@@ -206,7 +210,7 @@ export default function DoctorsAndStaff() {
       </div>
 
       {/* Staff Grid */}
-      <div className="staff-grid">
+      <div className="med-staff-grid">
         {filteredStaff.length > 0 ? (
           filteredStaff.map((staff) => (
             <StaffCard

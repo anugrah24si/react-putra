@@ -1,4 +1,4 @@
-import React, { Suspense, useMemo, useState } from "react";
+import React, { Suspense, useEffect, useMemo, useState } from "react";
 import { Navigate, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import "./App.css";
 import customerSeed from "./data/customers.json";
@@ -166,6 +166,19 @@ export default function App() {
     const [ordersData, setOrdersData] = useState(orderRows);
     // State untuk menyimpan data customers
     const [customersData, setCustomersData] = useState(customerRows);
+    const [theme, setTheme] = useState(() => {
+        const savedTheme = window.localStorage.getItem("medicare-theme");
+        if (savedTheme === "light" || savedTheme === "dark") {
+            return savedTheme;
+        }
+        return "dark";
+    });
+
+    useEffect(() => {
+        document.documentElement.setAttribute("data-theme", theme);
+        document.body.setAttribute("data-theme", theme);
+        window.localStorage.setItem("medicare-theme", theme);
+    }, [theme]);
 
     /**
      * dashboardCards - Menghitung statistik dashboard dari data orders
@@ -276,6 +289,10 @@ export default function App() {
      */
     function handleSearchChange(event) {
         setSearchQuery(event.target.value);
+    }
+
+    function handleToggleTheme() {
+        setTheme((currentTheme) => (currentTheme === "dark" ? "light" : "dark"));
     }
 
     /**
@@ -429,6 +446,8 @@ export default function App() {
                         onRemoveMenu={handleRemoveMenu}
                         searchValue={searchQuery}
                         onSearchChange={handleSearchChange}
+                        theme={theme}
+                        onToggleTheme={handleToggleTheme}
                     />}
                 >
                     {/* Redirect /dashboard → / agar tidak masuk NotFound */}

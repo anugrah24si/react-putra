@@ -49,10 +49,10 @@ export default function Orders({ orders, onAddOrder, isEmpty }) {
     }
 
     function statusTone(statusLabel) {
-        if (statusLabel === "Completed") return "lc-badge lc-badge--success";
-        if (statusLabel === "Pending") return "lc-badge lc-badge--warning";
-        if (statusLabel === "Scheduled") return "lc-badge lc-badge--info";
-        return "lc-badge lc-badge--danger";
+        if (statusLabel === "Completed") return "med-badge med-badge--success";
+        if (statusLabel === "Pending") return "med-badge med-badge--warning";
+        if (statusLabel === "Scheduled") return "med-badge med-badge--info";
+        return "med-badge med-badge--danger";
     }
 
     /**
@@ -86,31 +86,31 @@ export default function Orders({ orders, onAddOrder, isEmpty }) {
     }
 
     return (
-        <div className="lc-orders">
-            <div className="lc-orders__head">
+        <div className="med-orders">
+            <div className="med-orders__head">
                 <div>
-                    <div className="lc-orders__title">Orders Management</div>
-                    <div className="lc-orders__subtitle">Manage all treatment bookings and appointments</div>
+                    <div className="med-orders__title">Orders Management</div>
+                    <div className="med-orders__subtitle">Manage all treatment bookings and appointments</div>
                 </div>
 
-                <div className="lc-orders__actions">
-                    <div className="lc-orders__filterwrap">
+                <div className="med-orders__actions">
+                    <div className="med-orders__filterwrap">
                         <button
                             type="button"
-                            className="lc-btn lc-btn--ghost"
+                            className="med-btn med-btn--ghost"
                             onClick={() => setIsFilterOpen((v) => !v)}
                             aria-expanded={isFilterOpen ? "true" : "false"}
                         >
-                            <span className="lc-btn__icon" aria-hidden="true">
+                            <span className="med-btn__icon" aria-hidden="true">
                                 <span />
                             </span>
                             Filter
                         </button>
                         {isFilterOpen ? (
-                            <div className="lc-pop">
-                                <div className="lc-pop__label">Status</div>
+                            <div className="med-pop">
+                                <div className="med-pop__label">Status</div>
                                 <select
-                                    className="lc-select"
+                                    className="med-select"
                                     value={statusFilter}
                                     onChange={(e) => {
                                         setStatusFilter(e.target.value);
@@ -130,7 +130,7 @@ export default function Orders({ orders, onAddOrder, isEmpty }) {
 
                     <button
                         type="button"
-                        className="lc-btn lc-btn--primary"
+                        className="med-btn med-btn--primary"
                         onClick={() => setIsCreateOpen(true)}
                     >
                         + New Order
@@ -138,9 +138,9 @@ export default function Orders({ orders, onAddOrder, isEmpty }) {
                 </div>
             </div>
 
-            <section className="lc-tablecard">
-                <div className="lc-tablewrap">
-                    <table className="lc-table">
+            <section className="med-tablecard">
+                <div className="med-tablewrap">
+                    <table className="med-table">
                         <thead>
                             <tr>
                                 <th>Order ID</th>
@@ -148,15 +148,15 @@ export default function Orders({ orders, onAddOrder, isEmpty }) {
                                 <th>Treatment</th>
                                 <th>Date</th>
                                 <th>Status</th>
-                                <th className="lc-table__right">Amount</th>
-                                <th className="lc-table__right">Actions</th>
+                                <th className="med-table__right">Amount</th>
+                                <th className="med-table__right">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {isEmpty || filteredOrders.length === 0 ? (
                                 <tr>
                                     <td colSpan={7}>
-                                        <div className="lc-empty">No orders found</div>
+                                        <div className="med-empty">No orders found</div>
                                     </td>
                                 </tr>
                             ) : (
@@ -164,25 +164,25 @@ export default function Orders({ orders, onAddOrder, isEmpty }) {
                                     const statusLabel = displayOrderStatus(order.status);
                                     return (
                                         <tr key={order.id}>
-                                            <td className="lc-td--strong">{order.id}</td>
+                                            <td className="med-td--strong">{order.id}</td>
                                             <td>{order.customer}</td>
                                             <td>{order.item}</td>
-                                            <td className="lc-td--muted">{order.date ?? "-"}</td>
+                                            <td className="med-td--muted">{order.date ?? "-"}</td>
                                             <td>
                                                 <span className={statusTone(statusLabel)}>{statusLabel}</span>
                                             </td>
-                                            <td className="lc-table__right lc-td--strong">{order.total}</td>
-                                            <td className="lc-table__right">
+                                            <td className="med-table__right med-td--strong">{order.total}</td>
+                                            <td className="med-table__right">
                                                 <button
                                                     type="button"
-                                                    className="lc-chip"
+                                                    className="med-chip"
                                                     onClick={() => alert(`Order: ${order.id}`)}
                                                 >
                                                     View
                                                 </button>
                                                 <button
                                                     type="button"
-                                                    className="lc-kebab"
+                                                    className="med-kebab"
                                                     aria-label="More actions"
                                                     onClick={() => alert("More actions (coming soon)")}
                                                 >
@@ -201,11 +201,11 @@ export default function Orders({ orders, onAddOrder, isEmpty }) {
             </section>
 
             {!isEmpty && filteredOrders.length > pageSize ? (
-                <div className="lc-dash-pagination">
+                <div className="med-dash-pagination">
                     {/* Prev */}
                     <button
                         type="button"
-                        className="lc-page-btn"
+                        className="med-page-btn"
                         onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
                         disabled={effectivePage === 1}
                         aria-label="Previous page"
@@ -221,7 +221,7 @@ export default function Orders({ orders, onAddOrder, isEmpty }) {
                         <button
                             key={page}
                             type="button"
-                            className={`lc-page-btn${effectivePage === page ? " lc-page-btn--active" : ""}`}
+                            className={`med-page-num${effectivePage === page ? " med-page-num--active" : ""}`}
                             onClick={() => setCurrentPage(page)}
                             aria-label={`Page ${page}`}
                             aria-current={effectivePage === page ? "page" : undefined}
@@ -233,7 +233,7 @@ export default function Orders({ orders, onAddOrder, isEmpty }) {
                     {/* Next */}
                     <button
                         type="button"
-                        className="lc-page-btn"
+                        className="med-page-btn"
                         onClick={() => setCurrentPage((page) => Math.min(totalPages, page + 1))}
                         disabled={effectivePage === totalPages}
                         aria-label="Next page"
@@ -248,64 +248,72 @@ export default function Orders({ orders, onAddOrder, isEmpty }) {
 
 
             {isCreateOpen ? (
-                <div className="lc-modal" role="dialog" aria-modal="true" aria-label="Create new order">
-                    <div className="lc-modal__card">
-                        <div className="lc-modal__head">
+                <div className="med-overlay" role="dialog" aria-modal="true" aria-label="Create new order">
+                    <div className="med-modal">
+                        <div className="med-modal__head">
                             <div>
-                                <div className="lc-modal__title">Create New Order</div>
-                                <div className="lc-modal__desc">Add a treatment booking</div>
+                                <div className="med-modal__title">Create New Order</div>
                             </div>
-                            <button type="button" className="lc-modal__close" onClick={() => setIsCreateOpen(false)}>
-                                Close
+                            <button type="button" className="med-modal__close" onClick={() => setIsCreateOpen(false)}>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
                             </button>
                         </div>
 
-                        <form className="lc-form" onSubmit={handleSubmitOrder} noValidate>
-                            <label className="lc-field">
-                                <span>Customer</span>
-                                <input
-                                    value={orderForm.customer}
-                                    onChange={(e) => setOrderForm((c) => ({ ...c, customer: e.target.value }))}
-                                    placeholder="Sarah Anderson"
-                                    required
-                                />
-                            </label>
-                            <label className="lc-field">
-                                <span>Treatment</span>
-                                <input
-                                    value={orderForm.item}
-                                    onChange={(e) => setOrderForm((c) => ({ ...c, item: e.target.value }))}
-                                    placeholder="Facial Diamond Glow"
-                                    required
-                                />
-                            </label>
-                            <label className="lc-field">
-                                <span>Amount</span>
-                                <input
-                                    value={orderForm.total}
-                                    onChange={(e) => setOrderForm((c) => ({ ...c, total: e.target.value }))}
-                                    placeholder="850000"
-                                    required
-                                />
-                            </label>
-                            <label className="lc-field">
-                                <span>Status</span>
-                                <select
-                                    value={orderForm.status}
-                                    onChange={(e) => setOrderForm((c) => ({ ...c, status: e.target.value }))}
-                                >
-                                    <option value="Preparing">Preparing</option>
-                                    <option value="On Delivery">On Delivery</option>
-                                    <option value="Delivered">Delivered</option>
-                                    <option value="Canceled">Canceled</option>
-                                </select>
-                            </label>
+                        <form className="med-form" onSubmit={handleSubmitOrder} noValidate>
+                            <div className="med-modal__body">
+                                <div className="med-field">
+                                    <label className="med-label">Customer</label>
+                                    <input
+                                        value={orderForm.customer}
+                                        onChange={(e) => setOrderForm((c) => ({ ...c, customer: e.target.value }))}
+                                        placeholder="Sarah Anderson"
+                                        className="med-input"
+                                        required
+                                    />
+                                </div>
+                                <div className="med-field">
+                                    <label className="med-label">Treatment</label>
+                                    <input
+                                        value={orderForm.item}
+                                        onChange={(e) => setOrderForm((c) => ({ ...c, item: e.target.value }))}
+                                        placeholder="Facial Diamond Glow"
+                                        className="med-input"
+                                        required
+                                    />
+                                </div>
+                                <div className="med-field">
+                                    <label className="med-label">Amount</label>
+                                    <input
+                                        value={orderForm.total}
+                                        onChange={(e) => setOrderForm((c) => ({ ...c, total: e.target.value }))}
+                                        placeholder="850000"
+                                        className="med-input"
+                                        required
+                                    />
+                                </div>
+                                <div className="med-field">
+                                    <label className="med-label">Status</label>
+                                    <select
+                                        value={orderForm.status}
+                                        onChange={(e) => setOrderForm((c) => ({ ...c, status: e.target.value }))}
+                                        className="med-select"
+                                    >
+                                        <option value="Preparing">Preparing</option>
+                                        <option value="On Delivery">On Delivery</option>
+                                        <option value="Delivered">Delivered</option>
+                                        <option value="Canceled">Canceled</option>
+                                    </select>
+                                </div>
+                            </div>
 
-                            <div className="lc-form__actions">
-                                <button type="button" className="lc-btn lc-btn--ghost" onClick={() => setIsCreateOpen(false)}>
+                            <div className="med-modal__actions">
+                                <button type="button" className="med-btn med-btn--ghost" onClick={() => setIsCreateOpen(false)}>
                                     Cancel
                                 </button>
-                                <button type="submit" className="lc-btn lc-btn--primary">
+                                <button type="submit" className="med-btn med-btn--primary">
                                     Create
                                 </button>
                             </div>

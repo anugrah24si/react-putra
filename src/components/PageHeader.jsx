@@ -7,24 +7,24 @@ import { X, Mail, Phone, Clock, MapPin, Edit } from 'lucide-react';
 export const getStatusColor = (status) => {
   switch (status) {
     case 'Active':
-      return { bg: '#ECFDF5', color: '#007A55', border: '#A4F4CF' };
+      return { bg: 'rgba(0, 192, 70, 0.14)', color: '#8df0b4', border: 'rgba(0, 192, 70, 0.28)' };
     case 'On Leave':
-      return { bg: '#FFFBEB', color: '#BB4D00', border: '#FEE685' };
+      return { bg: 'rgba(255, 87, 16, 0.14)', color: '#ffb08b', border: 'rgba(255, 87, 16, 0.28)' };
     default:
-      return { bg: '#F0F0F0', color: '#666', border: '#D0D0D0' };
+      return { bg: 'rgba(255, 255, 255, 0.06)', color: '#d9dce5', border: 'rgba(255, 255, 255, 0.12)' };
   }
 };
 
 export const getRoleColor = (role) => {
   switch (role) {
     case 'Doctor':
-      return { bg: '#FAF5FF', color: '#8200DB', border: '#E9D4FF' };
+      return { bg: 'rgba(46, 111, 252, 0.14)', color: '#9fbbff', border: 'rgba(46, 111, 252, 0.28)' };
     case 'Nurse':
-      return { bg: '#EFF6FF', color: '#1447E6', border: '#BEDBFF' };
+      return { bg: 'rgba(0, 192, 70, 0.14)', color: '#8df0b4', border: 'rgba(0, 192, 70, 0.28)' };
     case 'Therapist':
-      return { bg: '#FDF2F8', color: '#C6005C', border: '#FCCEE8' };
+      return { bg: 'rgba(163, 41, 251, 0.14)', color: '#c79aff', border: 'rgba(163, 41, 251, 0.28)' };
     default:
-      return { bg: '#FFFBEB', color: '#BB4D00', border: '#FEE685' };
+      return { bg: 'rgba(255, 255, 255, 0.06)', color: '#d9dce5', border: 'rgba(255, 255, 255, 0.12)' };
   }
 };
 
@@ -34,12 +34,12 @@ export const getRoleColor = (role) => {
 
 export function StatsCard({ label, value, icon: Icon }) {
   return (
-    <div className="stats-card">
-      <div className="stats-card__content">
-        <p className="stats-card__label">{label}</p>
-        <p className="stats-card__value">{value}</p>
+    <div className="med-stats-card">
+      <div className="med-stats-card__content">
+        <p className="med-stats-card__label">{label}</p>
+        <p className="med-stats-card__value">{value}</p>
       </div>
-      <div className="stats-card__icon">
+      <div className="med-stats-card__icon">
         <Icon size={20} />
       </div>
     </div>
@@ -55,15 +55,15 @@ export function StaffCard({ staff, onViewProfile }) {
   const roleStyle = getRoleColor(staff.role);
 
   return (
-    <div className="staff-card">
-      <div className="staff-card__header">
+    <div className="med-staff-card">
+      <div className="med-staff-card__header">
         <img
           src={staff.image}
           alt={staff.name}
-          className="staff-card__image"
+          className="med-staff-card__image"
         />
         <div
-          className="staff-card__status"
+          className="med-staff-card__status"
           style={{
             background: statusStyle.bg,
             color: statusStyle.color,
@@ -74,12 +74,12 @@ export function StaffCard({ staff, onViewProfile }) {
         </div>
       </div>
 
-      <div className="staff-card__body">
-        <h3 className="staff-card__name">{staff.name}</h3>
-        <p className="staff-card__specialization">{staff.specialization}</p>
+      <div className="med-staff-card__body">
+        <h3 className="med-staff-card__name">{staff.name}</h3>
+        <p className="med-staff-card__specialization">{staff.specialization}</p>
 
         <div
-          className="staff-card__role"
+          className="med-staff-card__role"
           style={{
             background: roleStyle.bg,
             color: roleStyle.color,
@@ -89,34 +89,34 @@ export function StaffCard({ staff, onViewProfile }) {
           {staff.role}
         </div>
 
-        <div className="staff-card__details">
-          <div className="staff-card__detail-item">
+        <div className="med-staff-card__details">
+          <div className="med-staff-card__detail-item">
             <Mail size={14} />
             <span>{staff.email}</span>
           </div>
-          <div className="staff-card__detail-item">
+          <div className="med-staff-card__detail-item">
             <Phone size={14} />
             <span>{staff.phone}</span>
           </div>
-          <div className="staff-card__detail-item">
+          <div className="med-staff-card__detail-item">
             <Clock size={14} />
             <span>{staff.schedule}</span>
           </div>
-          <div className="staff-card__detail-item">
+          <div className="med-staff-card__detail-item">
             <MapPin size={14} />
             <span>{staff.location}</span>
           </div>
         </div>
       </div>
 
-      <div className="staff-card__footer">
+      <div className="med-staff-card__footer">
         <button 
-          className="staff-card__btn staff-card__btn--view"
+          className="med-staff-card__btn med-staff-card__btn--view"
           onClick={() => onViewProfile && onViewProfile(staff)}
         >
           View Profile
         </button>
-        <button className="staff-card__btn staff-card__btn--edit">
+        <button className="med-staff-card__btn med-staff-card__btn--edit">
           <Edit size={16} />
         </button>
       </div>
@@ -133,13 +133,13 @@ export function StaffForm({ title, form, onChange, onSubmit, onClose, submitLabe
   const STATUSES = ['Active', 'On Leave'];
 
   return (
-    <div className="staff-overlay" role="dialog" aria-modal="true">
-      <div className="staff-modal">
-        <div className="staff-modal__head">
-          <h3 className="staff-modal__title">{title}</h3>
+    <div className="med-overlay" role="dialog" aria-modal="true">
+      <div className="med-modal">
+        <div className="med-modal__head">
+          <h3 className="med-modal__title">{title}</h3>
           <button 
             type="button" 
-            className="staff-modal__close" 
+            className="med-modal__close" 
             onClick={onClose} 
             aria-label="Close"
           >
@@ -147,27 +147,27 @@ export function StaffForm({ title, form, onChange, onSubmit, onClose, submitLabe
           </button>
         </div>
 
-        <form className="staff-modal__body" onSubmit={onSubmit}>
-          <div className="staff-form-grid">
-            <div className="staff-field">
-              <label className="staff-label">Full Name <span className="staff-req">*</span></label>
+        <form className="med-modal__body" onSubmit={onSubmit}>
+          <div className="med-grid-2">
+            <div className="med-field">
+              <label className="med-label">Full Name <span className="med-req">*</span></label>
               <input
                 name="name"
                 value={form.name}
                 onChange={onChange}
                 required
                 placeholder="e.g., Dr. Amelia Chen"
-                className="staff-input"
+                className="med-input"
               />
             </div>
-            <div className="staff-field">
-              <label className="staff-label">Role <span className="staff-req">*</span></label>
+            <div className="med-field">
+              <label className="med-label">Role <span className="med-req">*</span></label>
               <select 
                 name="role" 
                 value={form.role} 
                 onChange={onChange} 
                 required
-                className="staff-input"
+                className="med-select"
               >
                 <option value="">Select Role</option>
                 {ROLES.map(r => <option key={r} value={r}>{r}</option>)}
@@ -175,21 +175,21 @@ export function StaffForm({ title, form, onChange, onSubmit, onClose, submitLabe
             </div>
           </div>
 
-          <div className="staff-field">
-            <label className="staff-label">Specialization <span className="staff-req">*</span></label>
+          <div className="med-field">
+            <label className="med-label">Specialization <span className="med-req">*</span></label>
             <input
               name="specialization"
               value={form.specialization}
               onChange={onChange}
               required
               placeholder="e.g., Dermatology & Aesthetic Medicine"
-              className="staff-input"
+              className="med-input"
             />
           </div>
 
-          <div className="staff-form-grid">
-            <div className="staff-field">
-              <label className="staff-label">Email <span className="staff-req">*</span></label>
+          <div className="med-grid-2">
+            <div className="med-field">
+              <label className="med-label">Email <span className="med-req">*</span></label>
               <input
                 type="email"
                 name="email"
@@ -197,64 +197,64 @@ export function StaffForm({ title, form, onChange, onSubmit, onClose, submitLabe
                 onChange={onChange}
                 required
                 placeholder="name@clinic.com"
-                className="staff-input"
+                className="med-input"
               />
             </div>
-            <div className="staff-field">
-              <label className="staff-label">Phone <span className="staff-req">*</span></label>
+            <div className="med-field">
+              <label className="med-label">Phone <span className="med-req">*</span></label>
               <input
                 name="phone"
                 value={form.phone}
                 onChange={onChange}
                 required
                 placeholder="+62 812-3456-7890"
-                className="staff-input"
+                className="med-input"
               />
             </div>
           </div>
 
-          <div className="staff-form-grid">
-            <div className="staff-field">
-              <label className="staff-label">Schedule <span className="staff-req">*</span></label>
+          <div className="med-grid-2">
+            <div className="med-field">
+              <label className="med-label">Schedule <span className="med-req">*</span></label>
               <input
                 name="schedule"
                 value={form.schedule}
                 onChange={onChange}
                 required
                 placeholder="Mon - Fri, 09:00 - 17:00"
-                className="staff-input"
+                className="med-input"
               />
             </div>
-            <div className="staff-field">
-              <label className="staff-label">Location <span className="staff-req">*</span></label>
+            <div className="med-field">
+              <label className="med-label">Location <span className="med-req">*</span></label>
               <input
                 name="location"
                 value={form.location}
                 onChange={onChange}
                 required
                 placeholder="e.g., Jakarta Central"
-                className="staff-input"
+                className="med-input"
               />
             </div>
           </div>
 
-          <div className="staff-field">
-            <label className="staff-label">Status</label>
+          <div className="med-field">
+            <label className="med-label">Status</label>
             <select 
               name="status" 
               value={form.status} 
               onChange={onChange}
-              className="staff-input"
+              className="med-select"
             >
               {STATUSES.map(s => <option key={s} value={s}>{s}</option>)}
             </select>
           </div>
 
-          <div className="staff-modal__actions">
-            <button type="button" className="staff-btn staff-btn--ghost" onClick={onClose}>
+          <div className="med-modal__actions">
+            <button type="button" className="med-btn med-btn--ghost" onClick={onClose}>
               Cancel
             </button>
-            <button type="submit" className="staff-btn staff-btn--primary">
+            <button type="submit" className="med-btn med-btn--primary">
               {submitLabel}
             </button>
           </div>
@@ -275,20 +275,20 @@ export function StaffProfileModal({ staff, isOpen, onClose }) {
   const roleStyle = getRoleColor(staff.role);
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <button className="modal-close" onClick={onClose}>
+    <div className="med-overlay" onClick={onClose}>
+      <div className="med-modal med-modal--view" onClick={(e) => e.stopPropagation()}>
+        <button className="med-modal__close" onClick={onClose}>
           <X size={24} />
         </button>
 
-        <div className="modal-header">
-          <img src={staff.image} alt={staff.name} className="modal-avatar" />
-          <div className="modal-header-info">
-            <h2 className="modal-title">{staff.name}</h2>
-            <p className="modal-subtitle">{staff.specialization}</p>
+        <div className="med-view-meta">
+          <img src={staff.image} alt={staff.name} className="med-view-img" />
+          <div className="med-view-info">
+            <h2 className="med-view-name">{staff.name}</h2>
+            <p className="med-view-desc">{staff.specialization}</p>
             <div style={{ display: 'flex', gap: '8px', marginTop: '12px' }}>
               <div
-                className="modal-badge"
+                className="med-badge"
                 style={{
                   background: statusStyle.bg,
                   color: statusStyle.color,
@@ -298,7 +298,7 @@ export function StaffProfileModal({ staff, isOpen, onClose }) {
                 {staff.status}
               </div>
               <div
-                className="modal-badge"
+                className="med-badge"
                 style={{
                   background: roleStyle.bg,
                   color: roleStyle.color,
@@ -311,75 +311,75 @@ export function StaffProfileModal({ staff, isOpen, onClose }) {
           </div>
         </div>
 
-        <div className="modal-body">
-          <section className="modal-section">
-            <h3 className="modal-section-title">Contact Information</h3>
-            <div className="modal-info-grid">
-              <div className="modal-info-item">
-                <Mail size={18} className="modal-info-icon" />
+        <div className="med-modal__body">
+          <section className="med-profile-section">
+            <h3 className="med-profile-section__title">Contact Information</h3>
+            <div className="med-profile-info-grid">
+              <div className="med-profile-info-item">
+                <Mail size={18} className="med-profile-info-icon" />
                 <div>
-                  <p className="modal-info-label">Email</p>
-                  <p className="modal-info-value">{staff.email}</p>
+                  <p className="med-profile-info-label">Email</p>
+                  <p className="med-profile-info-value">{staff.email}</p>
                 </div>
               </div>
-              <div className="modal-info-item">
-                <Phone size={18} className="modal-info-icon" />
+              <div className="med-profile-info-item">
+                <Phone size={18} className="med-profile-info-icon" />
                 <div>
-                  <p className="modal-info-label">Phone</p>
-                  <p className="modal-info-value">{staff.phone}</p>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section className="modal-section">
-            <h3 className="modal-section-title">Work Information</h3>
-            <div className="modal-info-grid">
-              <div className="modal-info-item">
-                <Clock size={18} className="modal-info-icon" />
-                <div>
-                  <p className="modal-info-label">Schedule</p>
-                  <p className="modal-info-value">{staff.schedule}</p>
-                </div>
-              </div>
-              <div className="modal-info-item">
-                <MapPin size={18} className="modal-info-icon" />
-                <div>
-                  <p className="modal-info-label">Location</p>
-                  <p className="modal-info-value">{staff.location}</p>
+                  <p className="med-profile-info-label">Phone</p>
+                  <p className="med-profile-info-value">{staff.phone}</p>
                 </div>
               </div>
             </div>
           </section>
 
-          <section className="modal-section">
-            <h3 className="modal-section-title">Additional Details</h3>
-            <div className="modal-details-list">
-              <div className="modal-detail-row">
-                <span className="modal-detail-label">Staff ID:</span>
-                <span className="modal-detail-value">{staff.id}</span>
+          <section className="med-profile-section">
+            <h3 className="med-profile-section__title">Work Information</h3>
+            <div className="med-profile-info-grid">
+              <div className="med-profile-info-item">
+                <Clock size={18} className="med-profile-info-icon" />
+                <div>
+                  <p className="med-profile-info-label">Schedule</p>
+                  <p className="med-profile-info-value">{staff.schedule}</p>
+                </div>
               </div>
-              <div className="modal-detail-row">
-                <span className="modal-detail-label">Role:</span>
-                <span className="modal-detail-value">{staff.role}</span>
+              <div className="med-profile-info-item">
+                <MapPin size={18} className="med-profile-info-icon" />
+                <div>
+                  <p className="med-profile-info-label">Location</p>
+                  <p className="med-profile-info-value">{staff.location}</p>
+                </div>
               </div>
-              <div className="modal-detail-row">
-                <span className="modal-detail-label">Specialization:</span>
-                <span className="modal-detail-value">{staff.specialization}</span>
+            </div>
+          </section>
+
+          <section className="med-profile-section">
+            <h3 className="med-profile-section__title">Additional Details</h3>
+            <div className="med-profile-details-list">
+              <div className="med-profile-detail-row">
+                <span className="med-profile-detail-label">Staff ID:</span>
+                <span className="med-profile-detail-value">{staff.id}</span>
               </div>
-              <div className="modal-detail-row">
-                <span className="modal-detail-label">Status:</span>
-                <span className="modal-detail-value">{staff.status}</span>
+              <div className="med-profile-detail-row">
+                <span className="med-profile-detail-label">Role:</span>
+                <span className="med-profile-detail-value">{staff.role}</span>
+              </div>
+              <div className="med-profile-detail-row">
+                <span className="med-profile-detail-label">Specialization:</span>
+                <span className="med-profile-detail-value">{staff.specialization}</span>
+              </div>
+              <div className="med-profile-detail-row">
+                <span className="med-profile-detail-label">Status:</span>
+                <span className="med-profile-detail-value">{staff.status}</span>
               </div>
             </div>
           </section>
         </div>
 
-        <div className="modal-footer">
-          <button className="modal-btn modal-btn--secondary" onClick={onClose}>
+        <div className="med-modal__actions">
+          <button className="med-btn med-btn--ghost" onClick={onClose}>
             Close
           </button>
-          <button className="modal-btn modal-btn--primary">
+          <button className="med-btn med-btn--primary">
             Edit Profile
           </button>
         </div>

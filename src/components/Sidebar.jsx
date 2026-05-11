@@ -1,55 +1,55 @@
 import { Link } from "react-router-dom";
 import { FaTrashAlt } from "react-icons/fa";
 
-function SidebarIcon({ type, active }) {
-    const stroke = active ? "#ffffff" : "#2D2A27";
+function SidebarIcon({ type }) {
+    const common = { width: 16, height: 16, viewBox: "0 0 16 16", fill: "none" };
 
     if (type === "dashboard") {
         return (
-            <span className="lc-icon" aria-hidden="true">
-                <span style={{ outline: `1.67px ${stroke} solid`, outlineOffset: "-0.83px" }} />
-                <span style={{ outline: `1.67px ${stroke} solid`, outlineOffset: "-0.83px" }} />
-                <span style={{ outline: `1.67px ${stroke} solid`, outlineOffset: "-0.83px" }} />
-                <span style={{ outline: `1.67px ${stroke} solid`, outlineOffset: "-0.83px" }} />
-            </span>
+            <svg {...common} aria-hidden="true">
+                <path d="M2.5 2.5h4v4h-4v-4Z" stroke="currentColor" strokeWidth="1.33" />
+                <path d="M9.5 2.5h4v3.33h-4V2.5Z" stroke="currentColor" strokeWidth="1.33" />
+                <path d="M9.5 8.5h4v5h-4v-5Z" stroke="currentColor" strokeWidth="1.33" />
+                <path d="M2.5 10.5h4v3h-4v-3Z" stroke="currentColor" strokeWidth="1.33" />
+            </svg>
         );
     }
 
     if (type === "orders") {
         return (
-            <span className="lc-icon lc-icon--orders" aria-hidden="true">
-                <span style={{ outline: `1.67px ${stroke} solid`, outlineOffset: "-0.83px" }} />
-                <span style={{ outline: `1.67px ${stroke} solid`, outlineOffset: "-0.83px" }} />
-            </span>
+            <svg {...common} aria-hidden="true">
+                <rect x="2.5" y="3" width="11" height="10.5" rx="2" stroke="currentColor" strokeWidth="1.33" />
+                <path d="M5 1.5v3M11 1.5v3M2.5 6.5h11" stroke="currentColor" strokeWidth="1.33" />
+            </svg>
         );
     }
 
     if (type === "products") {
         return (
-            <span className="lc-icon lc-icon--products" aria-hidden="true">
-                <span style={{ outline: `1.67px ${stroke} solid`, outlineOffset: "-0.83px" }} />
-                <span style={{ outline: `1.67px ${stroke} solid`, outlineOffset: "-0.83px" }} />
-                <span style={{ outline: `1.67px ${stroke} solid`, outlineOffset: "-0.83px" }} />
-            </span>
+            <svg {...common} aria-hidden="true">
+                <path d="M5 2.5h5.5L13.5 5v8.5h-8.5v-11Z" stroke="currentColor" strokeWidth="1.33" />
+                <path d="M10.5 2.5V5h3" stroke="currentColor" strokeWidth="1.33" />
+                <path d="M6.5 8h3.5M6.5 10h3.5" stroke="currentColor" strokeWidth="1.33" />
+            </svg>
         );
     }
 
     if (type === "doctors-and-staff") {
         return (
-            <span className="lc-icon lc-icon--staff" aria-hidden="true">
-                <span style={{ width: '8.33px', height: '7.59px', left: '5.84px', top: '10.74px', position: 'absolute', outline: `1.67px ${stroke} solid`, outlineOffset: "-0.83px" }} />
-                <span style={{ width: '10px', height: '10px', left: '5px', top: '1.67px', position: 'absolute', outline: `1.67px ${stroke} solid`, outlineOffset: "-0.83px" }} />
-            </span>
+            <svg {...common} aria-hidden="true">
+                <circle cx="6" cy="5" r="2.5" stroke="currentColor" strokeWidth="1.33" />
+                <path d="M2.5 13.5c.75-2.5 2.5-3.5 3.5-3.5s2.75.5 3.5 3.5" stroke="currentColor" strokeWidth="1.33" />
+                <path d="M10.5 5.5h3M12 4v3" stroke="currentColor" strokeWidth="1.33" />
+            </svg>
         );
     }
 
     return (
-        <span className="lc-icon lc-icon--customers" aria-hidden="true">
-            <span style={{ outline: `1.67px ${stroke} solid`, outlineOffset: "-0.83px" }} />
-            <span style={{ outline: `1.67px ${stroke} solid`, outlineOffset: "-0.83px" }} />
-            <span style={{ outline: `1.67px ${stroke} solid`, outlineOffset: "-0.83px" }} />
-            <span style={{ outline: `1.67px ${stroke} solid`, outlineOffset: "-0.83px" }} />
-        </span>
+        <svg {...common} aria-hidden="true">
+            <circle cx="6" cy="5" r="3" stroke="currentColor" strokeWidth="1.33" />
+            <path d="M2.5 13.5c.5-2.67 2.33-4 3.5-4s3 .33 3.5 4" stroke="currentColor" strokeWidth="1.33" />
+            <path d="M11 4.5h3M12.5 3v3" stroke="currentColor" strokeWidth="1.33" />
+        </svg>
     );
 }
 
@@ -84,15 +84,19 @@ function SidebarMenuItem({ id, label, isActive, removable, onClick, onRemove }) 
         <li>
             <Link
                 to={getMenuPath(id)}
-                className={isActive ? "lc-nav__item lc-nav__item--active" : "lc-nav__item"}
+                className={isActive ? "med-navitem med-navitem--active" : "med-navitem"}
                 onClick={() => onClick(id)}
             >
-                <SidebarIcon type={id} active={isActive} />
-                <span className="lc-nav__label">{label}</span>
+                <span className="med-navitem__left">
+                    <span className="med-navicon" aria-hidden="true">
+                        <SidebarIcon type={id} />
+                    </span>
+                    <span className="med-navitem__label">{label}</span>
+                </span>
                 {removable ? (
                     <button
                         type="button"
-                        className="lc-nav__remove"
+                        className="med-navremove"
                         aria-label={`Delete ${label}`}
                         onClick={(e) => {
                             e.preventDefault();
@@ -119,21 +123,19 @@ function SidebarMenuItem({ id, label, isActive, removable, onClick, onRemove }) 
  */
 export default function Sidebar({ activeSection, menuItems, onMenuClick, onAddMenu, onRemoveMenu }) {
     return (
-        <aside className="lc-sidebar">
-            <div className="lc-sidebar__top">
-                <div className="lc-brand">
-                    <div className="lc-brand__mark" aria-hidden="true">
-                        <span>LC</span>
-                    </div>
-                    <div className="lc-brand__text">
-                        <div className="lc-brand__name">Lumiere Clinic</div>
-                        <div className="lc-brand__tag">Beauty &amp; Wellness</div>
-                    </div>
+        <aside className="med-sidebar">
+            <div className="med-sidebar__brandrow">
+                <div className="med-brandmark" aria-hidden="true">
+                    <span>LC</span>
+                </div>
+                <div className="med-brandcopy">
+                    <div className="med-brandcopy__title">Lumiere Clinic</div>
+                    <div className="med-brandcopy__subtitle">Beauty &amp; Wellness</div>
                 </div>
             </div>
 
-            <nav className="lc-sidebar__nav" aria-label="Sidebar navigation">
-                <ul className="lc-nav">
+            <nav className="med-sidebar__navwrap" aria-label="Sidebar navigation">
+                <ul className="med-sidebar__nav med-nav">
                     {menuItems.map((item) => (
                         <SidebarMenuItem
                             key={item.id}
@@ -148,15 +150,15 @@ export default function Sidebar({ activeSection, menuItems, onMenuClick, onAddMe
                 </ul>
             </nav>
 
-            <div className="lc-sidebar__promo">
-                <div className="lc-promo">
-                    <div className="lc-promo__icon" aria-hidden="true">
+            <div className="med-sidebar__footer">
+                <div className="med-promo">
+                    <div className="med-promo__icon" aria-hidden="true">
                         <span />
                         <span />
                     </div>
-                    <div className="lc-promo__title">Tambah Menu</div>
-                    <div className="lc-promo__desc">Masih tambah menu biasa saja</div>
-                    <button type="button" className="lc-promo__cta" onClick={onAddMenu}>
+                    <div className="med-promo__title">Tambah Menu</div>
+                    <div className="med-promo__desc">Masih tambah menu biasa saja</div>
+                    <button type="button" className="med-promo__cta" onClick={onAddMenu}>
                         Tambah Menu
                     </button>
                 </div>
