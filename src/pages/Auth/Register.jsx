@@ -59,7 +59,7 @@ export default function Register() {
                     <div className="login-visual__inner">
                         <img
                             className="login-visual__hero"
-                            src="https://images.unsplash.com/photo-1581595219315-a187dd40c322?auto=format&fit=crop&w=1200&q=80"
+                            src="/img/clinik.jpg"
                             alt="Medical team"
                         />
 

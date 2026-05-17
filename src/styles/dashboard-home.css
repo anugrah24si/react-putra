@@ -1678,7 +1678,7 @@ body[data-theme="light"] {
     margin: 0;
     font-size: 13px;
     line-height: 18px;
-    color: #a0a5b1;
+    color: var(--med-text-muted);
 }
 
 .med-staff-card__details {
@@ -1693,7 +1693,7 @@ body[data-theme="light"] {
     gap: 8px;
     font-size: 13px;
     line-height: 18px;
-    color: #d9dce5;
+    color: var(--med-text-muted);
     word-break: break-word;
 }
 
@@ -1728,7 +1728,7 @@ body[data-theme="light"] {
 
 .med-staff-card__btn:hover {
     border-color: rgba(46, 111, 252, 0.3);
-    background: #202635;
+    background: var(--med-bg-elevated);
 }
 
 .med-staff-card__btn--view {
@@ -1755,7 +1755,7 @@ body[data-theme="light"] {
     font-size: 12px;
     line-height: 16px;
     font-weight: 600;
-    color: #9aa0ad;
+    color: var(--med-text-muted);
     text-transform: uppercase;
     letter-spacing: 0.08em;
 }
@@ -1786,7 +1786,7 @@ body[data-theme="light"] {
     margin: 0;
     font-size: 12px;
     line-height: 16px;
-    color: #9aa0ad;
+    color: var(--med-text-muted);
     text-transform: uppercase;
     letter-spacing: 0.04em;
 }
