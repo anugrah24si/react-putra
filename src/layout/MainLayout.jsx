@@ -1,4 +1,5 @@
 import { Outlet } from "react-router-dom";
+import { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import { Link } from "react-router-dom";
@@ -241,6 +242,41 @@ export default function MainLayout({
     theme,
     onToggleTheme,
 }) {
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+    // Close sidebar when screen size changes to desktop
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth > 768) {
+                setIsSidebarOpen(false);
+            }
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    // Prevent body scroll when sidebar is open on mobile
+    useEffect(() => {
+        if (isSidebarOpen && window.innerWidth <= 768) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [isSidebarOpen]);
+
+    const handleToggleSidebar = () => {
+        setIsSidebarOpen(!isSidebarOpen);
+    };
+
+    const handleCloseSidebar = () => {
+        setIsSidebarOpen(false);
+    };
+
     return (
         <div className="med-shell">
             <div className="med-shell__inner">
@@ -250,6 +286,8 @@ export default function MainLayout({
                     onMenuClick={onMenuClick}
                     onAddMenu={onAddMenu}
                     onRemoveMenu={onRemoveMenu}
+                    isOpen={isSidebarOpen}
+                    onClose={handleCloseSidebar}
                 />
 
                 <main className="med-main">
@@ -259,6 +297,8 @@ export default function MainLayout({
                         activeSection={activeSection}
                         theme={theme}
                         onToggleTheme={onToggleTheme}
+                        onToggleSidebar={handleToggleSidebar}
+                        isSidebarOpen={isSidebarOpen}
                     />
                     <div className="med-content">
                         <Outlet />

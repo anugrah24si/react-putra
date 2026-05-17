@@ -6,34 +6,31 @@ const pageLabels = {
     'doctors-and-staff': { title: 'Doctors & Staff', subtitle: 'Manage your medical team and staff members' },
 };
 
-export default function Header({ searchValue, onSearchChange, activeSection, theme, onToggleTheme }) {
+export default function Header({ searchValue, onSearchChange, activeSection, theme, onToggleTheme, onToggleSidebar, isSidebarOpen }) {
     const meta = pageLabels[activeSection] ?? pageLabels.dashboard;
 
     return (
         <header className="med-topbar">
+            <button
+                type="button"
+                className={`med-mobile-toggle${isSidebarOpen ? ' med-mobile-toggle--open' : ''}`}
+                onClick={onToggleSidebar}
+                aria-label={isSidebarOpen ? "Close menu" : "Open menu"}
+                aria-expanded={isSidebarOpen}
+            >
+                <span className="med-mobile-toggle__icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+            </button>
+
             <div className="med-topbar__titleblock">
                 <h1 className="med-topbar__title">{meta.title}</h1>
                 <p className="med-topbar__subtitle">{meta.subtitle}</p>
             </div>
 
             <div className="med-topbar__actions">
-                <div className="med-search">
-                    <span className="med-search__icon" aria-hidden="true">
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                            <circle cx="7" cy="7" r="4.5" stroke="currentColor" strokeWidth="1.33" />
-                            <path d="M10.5 10.5L14 14" stroke="currentColor" strokeWidth="1.33" strokeLinecap="round" />
-                        </svg>
-                    </span>
-                    <input
-                        className="med-search__input"
-                        type="text"
-                        placeholder="Search appointments, clients, treatments..."
-                        value={searchValue}
-                        onChange={onSearchChange}
-                        aria-label="Search"
-                    />
-                </div>
-
                 <div className="med-statuspill">
                     <span className="med-statuspill__dot" aria-hidden="true" />
                     <span>Online</span>
@@ -66,6 +63,23 @@ export default function Header({ searchValue, onSearchChange, activeSection, the
                 </button>
 
                 <div className="med-avatar med-avatar--small">DS</div>
+            </div>
+
+            <div className="med-search">
+                <span className="med-search__icon" aria-hidden="true">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <circle cx="7" cy="7" r="4.5" stroke="currentColor" strokeWidth="1.33" />
+                        <path d="M10.5 10.5L14 14" stroke="currentColor" strokeWidth="1.33" strokeLinecap="round" />
+                    </svg>
+                </span>
+                <input
+                    className="med-search__input"
+                    type="text"
+                    placeholder="Search appointments, clients, treatments..."
+                    value={searchValue}
+                    onChange={onSearchChange}
+                    aria-label="Search"
+                />
             </div>
         </header>
     );

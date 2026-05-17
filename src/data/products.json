@@ -7,7 +7,7 @@
     "brand": "Essence",
     "price": 99900,
     "stock": 45,
-    "thumbnail": "/product_makeup_eye.png"
+    "thumbnail": "/img/product_makeup_eye.png"
   },
   {
     "id": 2,
@@ -17,7 +17,7 @@
     "brand": "MAC",
     "price": 249900,
     "stock": 32,
-    "thumbnail": "/product_makeup_face.png"
+    "thumbnail": "/img/product_makeup_face.png"
   },
   {
     "id": 3,
@@ -27,7 +27,7 @@
     "brand": "Revlon",
     "price": 149900,
     "stock": 28,
-    "thumbnail": "/product_makeup_face.png"
+    "thumbnail": "/img/product_makeup_face.png"
   },
   {
     "id": 4,
@@ -37,7 +37,7 @@
     "brand": "NARS",
     "price": 199900,
     "stock": 55,
-    "thumbnail": "/product_lipstick.png"
+    "thumbnail": "/img/product_lipstick.png"
   },
   {
     "id": 5,
@@ -47,7 +47,7 @@
     "brand": "Kiehl's",
     "price": 299900,
     "stock": 40,
-    "thumbnail": "/product_skincare.png"
+    "thumbnail": "/img/product_skincare.png"
   },
   {
     "id": 6,
@@ -57,7 +57,7 @@
     "brand": "Estée Lauder",
     "price": 449900,
     "stock": 25,
-    "thumbnail": "/product_skincare.png"
+    "thumbnail": "/img/product_skincare.png"
   },
   {
     "id": 7,
@@ -67,7 +67,7 @@
     "brand": "Neutrogena",
     "price": 89900,
     "stock": 60,
-    "thumbnail": "/product_skincare.png"
+    "thumbnail": "/img/product_skincare.png"
   },
   {
     "id": 8,
@@ -77,7 +77,7 @@
     "brand": "Olay",
     "price": 179900,
     "stock": 38,
-    "thumbnail": "/product_skincare.png"
+    "thumbnail": "/img/product_skincare.png"
   },
   {
     "id": 9,
@@ -87,7 +87,7 @@
     "brand": "Mediheal",
     "price": 49900,
     "stock": 120,
-    "thumbnail": "/product_treatment.png"
+    "thumbnail": "/img/product_treatment.png"
   },
   {
     "id": 10,
@@ -97,7 +97,7 @@
     "brand": "Aztec Secret",
     "price": 139900,
     "stock": 35,
-    "thumbnail": "/product_treatment.png"
+    "thumbnail": "/img/product_treatment.png"
   },
   {
     "id": 11,
@@ -107,7 +107,7 @@
     "brand": "Argan Oil",
     "price": 159900,
     "stock": 42,
-    "thumbnail": "/product_haircare.png"
+    "thumbnail": "/img/product_haircare.png"
   },
   {
     "id": 12,
@@ -117,7 +117,7 @@
     "brand": "Pantene",
     "price": 119900,
     "stock": 68,
-    "thumbnail": "/product_haircare.png"
+    "thumbnail": "/img/product_haircare.png"
   },
   {
     "id": 13,
@@ -127,7 +127,7 @@
     "brand": "L'Oreal",
     "price": 129900,
     "stock": 50,
-    "thumbnail": "/product_haircare.png"
+    "thumbnail": "/img/product_haircare.png"
   },
   {
     "id": 14,
@@ -137,7 +137,7 @@
     "brand": "Coppertone",
     "price": 139900,
     "stock": 45,
-    "thumbnail": "/product_skincare.png"
+    "thumbnail": "/img/product_skincare.png"
   },
   {
     "id": 15,
@@ -147,7 +147,7 @@
     "brand": "Proactive",
     "price": 119900,
     "stock": 52,
-    "thumbnail": "/product_treatment.png"
+    "thumbnail": "/img/product_treatment.png"
   },
   {
     "id": 16,
@@ -157,7 +157,7 @@
     "brand": "Clinique",
     "price": 249900,
     "stock": 33,
-    "thumbnail": "/product_skincare.png"
+    "thumbnail": "/img/product_skincare.png"
   },
   {
     "id": 17,
@@ -167,7 +167,7 @@
     "brand": "Burt's Bees",
     "price": 59900,
     "stock": 80,
-    "thumbnail": "/product_lipstick.png"
+    "thumbnail": "/img/product_lipstick.png"
   },
   {
     "id": 18,
@@ -177,7 +177,7 @@
     "brand": "Urban Decay",
     "price": 299900,
     "stock": 29,
-    "thumbnail": "/product_makeup_face.png"
+    "thumbnail": "/img/product_makeup_face.png"
   },
   {
     "id": 19,
@@ -187,7 +187,7 @@
     "brand": "Benefit",
     "price": 179900,
     "stock": 36,
-    "thumbnail": "/product_makeup_face.png"
+    "thumbnail": "/img/product_makeup_face.png"
   },
   {
     "id": 20,
@@ -197,7 +197,7 @@
     "brand": "St. Ives",
     "price": 79900,
     "stock": 71,
-    "thumbnail": "/product_treatment.png"
+    "thumbnail": "/img/product_treatment.png"
   },
   {
     "id": 21,
@@ -207,7 +207,7 @@
     "brand": "Thayers",
     "price": 109900,
     "stock": 58,
-    "thumbnail": "/product_skincare.png"
+    "thumbnail": "/img/product_skincare.png"
   },
   {
     "id": 22,
@@ -217,7 +217,7 @@
     "brand": "Olay",
     "price": 149900,
     "stock": 44,
-    "thumbnail": "/product_skincare.png"
+    "thumbnail": "/img/product_skincare.png"
   },
   {
     "id": 23,
@@ -227,7 +227,7 @@
     "brand": "Maybelline",
     "price": 69900,
     "stock": 85,
-    "thumbnail": "/product_makeup_eye.png"
+    "thumbnail": "/img/product_makeup_eye.png"
   },
   {
     "id": 24,
@@ -237,7 +237,7 @@
     "brand": "Anastasia Beverly Hills",
     "price": 139900,
     "stock": 47,
-    "thumbnail": "/product_makeup_eye.png"
+    "thumbnail": "/img/product_makeup_eye.png"
   },
   {
     "id": 25,
@@ -247,7 +247,7 @@
     "brand": "Likas",
     "price": 49900,
     "stock": 110,
-    "thumbnail": "/product_treatment.png"
+    "thumbnail": "/img/product_treatment.png"
   },
   {
     "id": 26,
@@ -257,7 +257,7 @@
     "brand": "The Ordinary",
     "price": 89900,
     "stock": 76,
-    "thumbnail": "/product_skincare.png"
+    "thumbnail": "/img/product_skincare.png"
   },
   {
     "id": 27,
@@ -267,7 +267,7 @@
     "brand": "Minimalist",
     "price": 99900,
     "stock": 54,
-    "thumbnail": "/product_skincare.png"
+    "thumbnail": "/img/product_skincare.png"
   },
   {
     "id": 28,
@@ -277,7 +277,7 @@
     "brand": "Missha",
     "price": 119900,
     "stock": 39,
-    "thumbnail": "/product_makeup_face.png"
+    "thumbnail": "/img/product_makeup_face.png"
   },
   {
     "id": 29,
@@ -287,7 +287,7 @@
     "brand": "Bioderma",
     "price": 129900,
     "stock": 63,
-    "thumbnail": "/product_skincare.png"
+    "thumbnail": "/img/product_skincare.png"
   },
   {
     "id": 30,
@@ -297,6 +297,6 @@
     "brand": "Patchology",
     "price": 159900,
     "stock": 28,
-    "thumbnail": "/product_treatment.png"
+    "thumbnail": "/img/product_treatment.png"
   }
 ]

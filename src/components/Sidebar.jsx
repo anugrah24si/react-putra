@@ -120,49 +120,68 @@ function SidebarMenuItem({ id, label, isActive, removable, onClick, onRemove }) 
  * @param {function} onMenuClick - Callback saat menu diklik
  * @param {function} onAddMenu - Callback saat tombol Add Menu ditekan
  * @param {function} onRemoveMenu - Callback saat menu dihapus
+ * @param {boolean} isOpen - Status sidebar terbuka/tertutup (untuk mobile)
+ * @param {function} onClose - Callback untuk menutup sidebar (untuk mobile)
  */
-export default function Sidebar({ activeSection, menuItems, onMenuClick, onAddMenu, onRemoveMenu }) {
+export default function Sidebar({ activeSection, menuItems, onMenuClick, onAddMenu, onRemoveMenu, isOpen, onClose }) {
+    const handleMenuClick = (id) => {
+        onMenuClick(id);
+        // Close sidebar on mobile after clicking menu
+        if (window.innerWidth <= 768 && onClose) {
+            onClose();
+        }
+    };
+
     return (
-        <aside className="med-sidebar">
-            <div className="med-sidebar__brandrow">
-                <div className="med-brandmark" aria-hidden="true">
-                    <span>LC</span>
-                </div>
-                <div className="med-brandcopy">
-                    <div className="med-brandcopy__title">Lumiere Clinic</div>
-                    <div className="med-brandcopy__subtitle">Beauty &amp; Wellness</div>
-                </div>
-            </div>
+        <>
+            {/* Overlay for mobile */}
+            <div
+                className={`med-sidebar-overlay${isOpen ? ' med-sidebar-overlay--visible' : ''}`}
+                onClick={onClose}
+                aria-hidden="true"
+            />
 
-            <nav className="med-sidebar__navwrap" aria-label="Sidebar navigation">
-                <ul className="med-sidebar__nav med-nav">
-                    {menuItems.map((item) => (
-                        <SidebarMenuItem
-                            key={item.id}
-                            id={item.id}
-                            label={item.label}
-                            isActive={activeSection === item.id}
-                            removable={item.removable}
-                            onClick={onMenuClick}
-                            onRemove={onRemoveMenu}
-                        />
-                    ))}
-                </ul>
-            </nav>
-
-            <div className="med-sidebar__footer">
-                <div className="med-promo">
-                    <div className="med-promo__icon" aria-hidden="true">
-                        <span />
-                        <span />
+            <aside className={`med-sidebar${isOpen ? ' med-sidebar--open' : ''}`}>
+                <div className="med-sidebar__brandrow">
+                    <div className="med-brandmark" aria-hidden="true">
+                        <span>LC</span>
                     </div>
-                    <div className="med-promo__title">Tambah Menu</div>
-                    <div className="med-promo__desc">Masih tambah menu biasa saja</div>
-                    <button type="button" className="med-promo__cta" onClick={onAddMenu}>
-                        Tambah Menu
-                    </button>
+                    <div className="med-brandcopy">
+                        <div className="med-brandcopy__title">Lumiere Clinic</div>
+                        <div className="med-brandcopy__subtitle">Beauty &amp; Wellness</div>
+                    </div>
                 </div>
-            </div>
-        </aside>
+
+                <nav className="med-sidebar__navwrap" aria-label="Sidebar navigation">
+                    <ul className="med-sidebar__nav med-nav">
+                        {menuItems.map((item) => (
+                            <SidebarMenuItem
+                                key={item.id}
+                                id={item.id}
+                                label={item.label}
+                                isActive={activeSection === item.id}
+                                removable={item.removable}
+                                onClick={handleMenuClick}
+                                onRemove={onRemoveMenu}
+                            />
+                        ))}
+                    </ul>
+                </nav>
+
+                <div className="med-sidebar__footer">
+                    <div className="med-promo">
+                        <div className="med-promo__icon" aria-hidden="true">
+                            <span />
+                            <span />
+                        </div>
+                        <div className="med-promo__title">Tambah Menu</div>
+                        <div className="med-promo__desc">Masih tambah menu biasa saja</div>
+                        <button type="button" className="med-promo__cta" onClick={onAddMenu}>
+                            Tambah Menu
+                        </button>
+                    </div>
+                </div>
+            </aside>
+        </>
     );
 }

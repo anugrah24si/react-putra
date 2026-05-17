@@ -231,7 +231,7 @@ export default function Dashboard({ cards = [] }) {
                             type="button"
                             className={`med-actionbtn${action.primary ? " med-actionbtn--primary" : ""}`}
                         >
-                            <QuickActionIcon type={action.icon} color={action.primary ? "#0D0D0D" : "#FFFFFF"} />
+                            <QuickActionIcon type={action.icon} color={action.primary ? "currentColor" : "#FFFFFF"} />
                             <span>{action.label}</span>
                         </button>
                     ))}

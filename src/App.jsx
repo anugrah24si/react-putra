@@ -345,12 +345,12 @@ export default function App() {
                 return currentCustomers.map((customer) =>
                     customer.name.toLowerCase() === targetName
                         ? {
-                              ...customer,
-                              totalOrder: Number(customer.totalOrder || 0) + 1,
-                              lastVisit: today,
-                              status: "Active",
-                              totalSpent: formatRupiah(parseRupiah(customer.totalSpent) + orderAmount),
-                          }
+                            ...customer,
+                            totalOrder: Number(customer.totalOrder || 0) + 1,
+                            lastVisit: today,
+                            status: "Active",
+                            totalSpent: formatRupiah(parseRupiah(customer.totalSpent) + orderAmount),
+                        }
                         : customer,
                 );
             }

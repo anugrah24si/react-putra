@@ -5,22 +5,22 @@ import staffData from '../../data/staff.json';
 import '../../styles/dashboard-home.css';
 
 const ROLES = ['Doctor', 'Nurse', 'Therapist', 'Receptionist'];
-const EMPTY_STAFF_FORM = { 
-  name: '', 
-  role: '', 
-  specialization: '', 
-  email: '', 
-  phone: '', 
-  schedule: '', 
-  location: '', 
-  status: 'Active' 
+const EMPTY_STAFF_FORM = {
+  name: '',
+  role: '',
+  specialization: '',
+  email: '',
+  phone: '',
+  schedule: '',
+  location: '',
+  status: 'Active'
 };
 
 export default function DoctorsAndStaff() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterRole, setFilterRole] = useState('all');
   const [showFilter, setShowFilter] = useState(false);
-  
+
   // Profile Modal states
   const [selectedStaff, setSelectedStaff] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -97,18 +97,19 @@ export default function DoctorsAndStaff() {
 
   return (
     <div className="med-staff-page">
-      {/* Header */}
-      <div className="med-orders__head">
+      {/* Header with Actions */}
+      <div className="med-staff__head">
         <div>
-          <h1 className="med-orders__title">Doctors & Staff</h1>
-          <p className="med-orders__subtitle">Manage your medical team and staff members</p>
+          <h1 className="med-staff__title">Doctors & Staff</h1>
+          <p className="med-staff__subtitle">Manage your medical team and staff members</p>
         </div>
-      </div>
 
-      {/* Action Bar */}
-      <div className="med-orders__actions">
-        <div style={{ flex: 1 }}>
-          <div style={{ position: 'relative', maxWidth: '576px' }}>
+        <div className="med-staff__actions">
+          {/* Search */}
+          <div className="med-search">
+            <svg className="med-search__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
             <input
               type="text"
               placeholder="Search doctors, staff, specializations..."
@@ -116,55 +117,26 @@ export default function DoctorsAndStaff() {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
-            <svg
-              className="med-search__icon"
-              style={{
-                position: 'absolute',
-                left: '16px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                width: '20px',
-                height: '20px',
-              }}
-              viewBox="0 0 20 20"
-              fill="none"
-            >
-              <circle
-                cx="8.5"
-                cy="8.5"
-                r="5.5"
-                stroke="currentColor"
-                strokeWidth="1.67"
-              />
-              <path
-                d="M13 13L17 17"
-                stroke="currentColor"
-                strokeWidth="1.67"
-                strokeLinecap="round"
-              />
-            </svg>
           </div>
-        </div>
 
-        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-          {/* Filter Button */}
+          {/* Filter */}
           <div style={{ position: 'relative' }}>
-            <button 
+            <button
               className="med-btn med-btn--ghost"
               onClick={() => setShowFilter(v => !v)}
             >
               <Filter size={16} />
-              <span>Filter</span>
+              Filter
             </button>
             {showFilter && (
               <div className="med-filter-pop">
                 <p className="med-filter-pop__label">Role</p>
-                <select 
-                  className="med-select" 
-                  value={filterRole} 
-                  onChange={(e) => { 
-                    setFilterRole(e.target.value); 
-                    setShowFilter(false); 
+                <select
+                  className="med-select"
+                  value={filterRole}
+                  onChange={(e) => {
+                    setFilterRole(e.target.value);
+                    setShowFilter(false);
                   }}
                 >
                   <option value="all">All Roles</option>
@@ -175,12 +147,12 @@ export default function DoctorsAndStaff() {
           </div>
 
           {/* Add Staff Button */}
-          <button 
+          <button
             className="med-btn med-btn--primary"
             onClick={() => setAddOpen(true)}
           >
             <Plus size={16} />
-            <span>Add Staff</span>
+            Add Staff
           </button>
         </div>
       </div>
@@ -248,10 +220,10 @@ export default function DoctorsAndStaff() {
       )}
 
       {/* Staff Profile Modal */}
-      <StaffProfileModal 
-        staff={selectedStaff} 
-        isOpen={isModalOpen} 
-        onClose={handleCloseModal} 
+      <StaffProfileModal
+        staff={selectedStaff}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
       />
     </div>
   );

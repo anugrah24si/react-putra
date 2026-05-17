@@ -28,6 +28,15 @@ body[data-theme="light"] {
     --med-inverse-bg: #111827;
     --med-inverse-text: #ffffff;
 }
+
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
 .med-shell {
     min-height: 100vh;
     width: 100%;
@@ -183,12 +192,12 @@ body[data-theme="light"] {
     border-radius: 8px;
 }
 
-.med-group > summary {
+.med-group>summary {
     list-style: none;
     cursor: default;
 }
 
-.med-group > summary::-webkit-details-marker {
+.med-group>summary::-webkit-details-marker {
     display: none;
 }
 
@@ -427,7 +436,8 @@ body[data-theme="light"] {
 .med-content {
     flex: 1;
     min-width: 0;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
     padding: 24px 24px 32px;
     background: var(--med-bg-app);
 }
@@ -727,6 +737,10 @@ body[data-theme="light"] {
     outline-color: transparent;
 }
 
+.med-actionbtn--primary:hover {
+    opacity: 0.9;
+}
+
 @media (max-width: 1280px) {
     .med-stats {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -749,6 +763,16 @@ body[data-theme="light"] {
     display: flex;
     flex-direction: column;
     gap: 24px;
+    width: 100%;
+    max-width: 100%;
+}
+
+.med-staff-page {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+    max-width: 100%;
 }
 
 .med-orders__head,
@@ -759,6 +783,15 @@ body[data-theme="light"] {
     align-items: flex-start;
     justify-content: space-between;
     gap: 20px;
+    flex-wrap: wrap;
+}
+
+.med-orders__head>div:first-child,
+.med-customers__head>div:first-child,
+.med-products__head>div:first-child,
+.med-staff__head>div:first-child {
+    flex: 1 1 auto;
+    min-width: 250px;
 }
 
 .med-orders__title,
@@ -790,6 +823,15 @@ body[data-theme="light"] {
     align-items: center;
     gap: 12px;
     flex-shrink: 0;
+    flex-wrap: wrap;
+}
+
+.med-orders__actions .med-search,
+.med-customers__actions .med-search,
+.med-products__actions .med-search,
+.med-staff__actions .med-search {
+    min-width: 240px;
+    flex: 1 1 auto;
 }
 
 .med-orders__filterwrap {
@@ -944,6 +986,7 @@ body[data-theme="light"] {
     cursor: pointer;
     transition: all 0.2s ease;
     position: relative;
+    white-space: nowrap;
 }
 
 .med-btn__icon {
@@ -955,7 +998,7 @@ body[data-theme="light"] {
     flex-shrink: 0;
 }
 
-.med-btn__icon > span {
+.med-btn__icon>span {
     position: absolute;
     width: 4px;
     height: 4px;
@@ -963,12 +1006,12 @@ body[data-theme="light"] {
     border-radius: 999px;
 }
 
-.med-btn__icon > span:nth-child(1) {
+.med-btn__icon>span:nth-child(1) {
     top: 6px;
     left: 6px;
 }
 
-.med-btn__icon > span:nth-child(2) {
+.med-btn__icon>span:nth-child(2) {
     top: 6px;
     right: 6px;
 }
@@ -976,10 +1019,16 @@ body[data-theme="light"] {
 .med-btn--primary {
     background: #2e6ffc;
     color: var(--med-text-main);
+    border: none;
 }
 
 .med-btn--primary:hover {
     background: #2461e6;
+}
+
+.med-btn--primary .med-btn__icon {
+    width: 16px;
+    height: 16px;
 }
 
 .med-btn--ghost {
@@ -1311,7 +1360,7 @@ body[data-theme="light"] {
     color: var(--med-text-main);
 }
 
-.med-kebab > span {
+.med-kebab>span {
     position: absolute;
     width: 3px;
     height: 3px;
@@ -1319,16 +1368,16 @@ body[data-theme="light"] {
     border-radius: 999px;
 }
 
-.med-kebab > span:nth-child(1) {
+.med-kebab>span:nth-child(1) {
     top: 6px;
 }
 
-.med-kebab > span:nth-child(2) {
+.med-kebab>span:nth-child(2) {
     top: 50%;
     transform: translateY(-50%);
 }
 
-.med-kebab > span:nth-child(3) {
+.med-kebab>span:nth-child(3) {
     bottom: 6px;
 }
 
@@ -1414,7 +1463,7 @@ body[data-theme="light"] {
     object-fit: cover;
 }
 
-.med-view-img > span:last-child {
+.med-view-img>span:last-child {
     position: absolute;
     top: 12px;
     right: 12px;
@@ -1848,6 +1897,98 @@ body[data-theme="light"] {
     text-transform: uppercase;
 }
 
+/* Mobile Menu Toggle Button */
+.med-mobile-toggle {
+    display: none;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--med-border);
+    border-radius: 8px;
+    background: var(--med-bg-app);
+    color: var(--med-text-main);
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    z-index: 1001;
+}
+
+.med-mobile-toggle__icon {
+    width: 20px;
+    height: 16px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.med-mobile-toggle__icon span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: currentColor;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+.med-mobile-toggle--open .med-mobile-toggle__icon span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.med-mobile-toggle--open .med-mobile-toggle__icon span:nth-child(2) {
+    opacity: 0;
+}
+
+.med-mobile-toggle--open .med-mobile-toggle__icon span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Mobile Sidebar Overlay */
+.med-sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.med-sidebar-overlay--visible {
+    display: block;
+    opacity: 1;
+}
+
+/* Desktop optimization for larger screens */
+@media (min-width: 1440px) {
+
+    .med-orders__head,
+    .med-customers__head,
+    .med-products__head,
+    .med-staff__head {
+        flex-wrap: nowrap;
+    }
+
+    .med-orders__actions .med-search,
+    .med-customers__actions .med-search,
+    .med-products__actions .med-search,
+    .med-staff__actions .med-search {
+        min-width: 280px;
+        max-width: 400px;
+    }
+}
+
+@media (min-width: 1024px) and (max-width: 1439px) {
+
+    .med-orders__actions,
+    .med-customers__actions,
+    .med-products__actions,
+    .med-staff__actions {
+        width: 100%;
+        justify-content: flex-start;
+    }
+}
+
 @media (max-width: 1280px) {
     .med-shell__inner {
         flex-direction: column;
@@ -1885,15 +2026,226 @@ body[data-theme="light"] {
     .med-actionsgrid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+
+    /* Wrap header actions on smaller desktop */
+    .med-orders__head,
+    .med-customers__head,
+    .med-products__head,
+    .med-staff__head {
+        flex-wrap: wrap;
+    }
+
+    .med-orders__actions,
+    .med-customers__actions,
+    .med-products__actions,
+    .med-staff__actions {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .med-orders__actions .med-search,
+    .med-customers__actions .med-search,
+    .med-products__actions .med-search,
+    .med-staff__actions .med-search {
+        flex: 1;
+        min-width: 200px;
+    }
 }
 
 @media (max-width: 768px) {
+
+    /* Mobile Toggle Button */
+    .med-mobile-toggle {
+        display: inline-flex;
+    }
+
+    /* Layout */
+    .med-shell__inner {
+        position: relative;
+    }
+
+    .med-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 280px;
+        max-width: 85vw;
+        z-index: 1000;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        padding: 12px 8px;
+        box-shadow: 4px 0 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .med-sidebar--open {
+        transform: translateX(0);
+    }
+
+    .med-sidebar__brandrow {
+        height: 56px;
+        padding: 0 12px;
+    }
+
+    .med-brandmark {
+        width: 28px;
+        height: 28px;
+    }
+
+    .med-brandcopy__title {
+        font-size: 14px;
+        line-height: 20px;
+    }
+
+    .med-brandcopy__subtitle {
+        font-size: 11px;
+    }
+
+    .med-sidebar__navwrap {
+        max-height: 200px;
+        padding: 4px;
+    }
+
+    .med-navitem {
+        min-height: 32px;
+        padding: 6px 10px;
+        font-size: 13px;
+    }
+
+    .med-navicon {
+        width: 14px;
+        height: 14px;
+    }
+
+    .med-sidebar__footer {
+        padding: 8px;
+    }
+
+    .med-promo {
+        padding: 12px;
+        gap: 6px;
+    }
+
+    .med-promo__title {
+        font-size: 13px;
+        line-height: 18px;
+    }
+
+    .med-promo__desc {
+        font-size: 11px;
+        line-height: 15px;
+    }
+
+    .med-promo__cta {
+        min-height: 32px;
+        font-size: 13px;
+        padding: 6px 10px;
+    }
+
+    /* Topbar */
+    .med-topbar {
+        height: auto;
+        min-height: auto;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        padding: 12px;
+        gap: 12px;
+    }
+
+    .med-topbar__titleblock {
+        flex: 1;
+        min-width: 0;
+        order: 2;
+    }
+
+    .med-topbar__title {
+        font-size: 18px;
+        line-height: 24px;
+    }
+
+    .med-topbar__subtitle {
+        font-size: 13px;
+        line-height: 18px;
+    }
+
+    .med-topbar__actions {
+        order: 3;
+        width: auto;
+        flex: 0 0 auto;
+        justify-content: flex-end;
+        flex-wrap: nowrap;
+        gap: 8px;
+    }
+
+    .med-search {
+        order: 4;
+        width: 100%;
+        max-width: 100%;
+        flex-basis: 100%;
+    }
+
+    .med-search__input {
+        height: 40px;
+        font-size: 14px;
+        padding: 8px 12px 8px 36px;
+        border-radius: 10px;
+    }
+
+    .med-search__icon {
+        left: 10px;
+    }
+
+    .med-statuspill {
+        font-size: 11px;
+        padding: 3px 8px;
+        min-height: 20px;
+        white-space: nowrap;
+    }
+
+    .med-iconbutton {
+        width: 36px;
+        height: 36px;
+        flex-shrink: 0;
+    }
+
+    .med-avatar {
+        width: 32px;
+        height: 32px;
+        font-size: 13px;
+        flex-shrink: 0;
+    }
+
+    /* Content */
+    .med-content {
+        padding: 12px;
+    }
+
+    /* Page Headers */
     .med-orders__head,
     .med-customers__head,
     .med-products__head,
     .med-staff__head {
         flex-direction: column;
         align-items: stretch;
+        gap: 12px;
+    }
+
+    .med-orders__title,
+    .med-customers__title,
+    .med-products__title,
+    .med-staff__title {
+        font-size: 20px;
+        line-height: 28px;
+    }
+
+    .med-orders__subtitle,
+    .med-customers__subtitle,
+    .med-products__subtitle,
+    .med-staff__subtitle {
+        font-size: 13px;
+        line-height: 18px;
+        margin-top: 4px;
     }
 
     .med-orders__actions,
@@ -1901,40 +2253,630 @@ body[data-theme="light"] {
     .med-products__actions,
     .med-staff__actions {
         flex-direction: column;
+        width: 100%;
+        gap: 8px;
     }
 
-    .med-table {
-        font-size: 12px;
+    .med-orders__filterwrap {
+        width: 100%;
     }
 
-    .med-table th,
-    .med-table td {
-        padding: 8px 12px;
-        height: auto;
+    .med-btn {
+        width: 100%;
+        justify-content: center;
+        min-height: 44px;
+        font-size: 14px;
+        padding: 10px 16px;
+        touch-action: manipulation;
     }
 
+    .med-btn__icon {
+        width: 18px;
+        height: 18px;
+    }
+
+    /* Stats */
     .med-stats {
         grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .med-statcard {
+        padding: 16px;
+        min-height: 100px;
+    }
+
+    .med-statcard__head {
+        margin-bottom: 12px;
+    }
+
+    .med-statcard__label {
+        font-size: 13px;
+    }
+
+    .med-statcard__value {
+        font-size: 20px;
+        line-height: 28px;
+    }
+
+    .med-statcard__delta {
+        font-size: 11px;
+        margin-top: 2px;
     }
 
     .med-stats-grid {
         grid-template-columns: 1fr;
+        gap: 12px;
     }
 
+    .med-stats-card {
+        padding: 16px;
+    }
+
+    .med-stats-card__value {
+        font-size: 24px;
+        line-height: 32px;
+    }
+
+    .med-stats-card__label {
+        font-size: 12px;
+    }
+
+    /* Tables */
+    .med-tablecard {
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .med-tablewrap {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        scrollbar-color: var(--med-border) transparent;
+    }
+
+    .med-tablewrap::-webkit-scrollbar {
+        height: 6px;
+    }
+
+    .med-tablewrap::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .med-tablewrap::-webkit-scrollbar-thumb {
+        background: var(--med-border);
+        border-radius: 3px;
+    }
+
+    .med-tablewrap::-webkit-scrollbar-thumb:hover {
+        background: var(--med-text-muted);
+    }
+
+    .med-table {
+        font-size: 12px;
+        min-width: 600px;
+    }
+
+    .med-table th {
+        padding: 10px 8px;
+        height: auto;
+        font-size: 11px;
+        white-space: nowrap;
+    }
+
+    .med-table td {
+        padding: 10px 8px;
+        height: auto;
+        font-size: 12px;
+    }
+
+    .med-td--strong {
+        font-size: 12px;
+    }
+
+    .med-td--muted {
+        font-size: 11px;
+    }
+
+    .med-chip {
+        font-size: 11px;
+        padding: 3px 8px;
+        min-height: 24px;
+    }
+
+    .med-kebab {
+        width: 24px;
+        height: 24px;
+    }
+
+    /* Badges */
+    .med-badge {
+        font-size: 11px;
+        padding: 4px 8px;
+    }
+
+    .med-statusbadge {
+        font-size: 11px;
+        padding: 2px 8px;
+        min-height: 20px;
+    }
+
+    /* Grids */
     .med-splitgrid {
         grid-template-columns: 1fr;
     }
 
     .med-actionsgrid {
         grid-template-columns: 1fr;
+        gap: 12px;
     }
 
     .med-products-grid,
     .med-staff-grid {
         grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .med-grid-2 {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    /* Panels */
+    .med-panel {
+        padding: 16px;
+    }
+
+    .med-panel__head {
+        margin-bottom: 16px;
+    }
+
+    .med-panel__title {
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .med-panel__subtitle {
+        font-size: 13px;
+        line-height: 18px;
+    }
+
+    .med-appointment {
+        min-height: 60px;
+        padding: 10px;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .med-appointment__name {
+        font-size: 14px;
+    }
+
+    .med-appointment__type {
+        font-size: 12px;
+    }
+
+    .med-appointment__time {
+        font-size: 12px;
+    }
+
+    .med-appointment__meta {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .med-activity {
+        min-height: 50px;
+        gap: 10px;
+    }
+
+    .med-activity__label,
+    .med-activity__name {
+        font-size: 13px;
+    }
+
+    .med-activity__time {
+        font-size: 11px;
+    }
+
+    .med-actionbtn {
+        min-height: 60px;
+        font-size: 13px;
+        padding: 10px;
+    }
+
+    /* Forms */
+    .med-field {
+        gap: 6px;
+    }
+
+    .med-label {
+        font-size: 13px;
+        line-height: 18px;
+    }
+
+    .med-input,
+    .med-textarea,
+    .med-select {
+        font-size: 16px;
+        padding: 12px;
+        min-height: 44px;
+        border-radius: 10px;
+        touch-action: manipulation;
+    }
+
+    .med-input:focus,
+    .med-textarea:focus,
+    .med-select:focus {
+        box-shadow: 0 0 0 3px rgba(46, 111, 252, 0.15);
+    }
+
+    .med-textarea {
+        min-height: 100px;
+    }
+
+    /* Modals */
+    .med-overlay {
+        padding: 0;
+        align-items: flex-end;
     }
 
     .med-modal {
-        max-width: calc(100% - 32px);
+        max-width: 100%;
+        width: 100%;
+        margin: 0;
+        border-radius: 16px 16px 0 0;
+        max-height: 90vh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .med-modal--sm,
+    .med-modal--view {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .med-modal__head {
+        padding: 16px;
+        position: sticky;
+        top: 0;
+        background: var(--med-bg-app);
+        z-index: 10;
+        border-bottom: 1px solid var(--med-border);
+    }
+
+    .med-modal__title {
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .med-modal__close {
+        width: 36px;
+        height: 36px;
+    }
+
+    .med-modal__body {
+        padding: 16px;
+        gap: 12px;
+    }
+
+    .med-modal__actions {
+        padding: 12px 16px;
+        flex-direction: column-reverse;
+        gap: 8px;
+        position: sticky;
+        bottom: 0;
+        background: var(--med-bg-app);
+        border-top: 1px solid var(--med-border);
+    }
+
+    .med-modal__actions .med-btn {
+        width: 100%;
+    }
+
+    /* Pagination */
+    .med-dash-pagination {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 6px;
+    }
+
+    .med-page-btn {
+        min-height: 32px;
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+
+    .med-page-num {
+        min-height: 32px;
+        width: 32px;
+        font-size: 12px;
+    }
+
+    /* Product Cards */
+    .med-product-card__body {
+        padding: 12px;
+    }
+
+    .med-product-card__price {
+        font-size: 16px;
+    }
+
+    .med-product-card__name {
+        font-size: 14px;
+    }
+
+    .med-product-card__actions {
+        flex-wrap: wrap;
+    }
+
+    /* Staff Cards */
+    .med-staff-card {
+        padding: 12px;
+    }
+
+    .med-staff-card__name {
+        font-size: 15px;
+        line-height: 20px;
+    }
+
+    .med-staff-card__specialization {
+        font-size: 12px;
+    }
+
+    .med-staff-card__detail-item {
+        font-size: 12px;
+    }
+
+    .med-staff-card__footer {
+        flex-wrap: wrap;
+    }
+
+    .med-staff-card__btn {
+        min-height: 36px;
+        font-size: 13px;
+    }
+
+    .med-staff-card__btn--view {
+        flex: 1;
+        min-width: 100%;
+    }
+
+    .med-staff-card__btn--edit {
+        flex: 1;
+        width: auto;
+    }
+
+    /* View Modal */
+    .med-view-name {
+        font-size: 18px;
+        line-height: 24px;
+    }
+
+    .med-view-desc {
+        font-size: 13px;
+    }
+
+    .med-view-row {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .med-view-stat {
+        padding: 10px;
+    }
+
+    .med-view-stat__label {
+        font-size: 11px;
+    }
+
+    .med-view-stat__val {
+        font-size: 14px;
+    }
+
+    /* Profile Modal */
+    .med-profile-section {
+        padding-top: 16px;
+    }
+
+    .med-profile-section__title {
+        font-size: 12px;
+        margin-bottom: 10px;
+    }
+
+    .med-profile-info-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .med-profile-info-item {
+        padding: 10px;
+    }
+
+    .med-profile-info-label {
+        font-size: 11px;
+    }
+
+    .med-profile-info-value {
+        font-size: 13px;
+    }
+
+    .med-profile-detail-row {
+        padding: 10px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+
+    .med-profile-detail-label,
+    .med-profile-detail-value {
+        font-size: 13px;
+    }
+
+    .med-profile-detail-value {
+        text-align: left;
+    }
+
+    /* Empty State */
+    .med-empty {
+        padding: 24px 16px;
+        font-size: 13px;
+    }
+
+    /* Filter Popup */
+    .med-filter-pop {
+        left: 0;
+        right: 0;
+        width: calc(100% - 24px);
+        margin: 0 12px;
+    }
+
+    .med-pop {
+        left: 0;
+        right: 0;
+        width: calc(100% - 24px);
+        margin: 0 12px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    /* Extra small mobile adjustments */
+    .med-topbar {
+        padding: 10px;
+        gap: 10px;
+    }
+
+    .med-topbar__title {
+        font-size: 16px;
+        line-height: 22px;
+    }
+
+    .med-topbar__subtitle {
+        font-size: 12px;
+        line-height: 16px;
+    }
+
+    .med-mobile-toggle {
+        width: 36px;
+        height: 36px;
+    }
+
+    .med-iconbutton {
+        width: 32px;
+        height: 32px;
+    }
+
+    .med-avatar {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+
+    .med-statuspill {
+        font-size: 10px;
+        padding: 2px 6px;
+    }
+
+    .med-content {
+        padding: 10px;
+    }
+
+    .med-orders__title,
+    .med-customers__title,
+    .med-products__title,
+    .med-staff__title {
+        font-size: 18px;
+        line-height: 24px;
+    }
+
+    .med-orders__subtitle,
+    .med-customers__subtitle,
+    .med-products__subtitle,
+    .med-staff__subtitle {
+        font-size: 12px;
+    }
+
+    .med-statcard {
+        padding: 12px;
+        min-height: 90px;
+    }
+
+    .med-statcard__label {
+        font-size: 12px;
+    }
+
+    .med-statcard__value {
+        font-size: 18px;
+        line-height: 24px;
+    }
+
+    .med-statcard__delta {
+        font-size: 10px;
+    }
+
+    .med-panel {
+        padding: 12px;
+    }
+
+    .med-panel__title {
+        font-size: 14px;
+    }
+
+    .med-table {
+        font-size: 11px;
+        min-width: 550px;
+    }
+
+    .med-table th,
+    .med-table td {
+        padding: 8px 6px;
+        font-size: 11px;
+    }
+
+    .med-badge,
+    .med-chip {
+        font-size: 10px;
+        padding: 3px 6px;
+    }
+
+    .med-modal {
+        border-radius: 12px 12px 0 0;
+    }
+
+    .med-modal__head,
+    .med-modal__body {
+        padding: 12px;
+    }
+
+    .med-modal__title {
+        font-size: 15px;
+    }
+
+    .med-product-card__body,
+    .med-staff-card {
+        padding: 10px;
+    }
+
+    .med-btn {
+        min-height: 40px;
+        font-size: 13px;
+        padding: 8px 14px;
+    }
+
+    .med-input,
+    .med-textarea,
+    .med-select {
+        font-size: 15px;
+        padding: 10px;
+        min-height: 42px;
+    }
+
+    .med-search__input {
+        height: 38px;
+        font-size: 13px;
     }
 }
