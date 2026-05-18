@@ -1,113 +1,63 @@
-import { Link } from "react-router-dom";
 import { FaTrashAlt } from "react-icons/fa";
+import { Logo } from './layout';
+import { NavItem, SidebarOverlay } from './navigation';
+import { Button } from './ui';
+import { DashboardIcon, OrdersIcon, ProductsIcon, StaffIcon, CustomersIcon } from './icons';
 
-function SidebarIcon({ type }) {
-    const common = { width: 16, height: 16, viewBox: "0 0 16 16", fill: "none" };
-
-    if (type === "dashboard") {
-        return (
-            <svg {...common} aria-hidden="true">
-                <path d="M2.5 2.5h4v4h-4v-4Z" stroke="currentColor" strokeWidth="1.33" />
-                <path d="M9.5 2.5h4v3.33h-4V2.5Z" stroke="currentColor" strokeWidth="1.33" />
-                <path d="M9.5 8.5h4v5h-4v-5Z" stroke="currentColor" strokeWidth="1.33" />
-                <path d="M2.5 10.5h4v3h-4v-3Z" stroke="currentColor" strokeWidth="1.33" />
-            </svg>
-        );
-    }
-
-    if (type === "orders") {
-        return (
-            <svg {...common} aria-hidden="true">
-                <rect x="2.5" y="3" width="11" height="10.5" rx="2" stroke="currentColor" strokeWidth="1.33" />
-                <path d="M5 1.5v3M11 1.5v3M2.5 6.5h11" stroke="currentColor" strokeWidth="1.33" />
-            </svg>
-        );
-    }
-
-    if (type === "products") {
-        return (
-            <svg {...common} aria-hidden="true">
-                <path d="M5 2.5h5.5L13.5 5v8.5h-8.5v-11Z" stroke="currentColor" strokeWidth="1.33" />
-                <path d="M10.5 2.5V5h3" stroke="currentColor" strokeWidth="1.33" />
-                <path d="M6.5 8h3.5M6.5 10h3.5" stroke="currentColor" strokeWidth="1.33" />
-            </svg>
-        );
-    }
-
-    if (type === "doctors-and-staff") {
-        return (
-            <svg {...common} aria-hidden="true">
-                <circle cx="6" cy="5" r="2.5" stroke="currentColor" strokeWidth="1.33" />
-                <path d="M2.5 13.5c.75-2.5 2.5-3.5 3.5-3.5s2.75.5 3.5 3.5" stroke="currentColor" strokeWidth="1.33" />
-                <path d="M10.5 5.5h3M12 4v3" stroke="currentColor" strokeWidth="1.33" />
-            </svg>
-        );
-    }
-
-    return (
-        <svg {...common} aria-hidden="true">
-            <circle cx="6" cy="5" r="3" stroke="currentColor" strokeWidth="1.33" />
-            <path d="M2.5 13.5c.5-2.67 2.33-4 3.5-4s3 .33 3.5 4" stroke="currentColor" strokeWidth="1.33" />
-            <path d="M11 4.5h3M12.5 3v3" stroke="currentColor" strokeWidth="1.33" />
-        </svg>
-    );
+/**
+ * getMenuIcon - Mengembalikan icon component berdasarkan menu ID
+ * 
+ * @param {string} menuId - ID menu
+ * @returns {ReactNode} Icon component
+ */
+function getMenuIcon(menuId) {
+    const iconMap = {
+        'dashboard': <DashboardIcon />,
+        'orders': <OrdersIcon />,
+        'products': <ProductsIcon />,
+        'doctors-and-staff': <StaffIcon />,
+        'customers': <CustomersIcon />
+    };
+    return iconMap[menuId] || <DashboardIcon />;
 }
 
 /**
- * SidebarMenuItem Component - Satu item menu di sidebar untuk navigasi
+ * getMenuPath - Menentukan path URL berdasarkan ID menu
  * 
- * Menggunakan Link dari React Router untuk navigasi tanpa reload halaman
- * Link menggantikan tag <div> biasa untuk memungkinkan routing
- * 
- * @param {string} id - ID unik dari menu item
- * @param {string} label - Label/teks yang ditampilkan
- * @param {boolean} isActive - Status apakah menu sedang aktif
- * @param {boolean} removable - Apakah menu bisa dihapus
- * @param {function} onClick - Callback saat menu diklik
- * @param {function} onRemove - Callback saat tombol hapus diklik
+ * @param {string} menuId - ID menu
+ * @returns {string} Path URL
  */
-function SidebarMenuItem({ id, label, isActive, removable, onClick, onRemove }) {
-    /**
-     * getMenuPath - Menentukan path URL berdasarkan ID menu
-     * Mengembalikan path yang sesuai untuk Link
-     */
-    function getMenuPath(menuId) {
-        if (menuId === "dashboard") return "/";
-        if (menuId === "orders") return "/orders";
-        if (menuId === "customers") return "/customers";
-        if (menuId === "products") return "/products";
-        if (menuId === "doctors-and-staff") return "/doctors-and-staff";
-        return "/";
-    }
+function getMenuPath(menuId) {
+    const pathMap = {
+        'dashboard': '/',
+        'orders': '/orders',
+        'customers': '/customers',
+        'products': '/products',
+        'doctors-and-staff': '/doctors-and-staff'
+    };
+    return pathMap[menuId] || '/';
+}
 
+/**
+ * SidebarFooter Component - Footer card untuk sidebar dengan promo/action
+ * 
+ * @param {function} onAddMenu - Handler saat tombol Add Menu diklik
+ */
+function SidebarFooter({ onAddMenu }) {
     return (
-        <li>
-            <Link
-                to={getMenuPath(id)}
-                className={isActive ? "med-navitem med-navitem--active" : "med-navitem"}
-                onClick={() => onClick(id)}
-            >
-                <span className="med-navitem__left">
-                    <span className="med-navicon" aria-hidden="true">
-                        <SidebarIcon type={id} />
-                    </span>
-                    <span className="med-navitem__label">{label}</span>
-                </span>
-                {removable ? (
-                    <button
-                        type="button"
-                        className="med-navremove"
-                        aria-label={`Delete ${label}`}
-                        onClick={(e) => {
-                            e.preventDefault();
-                            onRemove(id);
-                        }}
-                    >
-                        <FaTrashAlt />
-                    </button>
-                ) : null}
-            </Link>
-        </li>
+        <div className="med-sidebar__footer">
+            <div className="med-promo">
+                <div className="med-promo__icon" aria-hidden="true">
+                    <span />
+                    <span />
+                </div>
+                <div className="med-promo__title">Tambah Menu</div>
+                <div className="med-promo__desc">Masih tambah menu biasa saja</div>
+                <button type="button" className="med-promo__cta" onClick={onAddMenu}>
+                    Tambah Menu
+                </button>
+            </div>
+        </div>
     );
 }
 
@@ -124,6 +74,10 @@ function SidebarMenuItem({ id, label, isActive, removable, onClick, onRemove }) 
  * @param {function} onClose - Callback untuk menutup sidebar (untuk mobile)
  */
 export default function Sidebar({ activeSection, menuItems, onMenuClick, onAddMenu, onRemoveMenu, isOpen, onClose }) {
+    /**
+     * handleMenuClick - Handler saat menu diklik
+     * Menutup sidebar di mobile setelah menu diklik
+     */
     const handleMenuClick = (id) => {
         onMenuClick(id);
         // Close sidebar on mobile after clicking menu
@@ -135,52 +89,36 @@ export default function Sidebar({ activeSection, menuItems, onMenuClick, onAddMe
     return (
         <>
             {/* Overlay for mobile */}
-            <div
-                className={`med-sidebar-overlay${isOpen ? ' med-sidebar-overlay--visible' : ''}`}
+            <SidebarOverlay
+                isVisible={isOpen}
                 onClick={onClose}
-                aria-hidden="true"
             />
 
             <aside className={`med-sidebar${isOpen ? ' med-sidebar--open' : ''}`}>
-                <div className="med-sidebar__brandrow">
-                    <div className="med-brandmark" aria-hidden="true">
-                        <span>LC</span>
-                    </div>
-                    <div className="med-brandcopy">
-                        <div className="med-brandcopy__title">Lumiere Clinic</div>
-                        <div className="med-brandcopy__subtitle">Beauty &amp; Wellness</div>
-                    </div>
-                </div>
+                {/* Logo */}
+                <Logo />
 
+                {/* Navigation Menu */}
                 <nav className="med-sidebar__navwrap" aria-label="Sidebar navigation">
                     <ul className="med-sidebar__nav med-nav">
                         {menuItems.map((item) => (
-                            <SidebarMenuItem
+                            <NavItem
                                 key={item.id}
-                                id={item.id}
+                                to={getMenuPath(item.id)}
                                 label={item.label}
+                                icon={getMenuIcon(item.id)}
                                 isActive={activeSection === item.id}
                                 removable={item.removable}
-                                onClick={handleMenuClick}
-                                onRemove={onRemoveMenu}
+                                onClick={() => handleMenuClick(item.id)}
+                                onRemove={() => onRemoveMenu(item.id)}
+                                removeIcon={<FaTrashAlt />}
                             />
                         ))}
                     </ul>
                 </nav>
 
-                <div className="med-sidebar__footer">
-                    <div className="med-promo">
-                        <div className="med-promo__icon" aria-hidden="true">
-                            <span />
-                            <span />
-                        </div>
-                        <div className="med-promo__title">Tambah Menu</div>
-                        <div className="med-promo__desc">Masih tambah menu biasa saja</div>
-                        <button type="button" className="med-promo__cta" onClick={onAddMenu}>
-                            Tambah Menu
-                        </button>
-                    </div>
-                </div>
+                {/* Footer */}
+                <SidebarFooter onAddMenu={onAddMenu} />
             </aside>
         </>
     );
