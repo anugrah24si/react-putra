@@ -1,7 +1,16 @@
 import { PageTitle } from './layout';
-import { SearchBar, IconButton, Avatar, StatusPill } from './ui';
+import { SearchInput, IconButton, Avatar, StatusPill } from './ui';
 import { MobileToggle } from './navigation';
 import { NotificationIcon, SunIcon, MoonIcon } from './icons';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from './ui/dropdown-menu';
+import { User, Settings, LogOut, HelpCircle } from 'lucide-react';
 
 /**
  * Page labels configuration - Mapping section ke title dan subtitle
@@ -52,7 +61,7 @@ export default function Header({
 
             {/* Actions */}
             <div className="med-topbar__actions">
-                <StatusPill status="Online" />
+                <StatusPill status="Online" showDot={true} />
 
                 <IconButton
                     icon={<NotificationIcon />}
@@ -66,11 +75,50 @@ export default function Header({
                     onClick={onToggleTheme}
                 />
 
-                <Avatar initials="DS" size="small" />
+                {/* User Profile Dropdown Menu */}
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <button className="cursor-pointer focus:outline-none">
+                            <Avatar className="h-8 w-8">
+                                <span className="flex h-full w-full items-center justify-center bg-primary text-xs font-medium text-primary-foreground">
+                                    DS
+                                </span>
+                            </Avatar>
+                        </button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-56">
+                        <DropdownMenuLabel>
+                            <div className="flex flex-col space-y-1">
+                                <p className="text-sm font-medium leading-none">Dr. Smith</p>
+                                <p className="text-xs leading-none text-muted-foreground">
+                                    dr.smith@clinic.com
+                                </p>
+                            </div>
+                        </DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem>
+                            <User className="mr-2 h-4 w-4" />
+                            <span>Profile</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                            <Settings className="mr-2 h-4 w-4" />
+                            <span>Settings</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                            <HelpCircle className="mr-2 h-4 w-4" />
+                            <span>Help & Support</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem className="text-destructive">
+                            <LogOut className="mr-2 h-4 w-4" />
+                            <span>Log out</span>
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
             </div>
 
             {/* Search Bar */}
-            <SearchBar
+            <SearchInput
                 value={searchValue}
                 onChange={onSearchChange}
                 placeholder="Search appointments, clients, treatments..."

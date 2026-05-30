@@ -1,17 +1,31 @@
 /**
- * UI Components - Export semua reusable UI components
+ * UI Components Index - Export semua shadcn/ui components
+ * Centralized exports untuk kemudahan import
  */
 
-export { default as Button } from './Button';
-export { default as IconButton } from './IconButton';
-export { default as Avatar } from './Avatar';
-export { default as SearchBar } from './SearchBar';
-export { default as Badge } from './Badge';
-export { default as Card } from './Card';
-export { default as LoadingSpinner } from './LoadingSpinner';
-export { default as StatusPill } from './StatusPill';
-export { default as Modal } from './Modal';
-export { default as StatsCard } from './StatsCard';
-export { default as StaffCard } from './StaffCard';
-export { default as StaffForm } from './StaffForm';
-export { default as StaffProfileModal } from './StaffProfileModal';
+// shadcn/ui core components
+export * from './button'
+export * from './input'
+export * from './label'
+export * from './select'
+export * from './textarea'
+export * from './card'
+export * from './badge'
+export * from './avatar'
+export * from './dialog'
+export * from './dropdown-menu'
+export * from './table'
+export * from './separator'
+export * from './scroll-area'
+
+// Custom wrapper components
+export * from './loading-spinner'
+export * from './search-input'
+export * from './icon-button'
+export * from './status-pill'
+
+// Staff-related components
+export * from './stats-card'
+export * from './staff-card'
+export * from './staff-form'
+export * from './staff-profile-modal'

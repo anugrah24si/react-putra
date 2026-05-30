@@ -77,6 +77,14 @@ export default function DoctorsAndStaff() {
     setSelectedStaff(null);
   };
 
+  const handleDeleteStaff = (staff) => {
+    // Konfirmasi delete
+    if (window.confirm(`Are you sure you want to delete ${staff.name}?`)) {
+      console.log('Deleting staff:', staff);
+      // Di sini Anda bisa menambahkan logic untuk delete staff dari data
+    }
+  };
+
   // Add Staff handlers
   function handleFormChange(e) {
     setForm(f => ({ ...f, [e.target.name]: e.target.value }));
@@ -163,21 +171,29 @@ export default function DoctorsAndStaff() {
           label="Total Staff"
           value={stats.totalStaff}
           icon={Users}
+          delta="+8.2% from last month"
+          deltaType="up"
         />
         <StatsCard
           label="Active Doctors"
           value={stats.activeDoctors}
           icon={UserCheck}
+          delta="+12.5% from last month"
+          deltaType="up"
         />
         <StatsCard
           label="On Duty Today"
           value={stats.onDutyToday}
           icon={Clock}
+          delta="+23.1% from last month"
+          deltaType="up"
         />
         <StatsCard
           label="Available Now"
           value={stats.availableNow}
           icon={UserPlus}
+          delta="-2.4% from last month"
+          deltaType="down"
         />
       </div>
 
@@ -189,6 +205,7 @@ export default function DoctorsAndStaff() {
               key={staff.id}
               staff={staff}
               onViewProfile={handleViewProfile}
+              onDelete={handleDeleteStaff}
             />
           ))
         ) : (
@@ -208,16 +225,15 @@ export default function DoctorsAndStaff() {
       </div>
 
       {/* Add Staff Form Modal */}
-      {addOpen && (
-        <StaffForm
-          title="Add New Staff Member"
-          form={form}
-          onChange={handleFormChange}
-          onSubmit={handleAddStaff}
-          onClose={handleCloseAddForm}
-          submitLabel="Add Staff"
-        />
-      )}
+      <StaffForm
+        open={addOpen}
+        onOpenChange={setAddOpen}
+        title="Add New Staff Member"
+        form={form}
+        onChange={handleFormChange}
+        onSubmit={handleAddStaff}
+        submitLabel="Add Staff"
+      />
 
       {/* Staff Profile Modal */}
       <StaffProfileModal

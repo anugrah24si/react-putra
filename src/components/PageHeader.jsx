@@ -1,14 +1,14 @@
 import { Breadcrumb } from './layout';
-import Button from './ui/Button';
+import { Button } from './ui';
 
 // Export utility functions for staff components
-export { getStatusColor, getRoleColor } from './ui/StaffCard';
+export { getStatusColor, getRoleColor } from './ui/staff-card';
 
 // Export staff-related components
-export { default as StatsCard } from './ui/StatsCard';
-export { default as StaffCard } from './ui/StaffCard';
-export { default as StaffForm } from './ui/StaffForm';
-export { default as StaffProfileModal } from './ui/StaffProfileModal';
+export { StatsCard } from './ui/stats-card';
+export { StaffCard } from './ui/staff-card';
+export { StaffForm } from './ui/staff-form';
+export { StaffProfileModal } from './ui/staff-profile-modal';
 
 /**
  * PageHeader Component - Header untuk halaman dengan title, breadcrumb, dan action button
@@ -36,9 +36,9 @@ export default function PageHeader({ title, subtitle, actionLabel, onAction }) {
       {/* Right side: Action Button */}
       {actionLabel && (
         <div id="action-button">
-          <button id="add-button" onClick={onAction}>
+          <Button onClick={onAction}>
             {actionLabel}
-          </button>
+          </Button>
         </div>
       )}
     </div>
