@@ -1351,3 +1351,152 @@
     font-size: 14px;
   }
 }
+
+/* ============================================================================
+   TOMBOL GANTI TEMA (DARK / LIGHT) — pojok kanan atas halaman auth
+   ============================================================================ */
+.login-theme-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 50;
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  border: 1px solid #dce4e8;
+  background: #ffffff;
+  color: #1c2634;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(10, 10, 10, 0.08);
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.login-theme-toggle:hover {
+  transform: translateY(-1px);
+}
+
+/* ============================================================================
+   MODE GELAP (DARK) — aktif saat <html data-theme="dark">
+   ============================================================================ */
+
+/* Latar halaman & panel */
+[data-theme="dark"] .login-page-wrap {
+  background: #0d0d0d;
+}
+
+[data-theme="dark"] .login-page {
+  background: #0d0d0d;
+}
+
+[data-theme="dark"] .login-panel {
+  background: #0d0d0d;
+  color: #f5f5f5;
+}
+
+/* Panel kiri (visual) sedikit lebih gelap */
+[data-theme="dark"] .login-visual {
+  background: #121821;
+}
+
+/* Tombol toggle versi gelap */
+[data-theme="dark"] .login-theme-toggle {
+  background: #1a1a1a;
+  border-color: rgba(255, 255, 255, 0.15);
+  color: #f5f5f5;
+}
+
+/* Kartu form */
+[data-theme="dark"] .login-card {
+  background: #161616;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Judul & teks */
+[data-theme="dark"] .login-card__head h1 {
+  color: #ffffff;
+}
+
+[data-theme="dark"] .login-card__head p,
+[data-theme="dark"] .login-check,
+[data-theme="dark"] .login-divider,
+[data-theme="dark"] .login-card__footer,
+[data-theme="dark"] .login-panel__footer {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .login-field__label {
+  color: #cbd5e1;
+}
+
+/* Input field */
+[data-theme="dark"] .login-field__control {
+  background: #0d0d0d;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+[data-theme="dark"] .login-field__control:focus-within {
+  border-color: #54a6ff;
+  background: #1a1a1a;
+  box-shadow: 0 0 0 4px rgba(84, 166, 255, 0.18);
+}
+
+[data-theme="dark"] .login-field__control input {
+  color: #ffffff;
+}
+
+[data-theme="dark"] .login-field__control input::placeholder {
+  color: #6b7280;
+}
+
+[data-theme="dark"] .login-field__icon,
+[data-theme="dark"] .login-field__action {
+  color: #9ca3af;
+}
+
+/* Tombol Google / sekunder */
+[data-theme="dark"] .login-google {
+  background: #1a1a1a;
+  border-color: rgba(255, 255, 255, 0.15);
+  color: #f5f5f5;
+}
+
+[data-theme="dark"] .login-google__icon {
+  background: #2a2a2a;
+}
+
+/* Brandmark */
+[data-theme="dark"] .login-panel__brandmark {
+  background: #ffffff;
+}
+
+/* Alert tetap kontras di dark mode */
+[data-theme="dark"] .login-alert--error {
+  background: rgba(220, 38, 38, 0.15);
+  border-color: rgba(220, 38, 38, 0.4);
+}
+
+[data-theme="dark"] .login-alert--loading {
+  background: rgba(67, 56, 202, 0.2);
+  border-color: rgba(99, 102, 241, 0.4);
+}
+
+[data-theme="dark"] .login-alert--success {
+  background: rgba(22, 163, 74, 0.18);
+  border-color: rgba(34, 197, 94, 0.4);
+}
+
+[data-theme="dark"] .login-alert__text {
+  color: #fca5a5;
+}
+
+[data-theme="dark"] .login-alert--loading .login-alert__text {
+  color: #c7d2fe;
+}
+
+[data-theme="dark"] .login-alert--success .login-alert__text {
+  color: #86efac;
+}

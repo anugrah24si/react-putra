@@ -2,17 +2,26 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BsFillExclamationDiamondFill } from "react-icons/bs";
 import { ImSpinner2 } from "react-icons/im";
-import "../../styles/login.css";
+import { registerUser } from "../../services/userService";
+import AuthThemeToggle from "../../components/AuthThemeToggle";
+import { Button } from "@/components/ui/button";
+import {
+    Card,
+    CardAction,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
-function EyeIcon() {
-    return (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M2.5 12s3.5-6.5 9.5-6.5S21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            <circle cx="12" cy="12" r="2.5" stroke="currentColor" strokeWidth="1.5" />
-        </svg>
-    );
-}
-
+/**
+ * Register Page - Menggunakan komponen shadcn UI (Card, Button, Input, Label).
+ * Mendaftarkan akun baru ke Supabase. Setelah berhasil, diarahkan ke /login
+ * agar user bisa langsung login dengan akun baru.
+ */
 export default function Register() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
@@ -25,222 +34,155 @@ export default function Register() {
         confirmPassword: "",
     });
 
+    // Handler perubahan input form
     const handleChange = (evt) => {
         const { name, value } = evt.target;
-        setDataForm((current) => ({
-            ...current,
-            [name]: value,
-        }));
+        setDataForm((current) => ({ ...current, [name]: value }));
     };
 
-    const handleSubmit = (e) => {
+    // Handler submit pendaftaran ke Supabase
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
 
+        // Validasi: password dan konfirmasi harus sama
         if (dataForm.password !== dataForm.confirmPassword) {
             setError("Passwords do not match. Please try again.");
             return;
         }
 
         setLoading(true);
-        // Simulate registration
-        setTimeout(() => {
-            setLoading(false);
+
+        try {
+            await registerUser({
+                fullName: dataForm.fullName,
+                email: dataForm.email,
+                phone: dataForm.phone,
+                password: dataForm.password,
+            });
+            // Pendaftaran berhasil → arahkan ke halaman login
             navigate("/login");
-        }, 1500);
+        } catch (err) {
+            setError(err.message || "Gagal mendaftar. Silakan coba lagi.");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
-        <div className="login-page-wrap">
-            <div className="login-page">
-                {/* LEFT VISUAL PANEL */}
-                <aside className="login-visual">
-                    <div className="login-visual__shine" aria-hidden="true" />
-                    <div className="login-visual__inner">
-                        <img
-                            className="login-visual__hero"
-                            src="/img/clinik.jpg"
-                            alt="Medical team"
-                        />
+        <div className="flex min-h-screen items-center justify-center bg-background p-4">
+            <AuthThemeToggle />
 
-                        <div className="login-visual__copy">
-                            <h2>Join the MediCare team and start managing your clinic smarter</h2>
-                            <p>
-                                Create your admin account to access the full suite of tools for patient management,
-                                scheduling, and operational efficiency in one centralized platform.
-                            </p>
+            <Card className="w-full max-w-sm">
+                <CardHeader>
+                    <CardTitle>Create your account</CardTitle>
+                    <CardDescription>
+                        Enter your details below to create a new account
+                    </CardDescription>
+                    <CardAction>
+                        <Button variant="link" onClick={() => navigate("/login")}>
+                            Sign In
+                        </Button>
+                    </CardAction>
+                </CardHeader>
+
+                <CardContent>
+                    {/* Alert error */}
+                    {error ? (
+                        <div className="mb-4 flex items-center gap-2 rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+                            <BsFillExclamationDiamondFill className="shrink-0" />
+                            <span>{error}</span>
                         </div>
+                    ) : null}
 
-                        <div className="login-visual__dots" aria-hidden="true">
-                            <span className="login-visual__dot" />
-                            <span className="login-visual__dot login-visual__dot--active" />
-                            <span className="login-visual__dot" />
+                    {/* Alert loading */}
+                    {loading ? (
+                        <div className="mb-4 flex items-center gap-2 rounded-md border border-primary/30 bg-primary/10 px-3 py-2 text-sm text-foreground">
+                            <ImSpinner2 className="shrink-0 animate-spin" />
+                            <span>Creating your account...</span>
                         </div>
-                    </div>
-                </aside>
+                    ) : null}
 
-                {/* RIGHT FORM PANEL */}
-                <main className="login-panel">
-                    <div className="login-panel__inner">
-                        <div className="login-panel__brand">
-                            <div className="login-panel__brandmark">
-                                <img src="/img/logo.png" alt="MediCare" />
+                    <form id="register-form" onSubmit={handleSubmit}>
+                        <div className="flex flex-col gap-6">
+                            <div className="grid gap-2">
+                                <Label htmlFor="fullName">Full Name</Label>
+                                <Input
+                                    id="fullName"
+                                    name="fullName"
+                                    type="text"
+                                    placeholder="Dr. Anugrah"
+                                    value={dataForm.fullName}
+                                    onChange={handleChange}
+                                    autoComplete="name"
+                                    required
+                                />
+                            </div>
+
+                            <div className="grid gap-2">
+                                <Label htmlFor="email">Email</Label>
+                                <Input
+                                    id="email"
+                                    name="email"
+                                    type="email"
+                                    placeholder="m@example.com"
+                                    value={dataForm.email}
+                                    onChange={handleChange}
+                                    autoComplete="email"
+                                    required
+                                />
+                            </div>
+
+                            <div className="grid gap-2">
+                                <Label htmlFor="phone">Phone Number</Label>
+                                <Input
+                                    id="phone"
+                                    name="phone"
+                                    type="tel"
+                                    placeholder="+62 812-3456-7890"
+                                    value={dataForm.phone}
+                                    onChange={handleChange}
+                                    autoComplete="tel"
+                                />
+                            </div>
+
+                            <div className="grid gap-2">
+                                <Label htmlFor="password">Password</Label>
+                                <Input
+                                    id="password"
+                                    name="password"
+                                    type="password"
+                                    placeholder="Create a strong password"
+                                    value={dataForm.password}
+                                    onChange={handleChange}
+                                    autoComplete="new-password"
+                                    required
+                                />
+                            </div>
+
+                            <div className="grid gap-2">
+                                <Label htmlFor="confirmPassword">Confirm Password</Label>
+                                <Input
+                                    id="confirmPassword"
+                                    name="confirmPassword"
+                                    type="password"
+                                    placeholder="Confirm your password"
+                                    value={dataForm.confirmPassword}
+                                    onChange={handleChange}
+                                    autoComplete="new-password"
+                                    required
+                                />
                             </div>
                         </div>
+                    </form>
+                </CardContent>
 
-                        <section className="login-card">
-                            <div className="login-card__head">
-                                <h1>Create Account</h1>
-                                <p>Join the MediCare admin team today</p>
-                            </div>
-
-                            {error && (
-                                <div className="login-alert login-alert--error" role="alert">
-                                    <BsFillExclamationDiamondFill className="login-alert__icon login-alert__icon--error" />
-                                    <div className="login-alert__text">{error}</div>
-                                </div>
-                            )}
-
-                            {loading && (
-                                <div className="login-alert login-alert--loading" role="status" aria-live="polite">
-                                    <ImSpinner2 className="login-alert__icon login-alert__icon--loading" />
-                                    <div className="login-alert__text">Creating your account...</div>
-                                </div>
-                            )}
-
-                            <form className="login-form" onSubmit={handleSubmit}>
-                                {/* FULL NAME */}
-                                <div className="login-field">
-                                    <label className="login-field__label" htmlFor="fullName">Full Name</label>
-                                    <div className="login-field__control">
-                                        <input
-                                            type="text"
-                                            name="fullName"
-                                            id="fullName"
-                                            value={dataForm.fullName}
-                                            onChange={handleChange}
-                                            placeholder="Dr. Anugrah"
-                                            autoComplete="name"
-                                            required
-                                        />
-                                    </div>
-                                </div>
-
-                                {/* EMAIL */}
-                                <div className="login-field">
-                                    <label className="login-field__label" htmlFor="reg-email">Email Address</label>
-                                    <div className="login-field__control">
-                                        <input
-                                            type="email"
-                                            name="email"
-                                            id="reg-email"
-                                            value={dataForm.email}
-                                            onChange={handleChange}
-                                            placeholder="admin@medicare.com"
-                                            autoComplete="email"
-                                            required
-                                        />
-                                    </div>
-                                </div>
-
-                                {/* PHONE */}
-                                <div className="login-field">
-                                    <label className="login-field__label" htmlFor="phone">Phone Number</label>
-                                    <div className="login-field__control">
-                                        <input
-                                            type="tel"
-                                            name="phone"
-                                            id="phone"
-                                            value={dataForm.phone}
-                                            onChange={handleChange}
-                                            placeholder="+62 812-3456-7890"
-                                            autoComplete="tel"
-                                        />
-                                    </div>
-                                </div>
-
-                                {/* PASSWORD */}
-                                <div className="login-field">
-                                    <label className="login-field__label" htmlFor="reg-password">Password</label>
-                                    <div className="login-field__control login-field__control--password">
-                                        <input
-                                            type="password"
-                                            name="password"
-                                            id="reg-password"
-                                            value={dataForm.password}
-                                            onChange={handleChange}
-                                            placeholder="Create a strong password"
-                                            autoComplete="new-password"
-                                            required
-                                        />
-                                        <span className="login-field__action" aria-hidden="true">
-                                            <EyeIcon />
-                                        </span>
-                                    </div>
-                                </div>
-
-                                {/* CONFIRM PASSWORD */}
-                                <div className="login-field">
-                                    <label className="login-field__label" htmlFor="confirmPassword">Confirm Password</label>
-                                    <div className="login-field__control login-field__control--password">
-                                        <input
-                                            type="password"
-                                            name="confirmPassword"
-                                            id="confirmPassword"
-                                            value={dataForm.confirmPassword}
-                                            onChange={handleChange}
-                                            placeholder="Confirm your password"
-                                            autoComplete="new-password"
-                                            required
-                                        />
-                                        <span className="login-field__action" aria-hidden="true">
-                                            <EyeIcon />
-                                        </span>
-                                    </div>
-                                </div>
-
-                                {/* TERMS */}
-                                <p style={{
-                                    fontSize: "13px",
-                                    color: "#6c7278",
-                                    textAlign: "center",
-                                    margin: "0",
-                                    fontFamily: "'Plus Jakarta Sans', Inter, sans-serif",
-                                }}>
-                                    By creating an account, you agree to our{" "}
-                                    <button type="button" className="login-link" style={{ fontSize: "13px" }}>
-                                        Terms of Service
-                                    </button>{" "}
-                                    and{" "}
-                                    <button type="button" className="login-link" style={{ fontSize: "13px" }}>
-                                        Privacy Policy
-                                    </button>
-                                </p>
-
-                                <button className="login-button" type="submit" disabled={loading}>
-                                    {loading ? <ImSpinner2 className="login-button__spinner" /> : null}
-                                    {loading ? "Creating Account..." : "Create Account"}
-                                </button>
-                            </form>
-
-                            <div className="login-card__footer">
-                                <span>Already have an account?</span>
-                                <button type="button" className="login-link" onClick={() => navigate("/login")}>
-                                    Sign In
-                                </button>
-                            </div>
-                        </section>
-
-                        <footer className="login-panel__footer">
-                            <div>© 2023 MediCare. All rights reserved.</div>
-                            <div className="login-panel__footer-links">
-                                <button type="button" className="login-link">Term &amp; Condition</button>
-                                <button type="button" className="login-link">Privacy &amp; Policy</button>
-                            </div>
-                        </footer>
-                    </div>
-                </main>
-            </div>
+                <CardFooter className="flex-col gap-2">
+                    <Button type="submit" form="register-form" className="w-full" disabled={loading}>
+                        {loading ? "Creating Account..." : "Create Account"}
+                    </Button>
+                </CardFooter>
+            </Card>
         </div>
     );
 }

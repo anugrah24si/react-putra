@@ -20,6 +20,7 @@ const Orders = React.lazy(() => import("./pages/Main/Orders"));
 const Customers = React.lazy(() => import("./pages/Main/Customers"));
 const Products = React.lazy(() => import("./pages/Main/Products"));
 const DoctorsAndStaff = React.lazy(() => import("./pages/Main/DoctorsAndStaff"));
+const Users = React.lazy(() => import("./pages/Main/Users"));
 const ProductDetail = React.lazy(() => import("./pages/ProductDetail"));
 const NotFound = React.lazy(() => import("./pages/Main/NotFound"));
 const AuthLayout = React.lazy(() => import("./layout/AuthLayout"));
@@ -27,6 +28,9 @@ const Login = React.lazy(() => import("./pages/Auth/Login"));
 const Register = React.lazy(() => import("./pages/Auth/Register"));
 const Forgot = React.lazy(() => import("./pages/Auth/Forgot"));
 const Loading = React.lazy(() => import("./components/Loading"));
+const PublicLayout = React.lazy(() => import("./layout/PublicLayout"));
+const Landing = React.lazy(() => import("./pages/Public/Landing"));
+import RequireAdmin from "./components/RequireAdmin";
 
 
 
@@ -38,6 +42,7 @@ const initialMenuItems = [
     { id: "customers", label: "Customers", removable: false },
     { id: "products", label: "Products", removable: false },
     { id: "doctors-and-staff", label: "Doctors & Staff", removable: false },
+    { id: "users", label: "Users", removable: false },
 ];
 
 const orderStatusMap = {
@@ -151,10 +156,11 @@ export default function App() {
 
     const activeSection = useMemo(() => {
         const path = location.pathname;
-        if (path.startsWith("/orders")) return "orders";
-        if (path.startsWith("/customers")) return "customers";
-        if (path.startsWith("/products")) return "products";
-        if (path.startsWith("/doctors-and-staff")) return "doctors-and-staff";
+        if (path.startsWith("/admin/orders")) return "orders";
+        if (path.startsWith("/admin/customers")) return "customers";
+        if (path.startsWith("/admin/products")) return "products";
+        if (path.startsWith("/admin/doctors-and-staff")) return "doctors-and-staff";
+        if (path.startsWith("/admin/users")) return "users";
         return "dashboard";
     }, [location.pathname]);
 
@@ -414,7 +420,7 @@ export default function App() {
             const nextItems = currentItems.filter((item) => item.id !== menuId);
 
             if (activeSection === menuId) {
-                navigate("/");
+                navigate("/admin");
             }
 
             return nextItems;
@@ -430,31 +436,40 @@ export default function App() {
         <Suspense fallback={<Loading />}>
             <Routes>
                 {/* Auth routes (explicit paths) */}
-                <Route element={<AuthLayout />}>
+                <Route element={<AuthLayout theme={theme} onToggleTheme={handleToggleTheme} />}>
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/forgot" element={<Forgot />} />
                 </Route>
 
-                {/* Main app (wrapped by MainLayout) */}
+                {/* Public site (bisa diakses tanpa login) */}
+                <Route element={<PublicLayout theme={theme} onToggleTheme={handleToggleTheme} />}>
+                    <Route path="/" element={<Landing />} />
+                </Route>
+
+                {/* Admin app (wrapped by MainLayout + dijaga RequireAdmin) */}
                 <Route
-                    element={<MainLayout
-                        activeSection={activeSection}
-                        menuItems={filteredMenuItems}
-                        onMenuClick={handleSectionChange}
-                        onAddMenu={handleAddMenu}
-                        onRemoveMenu={handleRemoveMenu}
-                        searchValue={searchQuery}
-                        onSearchChange={handleSearchChange}
-                        theme={theme}
-                        onToggleTheme={handleToggleTheme}
-                    />}
+                    element={
+                        <RequireAdmin>
+                            <MainLayout
+                                activeSection={activeSection}
+                                menuItems={filteredMenuItems}
+                                onMenuClick={handleSectionChange}
+                                onAddMenu={handleAddMenu}
+                                onRemoveMenu={handleRemoveMenu}
+                                searchValue={searchQuery}
+                                onSearchChange={handleSearchChange}
+                                theme={theme}
+                                onToggleTheme={handleToggleTheme}
+                            />
+                        </RequireAdmin>
+                    }
                 >
-                    {/* Redirect /dashboard → / agar tidak masuk NotFound */}
-                    <Route path="/dashboard" element={<Navigate to="/" replace />} />
+                    {/* Redirect /dashboard → /admin */}
+                    <Route path="/dashboard" element={<Navigate to="/admin" replace />} />
 
                     <Route
-                        path="/"
+                        path="/admin"
                         element={
                             <Dashboard
                                 cards={filteredDashboardCards}
@@ -465,7 +480,7 @@ export default function App() {
                     />
 
                     <Route
-                        path="/orders"
+                        path="/admin/orders"
                         element={
                             <Orders
                                 orders={filteredOrders}
@@ -476,7 +491,7 @@ export default function App() {
                     />
 
                     <Route
-                        path="/customers"
+                        path="/admin/customers"
                         element={
                             <Customers
                                 customers={filteredCustomers}
@@ -488,19 +503,25 @@ export default function App() {
 
                     {/* Route untuk halaman Products - Menampilkan daftar semua produk */}
                     <Route
-                        path="/products"
+                        path="/admin/products"
                         element={<Products />}
                     />
 
                     {/* Route untuk halaman Doctors & Staff - Mengelola tim medis dan staf */}
                     <Route
-                        path="/doctors-and-staff"
+                        path="/admin/doctors-and-staff"
                         element={<DoctorsAndStaff />}
+                    />
+
+                    {/* Route untuk halaman Users - CRUD data user dari Supabase */}
+                    <Route
+                        path="/admin/users"
+                        element={<Users />}
                     />
 
                     {/* Route dinamis untuk halaman ProductDetail - Menerima ID produk dari URL */}
                     <Route
-                        path="/products/:id"
+                        path="/admin/products/:id"
                         element={<ProductDetail />}
                     />
 

@@ -247,7 +247,7 @@ export default function MainLayout({
     // Close sidebar when screen size changes to desktop
     useEffect(() => {
         const handleResize = () => {
-            if (window.innerWidth > 768) {
+            if (window.innerWidth > 1024) {
                 setIsSidebarOpen(false);
             }
         };
@@ -258,7 +258,7 @@ export default function MainLayout({
 
     // Prevent body scroll when sidebar is open on mobile
     useEffect(() => {
-        if (isSidebarOpen && window.innerWidth <= 768) {
+        if (isSidebarOpen && window.innerWidth <= 1024) {
             document.body.style.overflow = 'hidden';
         } else {
             document.body.style.overflow = '';

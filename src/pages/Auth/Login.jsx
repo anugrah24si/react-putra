@@ -1,217 +1,149 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { BsFillExclamationDiamondFill } from "react-icons/bs";
 import { ImSpinner2 } from "react-icons/im";
-import "../../styles/login.css";
+import { loginUser } from "../../services/userService";
+import { saveSession } from "@/lib/auth";
+import AuthThemeToggle from "../../components/AuthThemeToggle";
+import { Button } from "@/components/ui/button";
+import {
+    Card,
+    CardAction,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
-function EyeIcon() {
-    return (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M2.5 12s3.5-6.5 9.5-6.5S21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            <circle cx="12" cy="12" r="2.5" stroke="currentColor" strokeWidth="1.5" />
-        </svg>
-    );
-}
-
+/**
+ * Login Page - Menggunakan komponen shadcn UI (Card, Button, Input, Label).
+ * Login langsung ke Supabase (bukan dummy json).
+ */
 export default function Login() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
-    const [rememberMe, setRememberMe] = useState(false);
     const [dataForm, setDataForm] = useState({
         email: "",
         password: "",
     });
 
+    // Handler perubahan input form
     const handleChange = (evt) => {
         const { name, value } = evt.target;
-        setDataForm((current) => ({
-            ...current,
-            [name]: value,
-        }));
+        setDataForm((current) => ({ ...current, [name]: value }));
     };
 
+    // Handler submit login ke Supabase
     const handleSubmit = async (event) => {
         event.preventDefault();
-
         setLoading(true);
         setError("");
 
-        axios
-            .post("https://dummyjson.com/user/login", {
-                username: dataForm.email,
-                password: dataForm.password,
-            })
-            .then((response) => {
-                if (response.status !== 200) {
-                    setError(response.data.message || "Login failed");
-                    return;
-                }
-
+        try {
+            const user = await loginUser(dataForm.email, dataForm.password);
+            // Simpan sesi user
+            saveSession(user);
+            // Arahkan berdasarkan role: admin → dashboard, user → halaman publik
+            if (user.role === "admin") {
+                navigate("/admin");
+            } else {
                 navigate("/");
-            })
-            .catch((err) => {
-                if (err.response) {
-                    setError(err.response.data.message || "An error occurred");
-                } else {
-                    setError(err.message || "An unknown error occurred");
-                }
-            })
-            .finally(() => {
-                setLoading(false);
-            });
+            }
+        } catch (err) {
+            setError(err.message || "Terjadi kesalahan saat login");
+        } finally {
+            setLoading(false);
+        }
     };
 
-    const errorInfo = error ? (
-        <div className="login-alert login-alert--error" role="alert">
-            <BsFillExclamationDiamondFill className="login-alert__icon login-alert__icon--error" />
-            <div className="login-alert__text">{error}</div>
-        </div>
-    ) : null;
-
-    const loadingInfo = loading ? (
-        <div className="login-alert login-alert--loading" role="status" aria-live="polite">
-            <ImSpinner2 className="login-alert__icon login-alert__icon--loading" />
-            <div className="login-alert__text">Mohon tunggu...</div>
-        </div>
-    ) : null;
-
     return (
-        <div className="login-page-wrap">
-            <div className="login-page">
-                <aside className="login-visual">
-                    <div className="login-visual__shine" aria-hidden="true" />
-                    <div className="login-visual__inner">
-                        <img
-                            className="login-visual__hero"
-                            src="/img/clinik.jpg"
-                            alt="Medical team"
-                        />
+        <div className="flex min-h-screen items-center justify-center bg-background p-4">
+            <AuthThemeToggle />
 
-                        <div className="login-visual__copy">
-                            <h2>Optimize your medicare operations with our intelligent medical admin dashboard</h2>
-                            <p>
-                                This comprehensive digital solution centralizes and streamlines essential tasks, data,
-                                and processes, empowering medicare providers to deliver better patient care and enhance
-                                operational efficiency.
-                            </p>
+            <Card className="w-full max-w-sm">
+                <CardHeader>
+                    <CardTitle>Login to your account</CardTitle>
+                    <CardDescription>
+                        Enter your email below to login to your account
+                    </CardDescription>
+                    <CardAction>
+                        <Button variant="link" onClick={() => navigate("/register")}>
+                            Sign Up
+                        </Button>
+                    </CardAction>
+                </CardHeader>
+
+                <CardContent>
+                    {/* Alert error */}
+                    {error ? (
+                        <div className="mb-4 flex items-center gap-2 rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+                            <BsFillExclamationDiamondFill className="shrink-0" />
+                            <span>{error}</span>
                         </div>
+                    ) : null}
 
-                        <div className="login-visual__dots" aria-hidden="true">
-                            <span className="login-visual__dot login-visual__dot--active" />
-                            <span className="login-visual__dot" />
-                            <span className="login-visual__dot" />
+                    {/* Alert loading */}
+                    {loading ? (
+                        <div className="mb-4 flex items-center gap-2 rounded-md border border-primary/30 bg-primary/10 px-3 py-2 text-sm text-foreground">
+                            <ImSpinner2 className="shrink-0 animate-spin" />
+                            <span>Mohon tunggu...</span>
                         </div>
-                    </div>
-                </aside>
+                    ) : null}
 
-                <main className="login-panel">
-                    <div className="login-panel__inner">
-                        <div className="login-panel__brand">
-                            <div className="login-panel__brandmark">
-                                <img src="/img/logo.png" alt="MediCare" />
+                    <form id="login-form" onSubmit={handleSubmit}>
+                        <div className="flex flex-col gap-6">
+                            <div className="grid gap-2">
+                                <Label htmlFor="email">Email</Label>
+                                <Input
+                                    id="email"
+                                    name="email"
+                                    type="email"
+                                    placeholder="m@example.com"
+                                    value={dataForm.email}
+                                    onChange={handleChange}
+                                    autoComplete="email"
+                                    required
+                                />
                             </div>
-                        </div>
 
-                        <section className="login-card">
-                            <div className="login-card__head">
-                                <h1>Login</h1>
-                                <p>Let’s login into your MediCare account first</p>
-                            </div>
-
-                            {errorInfo}
-                            {loadingInfo}
-
-                            <form className="login-form" onSubmit={handleSubmit}>
-                                <div className="login-field">
-                                    <label className="login-field__label" htmlFor="email">Email</label>
-                                    <div className="login-field__control">
-                                        <input
-                                            type="email"
-                                            name="email"
-                                            id="email"
-                                            value={dataForm.email}
-                                            onChange={handleChange}
-                                            placeholder="tempmail@gmail.com"
-                                            autoComplete="email"
-                                            required
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="login-field">
-                                    <label className="login-field__label" htmlFor="password">Password</label>
-                                    <div className="login-field__control login-field__control--password">
-                                        <input
-                                            type="password"
-                                            name="password"
-                                            id="password"
-                                            value={dataForm.password}
-                                            onChange={handleChange}
-                                            placeholder="*******"
-                                            autoComplete="current-password"
-                                            required
-                                        />
-                                        <span className="login-field__action" aria-hidden="true">
-                                            <EyeIcon />
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <div className="login-form__row">
-                                    <label className="login-check">
-                                        <input
-                                            type="checkbox"
-                                            checked={rememberMe}
-                                            onChange={(event) => setRememberMe(event.target.checked)}
-                                        />
-                                        <span>Remember me</span>
-                                    </label>
-
-                                    <button type="button" className="login-link" onClick={() => navigate("/forgot-password")}>
-                                        Forgot Password
+                            <div className="grid gap-2">
+                                <div className="flex items-center">
+                                    <Label htmlFor="password">Password</Label>
+                                    <button
+                                        type="button"
+                                        onClick={() => navigate("/forgot")}
+                                        className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                                    >
+                                        Forgot your password?
                                     </button>
                                 </div>
-
-                                <button className="login-button" type="submit" disabled={loading}>
-                                    {loading ? <ImSpinner2 className="login-button__spinner" /> : null}
-                                    {loading ? "Signing In..." : "Login"}
-                                </button>
-                            </form>
-
-                            <div className="login-divider">
-                                <span>or</span>
+                                <Input
+                                    id="password"
+                                    name="password"
+                                    type="password"
+                                    value={dataForm.password}
+                                    onChange={handleChange}
+                                    autoComplete="current-password"
+                                    required
+                                />
                             </div>
+                        </div>
+                    </form>
+                </CardContent>
 
-                            <button type="button" className="login-google">
-                                <span className="login-google__icon" aria-hidden="true">
-                                    <span className="login-google__g login-google__g--red" />
-                                    <span className="login-google__g login-google__g--green" />
-                                    <span className="login-google__g login-google__g--blue" />
-                                    <span className="login-google__g login-google__g--yellow" />
-                                </span>
-                                <span>Login with Google</span>
-                            </button>
-
-                            <div className="login-card__footer">
-                                <span>Don’t have an account?</span>
-                                <button type="button" className="login-link" onClick={() => navigate("/register")}>
-                                    Register Here
-                                </button>
-                            </div>
-                        </section>
-
-                        <footer className="login-panel__footer">
-                            <div>© 2023 MediCare. All rights reserved.</div>
-                            <div className="login-panel__footer-links">
-                                <button type="button" className="login-link">Term &amp; Condition</button>
-                                <button type="button" className="login-link">Privacy &amp; Policy</button>
-                            </div>
-                        </footer>
-                    </div>
-                </main>
-            </div>
+                <CardFooter className="flex-col gap-2">
+                    <Button type="submit" form="login-form" className="w-full" disabled={loading}>
+                        {loading ? "Signing In..." : "Login"}
+                    </Button>
+                    <Button variant="outline" className="w-full" type="button">
+                        Login with Google
+                    </Button>
+                </CardFooter>
+            </Card>
         </div>
     );
 }

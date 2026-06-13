@@ -21,6 +21,7 @@ const pageLabels = {
     orders: { title: 'Orders', subtitle: 'Manage appointments and treatments' },
     products: { title: 'Products', subtitle: 'Manage medical products and services' },
     'doctors-and-staff': { title: 'Doctors & Staff', subtitle: 'Manage your medical team and staff members' },
+    users: { title: 'Users', subtitle: 'Kelola data user — terhubung ke Supabase' },
 };
 
 /**

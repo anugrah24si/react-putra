@@ -16,7 +16,8 @@ function getMenuIcon(menuId) {
         'orders': <OrdersIcon />,
         'products': <ProductsIcon />,
         'doctors-and-staff': <StaffIcon />,
-        'customers': <CustomersIcon />
+        'customers': <CustomersIcon />,
+        'users': <CustomersIcon />
     };
     return iconMap[menuId] || <DashboardIcon />;
 }
@@ -29,13 +30,14 @@ function getMenuIcon(menuId) {
  */
 function getMenuPath(menuId) {
     const pathMap = {
-        'dashboard': '/',
-        'orders': '/orders',
-        'customers': '/customers',
-        'products': '/products',
-        'doctors-and-staff': '/doctors-and-staff'
+        'dashboard': '/admin',
+        'orders': '/admin/orders',
+        'customers': '/admin/customers',
+        'products': '/admin/products',
+        'doctors-and-staff': '/admin/doctors-and-staff',
+        'users': '/admin/users'
     };
-    return pathMap[menuId] || '/';
+    return pathMap[menuId] || '/admin';
 }
 
 /**
@@ -80,8 +82,8 @@ export default function Sidebar({ activeSection, menuItems, onMenuClick, onAddMe
      */
     const handleMenuClick = (id) => {
         onMenuClick(id);
-        // Close sidebar on mobile after clicking menu
-        if (window.innerWidth <= 768 && onClose) {
+        // Close sidebar on mobile/tablet after clicking menu
+        if (window.innerWidth <= 1024 && onClose) {
             onClose();
         }
     };

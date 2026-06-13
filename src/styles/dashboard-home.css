@@ -1990,15 +1990,6 @@ html {
 }
 
 @media (max-width: 1280px) {
-    .med-shell__inner {
-        flex-direction: column;
-    }
-
-    .med-sidebar {
-        width: 100%;
-        min-height: auto;
-    }
-
     .med-topbar {
         padding: 0 16px;
     }
@@ -2052,7 +2043,7 @@ html {
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
 
     /* Mobile Toggle Button */
     .med-mobile-toggle {
@@ -2102,7 +2093,9 @@ html {
     }
 
     .med-sidebar__navwrap {
-        max-height: 200px;
+        flex: 1;
+        overflow-y: auto;
+        max-height: none;
         padding: 4px;
     }
 

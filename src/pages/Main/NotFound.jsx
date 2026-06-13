@@ -44,12 +44,12 @@ export default function NotFound() {
 
                         <section className="login-card">
                             <div className="login-card__head">
-                                <h1 style={{fontSize: '72px', margin: '0 0 16px 0', color: '#C9A886'}}>404</h1>
-                                <h2 style={{fontSize: '24px', margin: '0 0 8px 0', color: '#2D2A27'}}>Oops! Page Not Found</h2>
-                                <p style={{color: '#666666', marginTop: '0'}}>The page you're looking for doesn't exist</p>
+                                <h1 style={{ fontSize: '72px', margin: '0 0 16px 0', color: '#C9A886' }}>404</h1>
+                                <h2 style={{ fontSize: '24px', margin: '0 0 8px 0', color: '#2D2A27' }}>Oops! Page Not Found</h2>
+                                <p style={{ color: '#666666', marginTop: '0' }}>The page you're looking for doesn't exist</p>
                             </div>
 
-                            <form className="login-form" style={{display: 'flex', flexDirection: 'column', gap: '12px'}}>
+                            <form className="login-form" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                                 <button
                                     type="button"
                                     onClick={() => navigate("/")}
@@ -74,7 +74,7 @@ export default function NotFound() {
 
                                 <button
                                     type="button"
-                                    onClick={() => navigate("/orders")}
+                                    onClick={() => navigate("/admin/orders")}
                                     style={{
                                         width: '100%',
                                         padding: '12px 16px',
@@ -100,7 +100,7 @@ export default function NotFound() {
 
                                 <button
                                     type="button"
-                                    onClick={() => navigate("/customers")}
+                                    onClick={() => navigate("/admin/customers")}
                                     style={{
                                         width: '100%',
                                         padding: '12px 16px',
