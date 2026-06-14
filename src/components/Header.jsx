@@ -1,5 +1,6 @@
+import { useNavigate } from 'react-router-dom';
 import { PageTitle } from './layout';
-import { SearchInput, IconButton, Avatar, StatusPill } from './ui';
+import { SearchInput, IconButton, Avatar, AvatarImage, AvatarFallback, StatusPill } from './ui';
 import { MobileToggle } from './navigation';
 import { NotificationIcon, SunIcon, MoonIcon } from './icons';
 import {
@@ -11,6 +12,7 @@ import {
     DropdownMenuTrigger,
 } from './ui/dropdown-menu';
 import { User, Settings, LogOut, HelpCircle } from 'lucide-react';
+import { getCurrentUser, logout } from '@/lib/auth';
 
 /**
  * Page labels configuration - Mapping section ke title dan subtitle
@@ -23,6 +25,18 @@ const pageLabels = {
     'doctors-and-staff': { title: 'Doctors & Staff', subtitle: 'Manage your medical team and staff members' },
     users: { title: 'Users', subtitle: 'Kelola data user — terhubung ke Supabase' },
 };
+
+/**
+ * getInitials - Mengambil inisial dari nama lengkap (maksimal 2 huruf).
+ * Contoh: "Admin MediCare" → "AM"
+ */
+function getInitials(name) {
+    if (!name) return 'US';
+    const parts = name.trim().split(/\s+/);
+    const first = parts[0]?.[0] ?? '';
+    const second = parts[1]?.[0] ?? '';
+    return (first + second).toUpperCase() || 'US';
+}
 
 /**
  * Header Component - Top navigation bar dengan search, notifications, dan user profile
@@ -45,6 +59,19 @@ export default function Header({
     isSidebarOpen
 }) {
     const meta = pageLabels[activeSection] ?? pageLabels.dashboard;
+    const navigate = useNavigate();
+
+    // Data user yang sedang login (untuk avatar & dropdown)
+    const user = getCurrentUser();
+    const displayName = user?.full_name || 'Dr. Smith';
+    const displayEmail = user?.email || 'dr.smith@clinic.com';
+    const initials = getInitials(user?.full_name);
+
+    // Handler logout: hapus sesi lalu kembali ke halaman publik
+    const handleLogout = () => {
+        logout();
+        navigate('/');
+    };
 
     return (
         <header className="med-topbar">
@@ -80,19 +107,22 @@ export default function Header({
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <button className="cursor-pointer focus:outline-none">
-                            <Avatar className="h-8 w-8">
-                                <span className="flex h-full w-full items-center justify-center bg-primary text-xs font-medium text-primary-foreground">
-                                    DS
-                                </span>
+                            <Avatar>
+                                <AvatarImage
+                                    src={user?.avatar_url || ''}
+                                    alt={displayName}
+                                    className="grayscale"
+                                />
+                                <AvatarFallback>{initials}</AvatarFallback>
                             </Avatar>
                         </button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-56">
                         <DropdownMenuLabel>
                             <div className="flex flex-col space-y-1">
-                                <p className="text-sm font-medium leading-none">Dr. Smith</p>
+                                <p className="text-sm font-medium leading-none">{displayName}</p>
                                 <p className="text-xs leading-none text-muted-foreground">
-                                    dr.smith@clinic.com
+                                    {displayEmail}
                                 </p>
                             </div>
                         </DropdownMenuLabel>
@@ -110,7 +140,7 @@ export default function Header({
                             <span>Help & Support</span>
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem className="text-destructive">
+                        <DropdownMenuItem className="text-destructive" onClick={handleLogout}>
                             <LogOut className="mr-2 h-4 w-4" />
                             <span>Log out</span>
                         </DropdownMenuItem>

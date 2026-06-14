@@ -10,7 +10,7 @@ import PublicNavbar from "@/components/public/PublicNavbar";
  */
 export default function PublicLayout({ theme, onToggleTheme }) {
     return (
-        <div className="flex min-h-screen flex-col bg-background text-foreground">
+        <div className="flex min-h-screen flex-col scroll-smooth bg-background text-foreground [&_section]:scroll-mt-16">
             <PublicNavbar theme={theme} onToggleTheme={onToggleTheme} />
 
             <main className="flex-1">
