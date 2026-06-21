@@ -47,11 +47,11 @@ export default function Login() {
             const user = await loginUser(dataForm.email, dataForm.password);
             // Simpan sesi user
             saveSession(user);
-            // Arahkan berdasarkan role: admin → dashboard, user → halaman publik
+            // Arahkan berdasarkan role: admin → dashboard admin, member → dashboard member
             if (user.role === "admin") {
                 navigate("/admin");
             } else {
-                navigate("/");
+                navigate("/member");
             }
         } catch (err) {
             setError(err.message || "Terjadi kesalahan saat login");

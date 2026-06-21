@@ -24,6 +24,11 @@ const pageLabels = {
     products: { title: 'Products', subtitle: 'Manage medical products and services' },
     'doctors-and-staff': { title: 'Doctors & Staff', subtitle: 'Manage your medical team and staff members' },
     users: { title: 'Users', subtitle: 'Kelola data user — terhubung ke Supabase' },
+    bookings: { title: 'Booking Management', subtitle: 'Kelola booking layanan member' },
+    transactions: { title: 'Transaction History', subtitle: 'Kelola riwayat transaksi member' },
+    vouchers: { title: 'Voucher & Promo', subtitle: 'Kelola voucher dan promosi' },
+    reviews: { title: 'Rating & Review', subtitle: 'Moderasi ulasan pelanggan' },
+    analytics: { title: 'CRM Analytics', subtitle: 'Ringkasan seluruh aktivitas CRM' },
 };
 
 /**

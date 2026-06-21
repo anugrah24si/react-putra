@@ -1,32 +1,42 @@
 -- ============================================================================
--- PERBAIKAN: function crypt(text, text) does not exist
+-- TAHAP 1: MEMBERSHIP SYSTEM
 -- ============================================================================
--- Penyebab: di Supabase, extension pgcrypto berada di schema "extensions",
--- sedangkan fungsi login/register sebelumnya hanya mencari di schema "public".
--- Solusi: pastikan extension ada, lalu tambahkan "extensions" ke search_path.
+-- Menambahkan kolom membership ke tabel users dan memperbarui fungsi
+-- register_user & login_user agar ikut mengembalikan data membership.
 --
 -- Cara pakai: paste SELURUH isi file ini ke Supabase > SQL Editor > Run.
+-- Aman dijalankan walau tabel users sudah berisi data (pakai IF NOT EXISTS
+-- dan DEFAULT, jadi data lama otomatis mendapat nilai default).
 -- ============================================================================
 
--- Pastikan pgcrypto terpasang di schema extensions
-create extension if not exists pgcrypto with schema extensions;
+-- 1. Tambah kolom membership_level dan points
+alter table public.users
+    add column if not exists membership_level text not null default 'Bronze';
+
+alter table public.users
+    add column if not exists points integer not null default 0;
 
 
--- ---------- Perbaiki fungsi REGISTER ----------
-create or replace function public.register_user(
+-- 2. Perbarui fungsi REGISTER agar mengembalikan membership_level & points
+--    (DROP dulu karena tipe return berubah)
+drop function if exists public.register_user(text, text, text, text);
+
+create function public.register_user(
     p_full_name text,
     p_email     text,
     p_phone     text,
     p_password  text
 )
 returns table (
-    id         uuid,
-    full_name  text,
-    email      text,
-    phone      text,
-    role       text,
-    status     text,
-    created_at timestamptz
+    id               uuid,
+    full_name        text,
+    email            text,
+    phone            text,
+    role             text,
+    status           text,
+    membership_level text,
+    points           integer,
+    created_at       timestamptz
 )
 language plpgsql
 security definer
@@ -40,15 +50,18 @@ begin
             using errcode = 'unique_violation';
     end if;
 
+    -- Member baru otomatis: role 'user', membership 'Bronze', points 0
     return query
-    insert into public.users (full_name, email, phone, password, role, status)
+    insert into public.users (full_name, email, phone, password, role, status, membership_level, points)
     values (
         trim(p_full_name),
         v_email,
         nullif(trim(p_phone), ''),
         crypt(p_password, gen_salt('bf')),
         'user',
-        'Active'
+        'Active',
+        'Bronze',
+        0
     )
     returning
         users.id,
@@ -57,24 +70,30 @@ begin
         users.phone,
         users.role,
         users.status,
+        users.membership_level,
+        users.points,
         users.created_at;
 end;
 $$;
 
 
--- ---------- Perbaiki fungsi LOGIN ----------
-create or replace function public.login_user(
+-- 3. Perbarui fungsi LOGIN agar mengembalikan membership_level & points
+drop function if exists public.login_user(text, text);
+
+create function public.login_user(
     p_email    text,
     p_password text
 )
 returns table (
-    id         uuid,
-    full_name  text,
-    email      text,
-    phone      text,
-    role       text,
-    status     text,
-    created_at timestamptz
+    id               uuid,
+    full_name        text,
+    email            text,
+    phone            text,
+    role             text,
+    status           text,
+    membership_level text,
+    points           integer,
+    created_at       timestamptz
 )
 language plpgsql
 security definer
@@ -91,6 +110,8 @@ begin
         u.phone,
         u.role,
         u.status,
+        u.membership_level,
+        u.points,
         u.created_at
     from public.users u
     where u.email = v_email
@@ -100,10 +121,11 @@ end;
 $$;
 
 
--- Beri izin eksekusi ulang (jaga-jaga)
+-- 4. Beri izin eksekusi ulang
 grant execute on function public.register_user(text, text, text, text) to anon, authenticated;
 grant execute on function public.login_user(text, text) to anon, authenticated;
 
 -- ============================================================================
--- SELESAI ✅  Coba login lagi: admin@medicare.com / admin123
+-- SELESAI ✅
+-- Kolom baru: membership_level (default 'Bronze'), points (default 0)
 -- ============================================================================

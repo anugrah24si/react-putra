@@ -1,5 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { getUsers, createUser, updateUser, deleteUser } from "../../services/userService";
+import MembershipBadge from "../../components/membership/MembershipBadge";
+import MembershipForm from "../../components/membership/MembershipForm";
 import "../../styles/dashboard-home.css";
 
 /**
@@ -14,6 +17,7 @@ import "../../styles/dashboard-home.css";
 export default function Users() {
     // State data user dari Supabase
     const [users, setUsers] = useState([]);
+    const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
@@ -25,6 +29,9 @@ export default function Users() {
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [editingId, setEditingId] = useState(null); // null = mode Add, ada nilai = mode Edit
     const [saving, setSaving] = useState(false);
+
+    // State modal Membership (kelola level membership)
+    const [membershipTarget, setMembershipTarget] = useState(null);
     const [form, setForm] = useState({
         fullName: "",
         email: "",
@@ -232,6 +239,7 @@ export default function Users() {
                                 <th>Email</th>
                                 <th>Phone</th>
                                 <th>Role</th>
+                                <th>Membership</th>
                                 <th>Status</th>
                                 <th className="med-table__right">Actions</th>
                             </tr>
@@ -239,13 +247,13 @@ export default function Users() {
                         <tbody>
                             {loading ? (
                                 <tr>
-                                    <td colSpan={6}>
+                                    <td colSpan={7}>
                                         <div className="med-empty">Memuat data...</div>
                                     </td>
                                 </tr>
                             ) : filteredUsers.length === 0 ? (
                                 <tr>
-                                    <td colSpan={6}>
+                                    <td colSpan={7}>
                                         <div className="med-empty">Tidak ada user ditemukan</div>
                                     </td>
                                 </tr>
@@ -259,15 +267,34 @@ export default function Users() {
                                             <span className={roleTone(u.role)}>{u.role}</span>
                                         </td>
                                         <td>
+                                            <MembershipBadge level={u.membership_level} />
+                                        </td>
+                                        <td>
                                             <span className={statusTone(u.status)}>{u.status}</span>
                                         </td>
                                         <td className="med-table__right">
                                             <button
                                                 type="button"
                                                 className="med-chip"
+                                                onClick={() => navigate(`/admin/users/${u.id}`)}
+                                            >
+                                                Detail
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className="med-chip"
+                                                style={{ marginLeft: "8px" }}
                                                 onClick={() => openEditForm(u)}
                                             >
                                                 Edit
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className="med-btn med-btn--ghost"
+                                                style={{ minHeight: "28px", padding: "4px 12px", marginLeft: "8px" }}
+                                                onClick={() => setMembershipTarget(u)}
+                                            >
+                                                Membership
                                             </button>
                                             <button
                                                 type="button"
@@ -395,6 +422,14 @@ export default function Users() {
                     </div>
                 </div>
             ) : null}
+
+            {/* Modal Kelola Membership (React Hook Form + Zod) */}
+            <MembershipForm
+                open={!!membershipTarget}
+                onOpenChange={(open) => !open && setMembershipTarget(null)}
+                member={membershipTarget}
+                onSuccess={loadUsers}
+            />
         </div>
     );
 }

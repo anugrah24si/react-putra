@@ -30,7 +30,19 @@ const Forgot = React.lazy(() => import("./pages/Auth/Forgot"));
 const Loading = React.lazy(() => import("./components/Loading"));
 const PublicLayout = React.lazy(() => import("./layout/PublicLayout"));
 const Landing = React.lazy(() => import("./pages/Public/Landing"));
+const MemberDashboard = React.lazy(() => import("./pages/Member/MemberDashboard"));
+const MemberBookings = React.lazy(() => import("./pages/Member/MemberBookings"));
+const MemberTransactions = React.lazy(() => import("./pages/Member/MemberTransactions"));
+const MemberVouchers = React.lazy(() => import("./pages/Member/MemberVouchers"));
+const MemberReviews = React.lazy(() => import("./pages/Member/MemberReviews"));
+const AdminBookings = React.lazy(() => import("./pages/Main/AdminBookings"));
+const AdminTransactions = React.lazy(() => import("./pages/Main/AdminTransactions"));
+const AdminVouchers = React.lazy(() => import("./pages/Main/AdminVouchers"));
+const AdminReviews = React.lazy(() => import("./pages/Main/AdminReviews"));
+const MemberDetail = React.lazy(() => import("./pages/Main/MemberDetail"));
+const Analytics = React.lazy(() => import("./pages/Main/Analytics"));
 import RequireAdmin from "./components/RequireAdmin";
+import RequireAuth from "./components/RequireAuth";
 
 
 
@@ -43,6 +55,11 @@ const initialMenuItems = [
     { id: "products", label: "Products", removable: false },
     { id: "doctors-and-staff", label: "Doctors & Staff", removable: false },
     { id: "users", label: "Users", removable: false },
+    { id: "bookings", label: "Bookings", removable: false },
+    { id: "transactions", label: "Transactions", removable: false },
+    { id: "vouchers", label: "Vouchers", removable: false },
+    { id: "reviews", label: "Reviews", removable: false },
+    { id: "analytics", label: "Analytics", removable: false },
 ];
 
 const orderStatusMap = {
@@ -161,6 +178,11 @@ export default function App() {
         if (path.startsWith("/admin/products")) return "products";
         if (path.startsWith("/admin/doctors-and-staff")) return "doctors-and-staff";
         if (path.startsWith("/admin/users")) return "users";
+        if (path.startsWith("/admin/bookings")) return "bookings";
+        if (path.startsWith("/admin/transactions")) return "transactions";
+        if (path.startsWith("/admin/vouchers")) return "vouchers";
+        if (path.startsWith("/admin/reviews")) return "reviews";
+        if (path.startsWith("/admin/analytics")) return "analytics";
         return "dashboard";
     }, [location.pathname]);
 
@@ -445,6 +467,47 @@ export default function App() {
                 {/* Public site (bisa diakses tanpa login) */}
                 <Route element={<PublicLayout theme={theme} onToggleTheme={handleToggleTheme} />}>
                     <Route path="/" element={<Landing />} />
+                    {/* Dashboard Member (wajib login) */}
+                    <Route
+                        path="/member"
+                        element={
+                            <RequireAuth>
+                                <MemberDashboard />
+                            </RequireAuth>
+                        }
+                    />
+                    <Route
+                        path="/member/bookings"
+                        element={
+                            <RequireAuth>
+                                <MemberBookings />
+                            </RequireAuth>
+                        }
+                    />
+                    <Route
+                        path="/member/transactions"
+                        element={
+                            <RequireAuth>
+                                <MemberTransactions />
+                            </RequireAuth>
+                        }
+                    />
+                    <Route
+                        path="/member/vouchers"
+                        element={
+                            <RequireAuth>
+                                <MemberVouchers />
+                            </RequireAuth>
+                        }
+                    />
+                    <Route
+                        path="/member/reviews"
+                        element={
+                            <RequireAuth>
+                                <MemberReviews />
+                            </RequireAuth>
+                        }
+                    />
                 </Route>
 
                 {/* Admin app (wrapped by MainLayout + dijaga RequireAdmin) */}
@@ -518,6 +581,15 @@ export default function App() {
                         path="/admin/users"
                         element={<Users />}
                     />
+                    {/* Detail Member - profil CRM lengkap + Customer Notes */}
+                    <Route path="/admin/users/:id" element={<MemberDetail />} />
+
+                    {/* CRM: Booking, Transaksi, Voucher (admin CRUD) */}
+                    <Route path="/admin/bookings" element={<AdminBookings />} />
+                    <Route path="/admin/transactions" element={<AdminTransactions />} />
+                    <Route path="/admin/vouchers" element={<AdminVouchers />} />
+                    <Route path="/admin/reviews" element={<AdminReviews />} />
+                    <Route path="/admin/analytics" element={<Analytics />} />
 
                     {/* Route dinamis untuk halaman ProductDetail - Menerima ID produk dari URL */}
                     <Route

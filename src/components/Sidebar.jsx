@@ -17,7 +17,12 @@ function getMenuIcon(menuId) {
         'products': <ProductsIcon />,
         'doctors-and-staff': <StaffIcon />,
         'customers': <CustomersIcon />,
-        'users': <CustomersIcon />
+        'users': <CustomersIcon />,
+        'bookings': <OrdersIcon />,
+        'transactions': <OrdersIcon />,
+        'vouchers': <ProductsIcon />,
+        'reviews': <StaffIcon />,
+        'analytics': <DashboardIcon />
     };
     return iconMap[menuId] || <DashboardIcon />;
 }
@@ -35,7 +40,12 @@ function getMenuPath(menuId) {
         'customers': '/admin/customers',
         'products': '/admin/products',
         'doctors-and-staff': '/admin/doctors-and-staff',
-        'users': '/admin/users'
+        'users': '/admin/users',
+        'bookings': '/admin/bookings',
+        'transactions': '/admin/transactions',
+        'vouchers': '/admin/vouchers',
+        'reviews': '/admin/reviews',
+        'analytics': '/admin/analytics'
     };
     return pathMap[menuId] || '/admin';
 }

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, X, Sun, Moon, LogOut, LayoutDashboard } from "lucide-react";
+import { Menu, X, Sun, Moon, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getCurrentUser, isAdmin, logout } from "@/lib/auth";
 
@@ -16,12 +16,16 @@ export default function PublicNavbar({ theme, onToggleTheme }) {
     const [mobileOpen, setMobileOpen] = useState(false);
     const user = getCurrentUser();
 
-    // Link navigasi ke section di halaman (anchor)
+    // Link publik ke section di halaman (pakai "/#..." agar bisa diklik dari
+    // halaman mana pun, termasuk dari dashboard member → kembali ke landing).
     const navLinks = [
-        { label: "Beranda", href: "#beranda" },
-        { label: "Layanan", href: "#layanan" },
-        { label: "Kontak", href: "#kontak" },
+        { label: "Beranda", href: "/#beranda" },
+        { label: "Layanan", href: "/#layanan" },
+        { label: "Kontak", href: "/#kontak" },
     ];
+
+    // Path dashboard sesuai role (untuk link "Dashboard" di navbar member)
+    const dashboardPath = isAdmin() ? "/admin" : "/member";
 
     // Handler logout lalu refresh ke beranda
     const handleLogout = () => {
@@ -52,6 +56,15 @@ export default function PublicNavbar({ theme, onToggleTheme }) {
                             {link.label}
                         </a>
                     ))}
+                    {/* Link Dashboard otomatis muncul di samping Kontak saat login */}
+                    {user ? (
+                        <Link
+                            to={dashboardPath}
+                            className="text-sm font-medium text-primary transition-colors hover:text-primary/80"
+                        >
+                            Dashboard
+                        </Link>
+                    ) : null}
                 </div>
 
                 {/* Aksi kanan (desktop) */}
@@ -62,12 +75,6 @@ export default function PublicNavbar({ theme, onToggleTheme }) {
 
                     {user ? (
                         <>
-                            {isAdmin() && (
-                                <Button variant="outline" size="sm" onClick={() => navigate("/admin")}>
-                                    <LayoutDashboard className="mr-1.5 h-4 w-4" />
-                                    Dashboard
-                                </Button>
-                            )}
                             <span className="text-sm font-medium text-foreground">
                                 Hi, {user.full_name?.split(" ")[0]}
                             </span>
@@ -113,6 +120,16 @@ export default function PublicNavbar({ theme, onToggleTheme }) {
                                 {link.label}
                             </a>
                         ))}
+                        {/* Link Dashboard di samping Kontak (mobile) saat login */}
+                        {user ? (
+                            <Link
+                                to={dashboardPath}
+                                onClick={() => setMobileOpen(false)}
+                                className="text-sm font-medium text-primary hover:text-primary/80"
+                            >
+                                Dashboard
+                            </Link>
+                        ) : null}
 
                         <div className="mt-2 flex items-center gap-2 border-t border-border pt-3">
                             <Button variant="ghost" size="icon" onClick={onToggleTheme} aria-label="Ganti tema">
@@ -120,16 +137,9 @@ export default function PublicNavbar({ theme, onToggleTheme }) {
                             </Button>
 
                             {user ? (
-                                <>
-                                    {isAdmin() && (
-                                        <Button variant="outline" size="sm" onClick={() => navigate("/admin")}>
-                                            Dashboard
-                                        </Button>
-                                    )}
-                                    <Button variant="ghost" size="sm" onClick={handleLogout}>
-                                        Logout
-                                    </Button>
-                                </>
+                                <Button variant="ghost" size="sm" onClick={handleLogout}>
+                                    Logout
+                                </Button>
                             ) : (
                                 <>
                                     <Button variant="ghost" size="sm" onClick={() => navigate("/login")}>

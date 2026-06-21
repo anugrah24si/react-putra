@@ -78,7 +78,7 @@ export async function registerUser({ fullName, email, phone, password }) {
 export async function getUsers() {
     const { data, error } = await supabase
         .from('users')
-        .select('id, full_name, email, phone, role, status, created_at, updated_at')
+        .select('id, full_name, email, phone, role, status, membership_level, points, created_at, updated_at')
         .order('created_at', { ascending: false })
 
     if (error) {
@@ -136,4 +136,24 @@ export async function deleteUser(id) {
     if (error) {
         throw new Error(error.message || 'Gagal menghapus user')
     }
+}
+
+/**
+ * getUserById - Mengambil satu user lengkap berdasarkan ID (untuk Detail Member).
+ *
+ * @param {string} id - ID user
+ * @returns {Promise<Object>} Data user
+ */
+export async function getUserById(id) {
+    const { data, error } = await supabase
+        .from('users')
+        .select('id, full_name, email, phone, role, status, membership_level, points, created_at')
+        .eq('id', id)
+        .single()
+
+    if (error) {
+        throw new Error(error.message || 'Gagal mengambil data user')
+    }
+
+    return data
 }
