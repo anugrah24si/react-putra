@@ -159,15 +159,24 @@ export default function Landing() {
                         </Reveal>
 
                         <Reveal delay={200}>
-                            <Card className="h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-                                <CardContent className="flex flex-col items-center gap-3 p-8 text-center">
-                                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                                        <MapPin className="h-5 w-5 text-primary" />
-                                    </div>
-                                    <h3 className="font-semibold text-foreground">Alamat</h3>
-                                    <p className="text-sm text-muted-foreground">Rumbai Central, Indonesia</p>
-                                </CardContent>
-                            </Card>
+                            <a
+                                href="https://maps.app.goo.gl/cb5VXSQVyEnNopfSA"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="block h-full"
+                            >
+                                <Card className="h-full cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+                                    <CardContent className="flex flex-col items-center gap-3 p-8 text-center">
+                                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                                            <MapPin className="h-5 w-5 text-primary" />
+                                        </div>
+                                        <h3 className="font-semibold text-foreground">Alamat</h3>
+                                        <p className="text-sm text-muted-foreground">
+                                            Rumbai Central, Pekanbaru, Riau
+                                        </p>
+                                    </CardContent>
+                                </Card>
+                            </a>
                         </Reveal>
                     </div>
                 </div>
