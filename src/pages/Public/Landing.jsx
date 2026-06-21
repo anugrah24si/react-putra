@@ -127,7 +127,14 @@ export default function Landing() {
                                         <Mail className="h-5 w-5 text-primary" />
                                     </div>
                                     <h3 className="font-semibold text-foreground">Email</h3>
-                                    <p className="text-sm text-muted-foreground">info@medicare.com</p>
+                                    <a
+                                        href="https://mail.google.com/mail/?view=cm&fs=1&to=anugrah24si@mahasiswa.pcr.ac.id"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-sm text-muted-foreground transition-colors hover:text-primary hover:underline"
+                                    >
+                                        anugrah24si@mahasiswa.pcr.ac.id
+                                    </a>
                                 </CardContent>
                             </Card>
                         </Reveal>
