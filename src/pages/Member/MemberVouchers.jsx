@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Gift, Tag } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getActiveVouchers } from "@/services/voucherService";
+import { useRealtimeSync } from "@/hooks/useRealtimeSync";
 
 /**
  * MemberVouchers - Halaman member untuk melihat voucher & promo yang aktif.
@@ -24,6 +25,16 @@ export default function MemberVouchers() {
         }
         load();
     }, []);
+
+    // Sinkron realtime: voucher yang ditambah/diubah admin langsung tampil
+    async function reloadVouchers() {
+        try {
+            setVouchers(await getActiveVouchers());
+        } catch (err) {
+            setError(err.message);
+        }
+    }
+    useRealtimeSync("vouchers", reloadVouchers);
 
     return (
         <div className="mx-auto max-w-5xl px-4 py-10">

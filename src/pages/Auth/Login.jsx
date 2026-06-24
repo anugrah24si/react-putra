@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { BorderBeam } from "@/components/ui/border-beam";
 
 /**
  * Login Page - Menggunakan komponen shadcn UI (Card, Button, Input, Label).
@@ -64,7 +65,7 @@ export default function Login() {
         <div className="flex min-h-screen items-center justify-center bg-background p-4">
             <AuthThemeToggle />
 
-            <Card className="w-full max-w-sm">
+            <Card className="relative w-full max-w-sm overflow-hidden">
                 <CardHeader>
                     <CardTitle>Login to your account</CardTitle>
                     <CardDescription>
@@ -143,6 +144,8 @@ export default function Login() {
                         Login with Google
                     </Button>
                 </CardFooter>
+
+                <BorderBeam duration={8} size={100} />
             </Card>
         </div>
     );

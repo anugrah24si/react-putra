@@ -14,9 +14,7 @@ export * from './badge'
 export * from './avatar'
 export * from './dialog'
 export * from './dropdown-menu'
-export * from './table'
 export * from './separator'
-export * from './scroll-area'
 
 // Custom wrapper components
 export * from './loading-spinner'

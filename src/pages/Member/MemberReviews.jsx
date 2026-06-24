@@ -5,10 +5,11 @@ import { Button } from "@/components/ui/button";
 import StarRating from "@/components/review/StarRating";
 import ReviewForm from "@/components/review/ReviewForm";
 import { getCurrentUser } from "@/lib/auth";
-import { services } from "@/data/services";
+import { useServices } from "@/hooks/useServices";
 import { getBookingsByUser } from "@/services/bookingService";
 import { getReviewsByUser, createReview, updateReview } from "@/services/reviewService";
 import { canEditReview } from "@/utils/review";
+import { useRealtimeSync } from "@/hooks/useRealtimeSync";
 
 /**
  * MemberReviews - Halaman member untuk memberi/mengedit review.
@@ -16,6 +17,8 @@ import { canEditReview } from "@/utils/review";
  */
 export default function MemberReviews() {
     const user = getCurrentUser();
+    // Daftar layanan dari DB (untuk memetakan nama → service_id saat menyimpan review)
+    const services = useServices();
     const [bookings, setBookings] = useState([]);
     const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -35,7 +38,13 @@ export default function MemberReviews() {
                 getBookingsByUser(user.id),
                 getReviewsByUser(user.id),
             ]);
-            setBookings(bk.filter((b) => b.status === "Completed"));
+            // Booking yang bisa direview: sudah Confirmed/Completed (layanan
+            // sudah dipesan & dibayar), atau yang sudah pernah diberi review.
+            const reviewedIds = new Set((rv || []).map((r) => r.booking_id));
+            const reviewable = bk.filter(
+                (b) => b.status === "Confirmed" || b.status === "Completed" || reviewedIds.has(b.id)
+            );
+            setBookings(reviewable);
             setReviews(rv);
         } catch (err) {
             setError(err.message);
@@ -48,6 +57,12 @@ export default function MemberReviews() {
         load();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    // Sinkron realtime: balasan/status review dari admin & perubahan status
+    // booking (mis. jadi "Completed") langsung tampil tanpa refresh manual.
+    const userFilter = user?.id ? `user_id=eq.${user.id}` : null;
+    useRealtimeSync("reviews", load, { filter: userFilter, enabled: !!user?.id });
+    useRealtimeSync("bookings", load, { filter: userFilter, enabled: !!user?.id });
 
     // Map review berdasarkan booking_id untuk akses cepat
     const reviewByBooking = useMemo(() => {
@@ -95,7 +110,7 @@ export default function MemberReviews() {
                 </div>
                 <div>
                     <h1 className="text-2xl font-bold text-foreground">Rating & Review</h1>
-                    <p className="text-sm text-muted-foreground">Beri ulasan untuk layanan yang sudah selesai</p>
+                    <p className="text-sm text-muted-foreground">Beri ulasan untuk layanan yang sudah kamu pesan</p>
                 </div>
             </div>
 
@@ -108,7 +123,7 @@ export default function MemberReviews() {
             ) : bookings.length === 0 ? (
                 <Card>
                     <CardContent className="p-8 text-center text-sm text-muted-foreground">
-                        Belum ada layanan selesai yang bisa direview.
+                        Belum ada layanan yang bisa direview.
                     </CardContent>
                 </Card>
             ) : (

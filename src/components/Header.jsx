@@ -13,6 +13,7 @@ import {
 } from './ui/dropdown-menu';
 import { User, Settings, LogOut, HelpCircle } from 'lucide-react';
 import { getCurrentUser, logout } from '@/lib/auth';
+import { toggleThemeWithTransition } from '@/lib/themeTransition';
 
 /**
  * Page labels configuration - Mapping section ke title dan subtitle
@@ -105,7 +106,7 @@ export default function Header({
                     icon={theme === "dark" ? <SunIcon /> : <MoonIcon />}
                     ariaLabel={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
                     title={theme === "dark" ? "Light mode" : "Dark mode"}
-                    onClick={onToggleTheme}
+                    onClick={(e) => toggleThemeWithTransition(theme, onToggleTheme, e?.currentTarget)}
                 />
 
                 {/* User Profile Dropdown Menu */}

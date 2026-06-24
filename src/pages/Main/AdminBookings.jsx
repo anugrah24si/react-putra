@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { getBookings, updateBooking, deleteBooking } from "../../services/bookingService";
+import { createTransactionFromBooking } from "../../services/transactionService";
+import { syncMembershipFromTransactions } from "../../services/membershipService";
 import "../../styles/dashboard-home.css";
 
 const STATUSES = ["Pending", "Confirmed", "Completed", "Cancelled"];
@@ -45,6 +47,16 @@ export default function AdminBookings() {
         setError("");
         try {
             await updateBooking(booking.id, { status: newStatus });
+
+            // Otomatis saat booking di-Confirm: buat transaksi (sekali saja,
+            // anti-duplikat) lalu sinkronkan poin & level membership member.
+            if (newStatus === "Confirmed") {
+                const created = await createTransactionFromBooking(booking);
+                if (created && booking.user_id) {
+                    await syncMembershipFromTransactions(booking.user_id);
+                }
+            }
+
             await load();
         } catch (err) {
             setError(err.message);
@@ -68,6 +80,11 @@ export default function AdminBookings() {
                     <div className="med-customers__title">Booking Management</div>
                     <div className="med-customers__subtitle">
                         Kelola semua booking layanan member ({bookings.length} booking)
+                        <br />
+                        <span style={{ fontSize: "0.8rem" }}>
+                            💡 Mengubah status ke <b>Confirmed</b> otomatis membuat transaksi &amp;
+                            menambah poin member.
+                        </span>
                     </div>
                 </div>
                 <div className="med-customers__actions">

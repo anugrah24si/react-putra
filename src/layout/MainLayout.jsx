@@ -172,7 +172,7 @@ function DashboardSidebar() {
                     </svg>
                 </div>
                 <div className="med-brandcopy">
-                    <div className="med-brandcopy__title">MediCare Admin</div>
+                    <div className="med-brandcopy__title">LUMIVA Admin</div>
                     <div className="med-brandcopy__subtitle">Hospital Management</div>
                 </div>
             </div>

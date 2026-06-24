@@ -8,9 +8,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { bookingSchema } from "@/schemas/crmSchemas";
-import { services } from "@/data/services";
+import { useServices } from "@/hooks/useServices";
 import { getCurrentUser } from "@/lib/auth";
 import { createBooking, getBookingsByUser } from "@/services/bookingService";
+import { calculatePoints } from "@/services/membershipService";
+import { parsePriceToNumber } from "@/services/transactionService";
+import { useRealtimeSync } from "@/hooks/useRealtimeSync";
 
 /**
  * statusColor - Warna badge sesuai status booking.
@@ -29,6 +32,8 @@ function statusColor(status) {
  */
 export default function MemberBookings() {
     const user = getCurrentUser();
+    // Layanan aktif dari DB (dikelola admin), sinkron realtime
+    const services = useServices({ activeOnly: true });
     const [bookings, setBookings] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
@@ -63,6 +68,12 @@ export default function MemberBookings() {
         loadBookings();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    // Sinkron realtime: booking yang diubah admin langsung tampil di sini
+    useRealtimeSync("bookings", loadBookings, {
+        filter: user?.id ? `user_id=eq.${user.id}` : null,
+        enabled: !!user?.id,
+    });
 
     // Submit booking baru
     const onSubmit = async (values) => {
@@ -129,6 +140,12 @@ export default function MemberBookings() {
                                     </SelectContent>
                                 </Select>
                                 {errors.service_name ? <p className="text-xs text-destructive">{errors.service_name.message}</p> : null}
+                                {/* Info poin yang didapat dari layanan terpilih */}
+                                {selectedService ? (
+                                    <p className="text-xs text-primary">
+                                        Kamu akan mendapat +{calculatePoints(parsePriceToNumber(services.find((s) => s.name === selectedService)?.price))} poin dari layanan ini
+                                    </p>
+                                ) : null}
                             </div>
 
                             <div className="grid gap-2">
@@ -167,9 +184,15 @@ export default function MemberBookings() {
                                             <p className="font-medium text-foreground">{b.service_name}</p>
                                             <p className="text-xs text-muted-foreground">{b.booking_date} · {b.service_price || "-"}</p>
                                         </div>
-                                        <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${statusColor(b.status)}`}>
-                                            {b.status}
-                                        </span>
+                                        <div className="flex flex-col items-end gap-1">
+                                            <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${statusColor(b.status)}`}>
+                                                {b.status}
+                                            </span>
+                                            {/* Poin yang didapat dari layanan ini (Rp 10.000 = 1 poin) */}
+                                            <span className="rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
+                                                +{calculatePoints(parsePriceToNumber(b.service_price))} poin
+                                            </span>
+                                        </div>
                                     </div>
                                 ))}
                             </div>

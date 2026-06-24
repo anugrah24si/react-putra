@@ -1,4 +1,5 @@
 import { useOutletContext } from "react-router-dom";
+import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
 
 /**
  * SunIcon - Ikon matahari (untuk beralih ke mode terang).
@@ -32,14 +33,12 @@ export default function AuthThemeToggle() {
     const { theme, onToggleTheme } = useOutletContext();
 
     return (
-        <button
-            type="button"
-            className="fixed right-5 top-5 z-50 inline-flex h-11 w-11 items-center justify-center rounded-xl border border-border bg-card text-foreground shadow-md transition-transform hover:-translate-y-0.5 hover:bg-accent"
-            onClick={onToggleTheme}
-            aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-            title={theme === "dark" ? "Mode terang" : "Mode gelap"}
+        <AnimatedThemeToggler
+            theme={theme}
+            onToggleTheme={onToggleTheme}
+            className="fixed right-5 top-5 z-50 h-11 w-11 rounded-xl border border-border bg-card text-foreground shadow-md hover:-translate-y-0.5 hover:bg-accent"
         >
             {theme === "dark" ? <SunIcon /> : <MoonIcon />}
-        </button>
+        </AnimatedThemeToggler>
     );
 }

@@ -33,7 +33,7 @@ export default function MemberDashboard() {
                         Halo, {membership?.full_name || "Member"} 👋
                     </h1>
                     <p className="text-sm text-muted-foreground">
-                        Selamat datang di dashboard member MediCare
+                        Selamat datang di dashboard member LUMIVA
                     </p>
                 </div>
             </div>

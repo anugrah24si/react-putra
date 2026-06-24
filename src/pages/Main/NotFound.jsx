@@ -1,172 +1,61 @@
 import { useNavigate } from "react-router-dom";
-import "../../styles/login.css";
+import { Home, ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import BrandLogo from "@/components/BrandLogo";
 
+/**
+ * NotFound - Halaman 404 dengan desain modern selaras tema brand LUMIVA.
+ */
 export default function NotFound() {
     const navigate = useNavigate();
 
     return (
-        <div className="login-page-wrap">
-            <div className="login-page">
-                {/* LEFT VISUAL PANEL */}
-                <aside className="login-visual">
-                    <div className="login-visual__shine" aria-hidden="true" />
-                    <div className="login-visual__inner">
-                        <img
-                            className="login-visual__hero"
-                            src="/img/clinik.jpg"
-                            alt="Medical clinic"
-                        />
-
-                        <div className="login-visual__copy">
-                            <h2>Page Not Found</h2>
-                            <p>
-                                It seems like the page you're trying to access doesn't exist or has been moved.
-                                Don't worry, you can navigate back to the main dashboard to continue managing your clinic operations.
-                            </p>
-                        </div>
-
-                        <div className="login-visual__dots" aria-hidden="true">
-                            <span className="login-visual__dot login-visual__dot--active" />
-                            <span className="login-visual__dot" />
-                            <span className="login-visual__dot" />
-                        </div>
-                    </div>
-                </aside>
-
-                {/* RIGHT PANEL */}
-                <main className="login-panel">
-                    <div className="login-panel__inner">
-                        <div className="login-panel__brand">
-                            <div className="login-panel__brandmark">
-                                <img src="/img/logo.png" alt="MediCare" />
-                            </div>
-                        </div>
-
-                        <section className="login-card">
-                            <div className="login-card__head">
-                                <h1 style={{ fontSize: '72px', margin: '0 0 16px 0', color: '#C9A886' }}>404</h1>
-                                <h2 style={{ fontSize: '24px', margin: '0 0 8px 0', color: '#2D2A27' }}>Oops! Page Not Found</h2>
-                                <p style={{ color: '#666666', marginTop: '0' }}>The page you're looking for doesn't exist</p>
-                            </div>
-
-                            <form className="login-form" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                                <button
-                                    type="button"
-                                    onClick={() => navigate("/")}
-                                    style={{
-                                        width: '100%',
-                                        padding: '12px 16px',
-                                        background: 'linear-gradient(90deg, #C9A886 0%, #D4AF8C 100%)',
-                                        color: 'white',
-                                        border: 'none',
-                                        borderRadius: '8px',
-                                        fontSize: '14px',
-                                        fontWeight: '600',
-                                        fontFamily: 'Inter, sans-serif',
-                                        cursor: 'pointer',
-                                        transition: 'opacity 0.3s ease'
-                                    }}
-                                    onMouseOver={(e) => e.target.style.opacity = '0.9'}
-                                    onMouseOut={(e) => e.target.style.opacity = '1'}
-                                >
-                                    Go to Dashboard
-                                </button>
-
-                                <button
-                                    type="button"
-                                    onClick={() => navigate("/admin/orders")}
-                                    style={{
-                                        width: '100%',
-                                        padding: '12px 16px',
-                                        background: 'transparent',
-                                        color: '#C9A886',
-                                        border: '2px solid #C9A886',
-                                        borderRadius: '8px',
-                                        fontSize: '14px',
-                                        fontWeight: '600',
-                                        fontFamily: 'Inter, sans-serif',
-                                        cursor: 'pointer',
-                                        transition: 'all 0.3s ease'
-                                    }}
-                                    onMouseOver={(e) => {
-                                        e.target.style.background = '#f5f5f5';
-                                    }}
-                                    onMouseOut={(e) => {
-                                        e.target.style.background = 'transparent';
-                                    }}
-                                >
-                                    View Orders
-                                </button>
-
-                                <button
-                                    type="button"
-                                    onClick={() => navigate("/admin/customers")}
-                                    style={{
-                                        width: '100%',
-                                        padding: '12px 16px',
-                                        background: 'transparent',
-                                        color: '#C9A886',
-                                        border: '2px solid #C9A886',
-                                        borderRadius: '8px',
-                                        fontSize: '14px',
-                                        fontWeight: '600',
-                                        fontFamily: 'Inter, sans-serif',
-                                        cursor: 'pointer',
-                                        transition: 'all 0.3s ease'
-                                    }}
-                                    onMouseOver={(e) => {
-                                        e.target.style.background = '#f5f5f5';
-                                    }}
-                                    onMouseOut={(e) => {
-                                        e.target.style.background = 'transparent';
-                                    }}
-                                >
-                                    View Customers
-                                </button>
-
-                                <button
-                                    type="button"
-                                    onClick={() => navigate("/login")}
-                                    style={{
-                                        width: '100%',
-                                        padding: '12px 16px',
-                                        background: 'transparent',
-                                        color: '#C9A886',
-                                        border: '2px solid #C9A886',
-                                        borderRadius: '8px',
-                                        fontSize: '14px',
-                                        fontWeight: '600',
-                                        fontFamily: 'Inter, sans-serif',
-                                        cursor: 'pointer',
-                                        transition: 'all 0.3s ease'
-                                    }}
-                                    onMouseOver={(e) => {
-                                        e.target.style.background = '#f5f5f5';
-                                    }}
-                                    onMouseOut={(e) => {
-                                        e.target.style.background = 'transparent';
-                                    }}
-                                >
-                                    Back to Sign In
-                                </button>
-                            </form>
-
-                            <div style={{
-                                marginTop: '32px',
-                                padding: '16px',
-                                background: '#f9f8f7',
-                                borderRadius: '8px',
-                                textAlign: 'center',
-                                fontSize: '12px',
-                                color: '#999999',
-                                fontFamily: 'Inter, sans-serif'
-                            }}>
-                                If you think this is a mistake, please contact support at support@medicare.com
-                            </div>
-                        </section>
-                    </div>
-                </main>
+        <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background px-4 text-center">
+            {/* Aksen latar lembut */}
+            <div className="pointer-events-none absolute inset-0 -z-10">
+                <div className="absolute -left-24 top-10 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
+                <div className="absolute -right-24 bottom-10 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
             </div>
+
+            {/* Logo */}
+            <BrandLogo className="mb-8" />
+
+            {/* Angka 404 */}
+            <h1 className="bg-gradient-to-b from-primary to-emerald-600 bg-clip-text text-8xl font-extrabold tracking-tighter text-transparent md:text-9xl">
+                404
+            </h1>
+
+            <h2 className="mt-4 text-2xl font-bold text-foreground md:text-3xl">
+                Halaman Tidak Ditemukan
+            </h2>
+            <p className="mx-auto mt-3 max-w-md text-muted-foreground">
+                Maaf, halaman yang kamu cari tidak ada atau sudah dipindahkan.
+                Yuk kembali ke beranda untuk melanjutkan.
+            </p>
+
+            {/* Tombol aksi */}
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+                <Button size="lg" onClick={() => navigate("/")}>
+                    <Home className="mr-1.5 h-4 w-4" />
+                    Kembali ke Beranda
+                </Button>
+                <Button size="lg" variant="outline" onClick={() => navigate(-1)}>
+                    <ArrowLeft className="mr-1.5 h-4 w-4" />
+                    Halaman Sebelumnya
+                </Button>
+            </div>
+
+            <p className="mt-10 text-xs text-muted-foreground">
+                Butuh bantuan? Hubungi kami di{" "}
+                <a
+                    href="https://wa.me/6282225546502"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-medium text-primary hover:underline"
+                >
+                    WhatsApp
+                </a>
+            </p>
         </div>
     );
 }

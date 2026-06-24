@@ -1,7 +1,9 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Menu, X, Sun, Moon, LogOut } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Menu, X, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
+import BrandLogo from "@/components/BrandLogo";
 import { getCurrentUser, isAdmin, logout } from "@/lib/auth";
 
 /**
@@ -13,8 +15,14 @@ import { getCurrentUser, isAdmin, logout } from "@/lib/auth";
  */
 export default function PublicNavbar({ theme, onToggleTheme }) {
     const navigate = useNavigate();
+    const location = useLocation();
     const [mobileOpen, setMobileOpen] = useState(false);
+    // Section yang sedang tampil di layar (untuk menandai link aktif/bold)
+    const [activeSection, setActiveSection] = useState("beranda");
     const user = getCurrentUser();
+
+    // Hanya halaman landing ("/") yang punya section untuk scroll-spy
+    const isLanding = location.pathname === "/";
 
     // Link publik ke section di halaman (pakai "/#..." agar bisa diklik dari
     // halaman mana pun, termasuk dari dashboard member → kembali ke landing).
@@ -26,6 +34,49 @@ export default function PublicNavbar({ theme, onToggleTheme }) {
 
     // Path dashboard sesuai role (untuk link "Dashboard" di navbar member)
     const dashboardPath = isAdmin() ? "/admin" : "/member";
+    // Dashboard dianggap aktif bila sedang berada di rute dashboard (mis. /member)
+    const dashboardActive = location.pathname.startsWith(dashboardPath);
+
+    // Scroll-spy: pantau section landing yang sedang tampil → tandai link aktif.
+    // Hanya berjalan di halaman landing; di rute lain tidak ada section yang aktif.
+    useEffect(() => {
+        if (!isLanding) {
+            setActiveSection("");
+            return;
+        }
+        const ids = navLinks.map((l) => l.href.split("#")[1]);
+        const sections = ids
+            .map((id) => document.getElementById(id))
+            .filter(Boolean);
+        if (sections.length === 0) return;
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) setActiveSection(entry.target.id);
+                });
+            },
+            // Aktif saat section berada di sekitar bagian tengah viewport
+            { rootMargin: "-45% 0px -50% 0px", threshold: 0 }
+        );
+
+        sections.forEach((s) => observer.observe(s));
+        return () => observer.disconnect();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isLanding]);
+
+    // Kelas link nav sesuai status aktif (bold + terang bila section sedang dilihat)
+    const navLinkClass = (sectionId) =>
+        `text-sm transition-colors ${isLanding && activeSection === sectionId
+            ? "font-bold text-foreground"
+            : "font-medium text-muted-foreground hover:text-foreground"
+        }`;
+
+    // Kelas khusus link Dashboard (bold bila sedang di rute dashboard)
+    const dashboardLinkClass = `text-sm transition-colors ${dashboardActive
+        ? "font-bold text-foreground"
+        : "font-medium text-muted-foreground hover:text-foreground"
+        }`;
 
     // Handler logout lalu refresh ke beranda
     const handleLogout = () => {
@@ -39,10 +90,7 @@ export default function PublicNavbar({ theme, onToggleTheme }) {
             <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
                 {/* Logo */}
                 <Link to="/" className="flex items-center gap-2">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                        <img src="/img/logo.png" alt="MediCare" className="h-6 w-6 object-contain" />
-                    </div>
-                    <span className="text-lg font-bold text-foreground">MediCare</span>
+                    <BrandLogo />
                 </Link>
 
                 {/* Link desktop */}
@@ -51,7 +99,7 @@ export default function PublicNavbar({ theme, onToggleTheme }) {
                         <a
                             key={link.href}
                             href={link.href}
-                            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                            className={navLinkClass(link.href.split("#")[1])}
                         >
                             {link.label}
                         </a>
@@ -60,7 +108,7 @@ export default function PublicNavbar({ theme, onToggleTheme }) {
                     {user ? (
                         <Link
                             to={dashboardPath}
-                            className="text-sm font-medium text-primary transition-colors hover:text-primary/80"
+                            className={dashboardLinkClass}
                         >
                             Dashboard
                         </Link>
@@ -69,9 +117,11 @@ export default function PublicNavbar({ theme, onToggleTheme }) {
 
                 {/* Aksi kanan (desktop) */}
                 <div className="hidden items-center gap-2 md:flex">
-                    <Button variant="ghost" size="icon" onClick={onToggleTheme} aria-label="Ganti tema">
-                        {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-                    </Button>
+                    <AnimatedThemeToggler
+                        theme={theme}
+                        onToggleTheme={onToggleTheme}
+                        className="h-9 w-9 rounded-md text-foreground hover:bg-accent"
+                    />
 
                     {user ? (
                         <>
@@ -115,7 +165,7 @@ export default function PublicNavbar({ theme, onToggleTheme }) {
                                 key={link.href}
                                 href={link.href}
                                 onClick={() => setMobileOpen(false)}
-                                className="text-sm font-medium text-muted-foreground hover:text-foreground"
+                                className={navLinkClass(link.href.split("#")[1])}
                             >
                                 {link.label}
                             </a>
@@ -125,16 +175,18 @@ export default function PublicNavbar({ theme, onToggleTheme }) {
                             <Link
                                 to={dashboardPath}
                                 onClick={() => setMobileOpen(false)}
-                                className="text-sm font-medium text-primary hover:text-primary/80"
+                                className={dashboardLinkClass}
                             >
                                 Dashboard
                             </Link>
                         ) : null}
 
                         <div className="mt-2 flex items-center gap-2 border-t border-border pt-3">
-                            <Button variant="ghost" size="icon" onClick={onToggleTheme} aria-label="Ganti tema">
-                                {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-                            </Button>
+                            <AnimatedThemeToggler
+                                theme={theme}
+                                onToggleTheme={onToggleTheme}
+                                className="h-9 w-9 rounded-md text-foreground hover:bg-accent"
+                            />
 
                             {user ? (
                                 <Button variant="ghost" size="sm" onClick={handleLogout}>

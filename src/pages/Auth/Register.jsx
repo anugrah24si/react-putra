@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { BorderBeam } from "@/components/ui/border-beam";
 
 /**
  * Register Page - Menggunakan komponen shadcn UI (Card, Button, Input, Label).
@@ -73,7 +74,7 @@ export default function Register() {
         <div className="flex min-h-screen items-center justify-center bg-background p-4">
             <AuthThemeToggle />
 
-            <Card className="w-full max-w-sm">
+            <Card className="relative w-full max-w-sm overflow-hidden">
                 <CardHeader>
                     <CardTitle>Create your account</CardTitle>
                     <CardDescription>
@@ -182,6 +183,8 @@ export default function Register() {
                         {loading ? "Creating Account..." : "Create Account"}
                     </Button>
                 </CardFooter>
+
+                <BorderBeam duration={8} size={100} />
             </Card>
         </div>
     );

@@ -1,5 +1,7 @@
 import { Outlet } from "react-router-dom";
 import PublicNavbar from "@/components/public/PublicNavbar";
+import PublicFooter from "@/components/public/PublicFooter";
+import { SmoothCursor } from "@/components/ui/smooth-cursor";
 
 /**
  * PublicLayout - Layout untuk halaman publik (bisa diakses tanpa login).
@@ -11,18 +13,14 @@ import PublicNavbar from "@/components/public/PublicNavbar";
 export default function PublicLayout({ theme, onToggleTheme }) {
     return (
         <div className="flex min-h-screen flex-col scroll-smooth bg-background text-foreground [&_section]:scroll-mt-16">
+            <SmoothCursor />
             <PublicNavbar theme={theme} onToggleTheme={onToggleTheme} />
 
             <main className="flex-1">
                 <Outlet />
             </main>
 
-            {/* Footer */}
-            <footer className="border-t border-border bg-background py-6">
-                <div className="mx-auto max-w-6xl px-4 text-center text-sm text-muted-foreground">
-                    © 2025 MediCare Clinic. All rights reserved.
-                </div>
-            </footer>
+            <PublicFooter />
         </div>
     );
 }

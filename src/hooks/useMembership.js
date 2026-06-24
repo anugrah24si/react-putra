@@ -1,10 +1,12 @@
 import { useEffect, useState, useCallback } from "react";
-import { getCurrentUser } from "@/lib/auth";
+import { getCurrentUser, saveSession } from "@/lib/auth";
 import { getMembershipByUserId } from "@/services/membershipService";
+import { useRealtimeSync } from "@/hooks/useRealtimeSync";
 
 /**
  * useMembership - Hook untuk mengambil data membership user yang sedang login.
- * Dipakai nanti di Member Dashboard (Tahap 2) dan komponen lain.
+ * Dipakai di Member Dashboard dan komponen lain. Otomatis tersinkron secara
+ * realtime: bila admin/transaksi mengubah poin atau level, data ikut diperbarui.
  *
  * @returns {{ membership: Object|null, loading: boolean, error: string, reload: function }}
  */
@@ -27,6 +29,8 @@ export function useMembership() {
         try {
             const data = await getMembershipByUserId(user.id);
             setMembership(data);
+            // Jaga sesi di localStorage tetap selaras (level & poin terbaru)
+            saveSession({ ...user, ...data });
         } catch (err) {
             setError(err.message || "Gagal memuat membership");
         } finally {
@@ -37,6 +41,13 @@ export function useMembership() {
     useEffect(() => {
         reload();
     }, [reload]);
+
+    // Sinkron realtime: pantau baris user ini agar perubahan poin/level langsung tampil
+    const currentUser = getCurrentUser();
+    useRealtimeSync("users", reload, {
+        filter: currentUser?.id ? `id=eq.${currentUser.id}` : null,
+        enabled: !!currentUser?.id,
+    });
 
     return { membership, loading, error, reload };
 }

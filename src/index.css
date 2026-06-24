@@ -68,6 +68,27 @@ a {
   text-decoration: none;
 }
 
+/* Transisi tema (AnimatedThemeToggler): nonaktifkan crossfade default agar
+   hanya efek lingkaran (clip-path) yang tampil. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* Animasi BorderBeam: gradien conic berputar (sudut dianimasikan via @property). */
+@property --beam-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes border-beam-rotate {
+  to {
+    --beam-angle: 360deg;
+  }
+}
+
 h1 {
   font-size: 3.2em;
   line-height: 1.1;

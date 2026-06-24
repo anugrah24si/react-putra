@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { getTransactions, createTransaction, updateTransaction, deleteTransaction } from "../../services/transactionService";
+import { syncMembershipFromTransactions } from "../../services/membershipService";
 import { getUsers } from "../../services/userService";
 import "../../styles/dashboard-home.css";
 
@@ -74,11 +75,23 @@ export default function AdminTransactions() {
                 amount: Number(form.amount) || 0,
                 status: form.status,
             };
+
+            // Kumpulkan member yang poin/level-nya perlu disinkronkan ulang.
+            // Saat edit, member lama (sebelum diubah) juga ikut disinkronkan
+            // agar poinnya terkoreksi bila transaksi dipindah ke member lain.
+            const affected = new Set();
             if (editingId) {
+                const original = transactions.find((t) => t.id === editingId);
+                if (original?.user_id) affected.add(original.user_id);
                 await updateTransaction(editingId, payload);
             } else {
                 await createTransaction(payload);
             }
+            if (form.user_id) affected.add(form.user_id);
+
+            // Hitung ulang poin & level otomatis dari transaksi 'Paid'
+            await Promise.all([...affected].map((uid) => syncMembershipFromTransactions(uid)));
+
             setIsOpen(false);
             await load();
         } catch (err) {
@@ -92,6 +105,8 @@ export default function AdminTransactions() {
         if (!window.confirm("Hapus transaksi ini?")) return;
         try {
             await deleteTransaction(t.id);
+            // Sinkronkan poin & level member setelah transaksinya dihapus
+            if (t.user_id) await syncMembershipFromTransactions(t.user_id);
             await load();
         } catch (err) {
             setError(err.message);
@@ -193,6 +208,12 @@ export default function AdminTransactions() {
                                     <select className="med-select" value={form.status} onChange={(e) => setForm((f) => ({ ...f, status: e.target.value }))}>
                                         {STATUSES.map((s) => <option key={s} value={s}>{s}</option>)}
                                     </select>
+                                </div>
+                                <div className="med-field">
+                                    <p className="med-td--muted" style={{ fontSize: "0.8rem", margin: 0 }}>
+                                        💡 Poin &amp; level membership dihitung otomatis dari transaksi
+                                        berstatus <b>Paid</b> (setiap Rp 10.000 = 1 poin).
+                                    </p>
                                 </div>
                             </div>
                             <div className="med-modal__actions">

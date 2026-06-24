@@ -46,17 +46,72 @@ function Button({
   variant = "default",
   size = "default",
   asChild = false,
+  rippleColor = "currentColor",
+  children,
+  onClick,
   ...props
 }) {
-  const Comp = asChild ? Slot.Root : "button"
+  const [ripples, setRipples] = React.useState([]);
+
+  // Buat riak baru pada titik klik (hanya untuk <button>, bukan asChild)
+  const handleClick = (event) => {
+    const btn = event.currentTarget;
+    const rect = btn.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    const x = event.clientX - rect.left - size / 2;
+    const y = event.clientY - rect.top - size / 2;
+    const key = Date.now();
+    setRipples((prev) => [...prev, { x, y, size, key }]);
+    setTimeout(() => {
+      setRipples((prev) => prev.filter((r) => r.key !== key));
+    }, 600);
+    onClick?.(event);
+  };
+
+  // Mode asChild (mis. tombol berisi <a>/<Link>): render tanpa overlay ripple
+  if (asChild) {
+    return (
+      <Slot.Root
+        data-slot="button"
+        data-variant={variant}
+        data-size={size}
+        className={cn(buttonVariants({ variant, size, className }))}
+        onClick={onClick}
+        {...props}
+      >
+        {children}
+      </Slot.Root>
+    );
+  }
 
   return (
-    <Comp
+    <button
       data-slot="button"
       data-variant={variant}
       data-size={size}
-      className={cn(buttonVariants({ variant, size, className }))}
-      {...props} />
+      className={cn("relative overflow-hidden", buttonVariants({ variant, size, className }))}
+      onClick={handleClick}
+      {...props}
+    >
+      <span className="relative z-10 inline-flex items-center justify-center gap-1.5">
+        {children}
+      </span>
+      <span className="pointer-events-none absolute inset-0">
+        {ripples.map((ripple) => (
+          <span
+            key={ripple.key}
+            className="absolute animate-rippling rounded-full opacity-30"
+            style={{
+              width: ripple.size,
+              height: ripple.size,
+              top: ripple.y,
+              left: ripple.x,
+              backgroundColor: rippleColor,
+            }}
+          />
+        ))}
+      </span>
+    </button>
   );
 }
 

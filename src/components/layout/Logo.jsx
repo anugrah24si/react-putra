@@ -1,3 +1,5 @@
+import { BrandMark } from "@/components/BrandLogo";
+
 /**
  * Logo Component - Menampilkan logo aplikasi dengan title dan subtitle
  * 
@@ -6,18 +8,14 @@
  * @param {string} className - Custom className tambahan
  */
 export default function Logo({
-    title = 'Lumiere Clinic',
+    title = 'LUMIVA',
     subtitle = 'Beauty & Wellness',
     className = ''
 }) {
     return (
         <div className={`med-sidebar__brandrow ${className}`}>
             <div className="med-brandmark">
-                <img
-                    src="/img/logo.png"
-                    alt={title}
-                    className="h-full w-full object-contain p-1"
-                />
+                <BrandMark className="h-full w-full rounded-lg" />
             </div>
             <div className="med-brandcopy">
                 <div className="med-brandcopy__title">{title}</div>

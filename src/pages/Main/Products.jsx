@@ -1,446 +1,233 @@
-import { useMemo, useState } from 'react';
-import { Filter, Plus, Edit, Trash2, Eye, Package, X } from 'lucide-react';
+import { useEffect, useMemo, useState } from "react";
+import { getServices, createService, updateService, deleteService } from "../../services/serviceService";
+import { useRealtimeSync } from "../../hooks/useRealtimeSync";
+import "../../styles/dashboard-home.css";
 
+const EMPTY = { name: "", description: "", price: "", image: "/img/product_treatment.png", active: true };
 
-const CATEGORIES = ['Facial Treatment', 'Laser Treatment', 'Anti-Aging', 'Injectable', 'Medical Treatment'];
-const PAGE_SIZE = 6;
-
-const initialProducts = [
-  { id: 'PRD-001', name: 'Facial Diamond Glow', category: 'Facial Treatment', price: 'Rp 850,000', stock: 25, status: 'available', image: '/img/product_treatment.png', description: 'Premium diamond facial treatment for radiant skin' },
-  { id: 'PRD-002', name: 'Laser Hair Removal', category: 'Laser Treatment', price: 'Rp 1,200,000', stock: 15, status: 'available', image: '/img/product_skincare.png', description: 'Permanent hair removal with advanced laser technology' },
-  { id: 'PRD-003', name: 'Skin Rejuvenation', category: 'Anti-Aging', price: 'Rp 950,000', stock: 8, status: 'low-stock', image: '/img/product_skincare.png', description: 'Restore youthful skin with collagen boosting therapy' },
-  { id: 'PRD-004', name: 'Botox Treatment', category: 'Injectable', price: 'Rp 2,500,000', stock: 12, status: 'available', image: '/img/product_treatment.png', description: 'FDA-approved botox for wrinkle reduction' },
-  { id: 'PRD-005', name: 'Chemical Peeling', category: 'Facial Treatment', price: 'Rp 750,000', stock: 0, status: 'out-of-stock', image: '/img/product_skincare.png', description: 'Deep exfoliation for smooth and even skin tone' },
-  { id: 'PRD-006', name: 'Dermal Filler', category: 'Injectable', price: 'Rp 3,200,000', stock: 18, status: 'available', image: '/img/product_treatment.png', description: 'Hyaluronic acid filler for volume restoration' },
-  { id: 'PRD-007', name: 'Acne Treatment', category: 'Medical Treatment', price: 'Rp 680,000', stock: 20, status: 'available', image: '/img/product_skincare.png', description: 'Comprehensive acne therapy with clinical-grade products' },
-  { id: 'PRD-008', name: 'Hydrafacial', category: 'Facial Treatment', price: 'Rp 1,100,000', stock: 5, status: 'low-stock', image: '/img/product_treatment.png', description: 'Deep cleansing and hydration facial treatment' },
-];
-
-const EMPTY_FORM = { name: '', category: 'Facial Treatment', price: '', stock: '', description: '' };
-
-function deriveStatus(stock) {
-  const n = Number(stock);
-  if (n === 0) return 'out-of-stock';
-  if (n <= 10) return 'low-stock';
-  return 'available';
+/**
+ * formatRupiahInput - Mengubah input angka menjadi format "Rp X.XXX".
+ * Mengambil hanya digit, lalu menambahkan pemisah ribuan & prefix "Rp ".
+ * @param {string|number} value
+ * @returns {string}
+ */
+function formatRupiahInput(value) {
+  const digits = String(value ?? "").replace(/\D/g, "");
+  if (!digits) return "";
+  return "Rp " + Number(digits).toLocaleString("id-ID");
 }
 
-function formatPrice(raw) {
-  const digits = raw.replace(/\D/g, '');
-  return digits ? `Rp ${Number(digits).toLocaleString('id-ID')}` : '';
-}
-
-function getStatusBadge(status) {
-  switch (status) {
-    case 'available': return 'med-badge med-badge--green';
-    case 'low-stock': return 'med-badge med-badge--amber';
-    case 'out-of-stock': return 'med-badge med-badge--red';
-    default: return 'med-badge';
-  }
-}
-
-function getStatusText(status) {
-  return status.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-}
-
-/* ─── Shared Modal Form ─────────────────────────────────── */
-function ProductForm({ title, form, onChange, onSubmit, onClose, submitLabel }) {
-  return (
-    <div className="med-overlay" role="dialog" aria-modal="true">
-      <div className="med-modal">
-        {/* Header */}
-        <div className="med-modal__head">
-          <h3 className="med-modal__title">{title}</h3>
-          <button type="button" className="med-modal__close" onClick={onClose} aria-label="Close">
-            <X size={18} />
-          </button>
-        </div>
-
-        {/* Form */}
-        <form className="med-form" onSubmit={onSubmit}>
-          <div className="med-modal__body">
-            <div className="med-grid-2">
-              <div className="med-field">
-                <label className="med-label">Product Name <span className="med-req">*</span></label>
-                <input
-                  name="name" value={form.name} onChange={onChange} required
-                  placeholder="e.g., Facial Diamond Glow"
-                  className="med-input"
-                />
-              </div>
-              <div className="med-field">
-                <label className="med-label">Category</label>
-                <select name="category" value={form.category} onChange={onChange} className="med-select">
-                  {CATEGORIES.map(c => <option key={c}>{c}</option>)}
-                </select>
-              </div>
-            </div>
-
-            <div className="med-grid-2">
-              <div className="med-field">
-                <label className="med-label">Price (Rp) <span className="med-req">*</span></label>
-                <input
-                  name="price" value={form.price} onChange={onChange} required
-                  placeholder="850000"
-                  className="med-input"
-                />
-              </div>
-              <div className="med-field">
-                <label className="med-label">Stock Qty <span className="med-req">*</span></label>
-                <input
-                  type="number" min="0" name="stock" value={form.stock} onChange={onChange} required
-                  placeholder="25"
-                  className="med-input"
-                />
-              </div>
-            </div>
-
-            <div className="med-field">
-              <label className="med-label">Description</label>
-              <textarea
-                name="description" value={form.description} onChange={onChange}
-                rows={3} placeholder="Describe the product or treatment..."
-                className="med-textarea"
-              />
-            </div>
-          </div>
-
-          <div className="med-modal__actions">
-            <button type="button" className="med-btn med-btn--ghost" onClick={onClose}>Cancel</button>
-            <button type="submit" className="med-btn med-btn--primary">{submitLabel}</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
-}
-
-/* ─── View Modal ────────────────────────────────────────── */
-function ViewModal({ product, onClose, onEdit }) {
-  return (
-    <div className="med-overlay" role="dialog" aria-modal="true">
-      <div className="med-modal med-modal--view">
-        <div className="med-modal__head">
-          <h3 className="med-modal__title">Product Detail</h3>
-          <button type="button" className="med-modal__close" onClick={onClose} aria-label="Close">
-            <X size={18} />
-          </button>
-        </div>
-        <div className="med-modal__body">
-          <div className="med-view-img">
-            <img src={product.image} alt={product.name} onError={e => { e.target.src = '/img/product_treatment.png'; }} />
-            <span className={getStatusBadge(product.status)}>{getStatusText(product.status)}</span>
-          </div>
-          <div className="med-view-meta">
-            <span className="med-view-cat">{product.category}</span>
-            <h2 className="med-view-name">{product.name}</h2>
-            <p className="med-view-desc">{product.description}</p>
-            <div className="med-view-row">
-              <div className="med-view-stat">
-                <span className="med-view-stat__label">Price</span>
-                <span className="med-view-stat__val">{product.price}</span>
-              </div>
-              <div className="med-view-stat">
-                <span className="med-view-stat__label">Stock</span>
-                <span className="med-view-stat__val">{product.stock} units</span>
-              </div>
-              <div className="med-view-stat">
-                <span className="med-view-stat__label">ID</span>
-                <span className="med-view-stat__val">{product.id}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="med-modal__actions" style={{ padding: '0 28px 24px' }}>
-          <button type="button" className="med-btn med-btn--ghost" onClick={onClose}>Close</button>
-          <button type="button" className="med-btn med-btn--primary" onClick={() => { onClose(); onEdit(product); }}>
-            <Edit size={14} /> Edit Product
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ─── Delete Confirm Modal ──────────────────────────────── */
-function DeleteModal({ product, onConfirm, onClose }) {
-  return (
-    <div className="med-overlay" role="dialog" aria-modal="true">
-      <div className="med-modal med-modal--sm">
-        <div className="med-modal__head">
-          <h3 className="med-modal__title">Delete Product</h3>
-          <button type="button" className="med-modal__close" onClick={onClose}><X size={18} /></button>
-        </div>
-        <div className="med-modal__body">
-          <div className="med-delete-icon">
-            <Trash2 size={28} />
-          </div>
-          <p className="med-delete-text">
-            Are you sure you want to delete <strong>{product.name}</strong>? This action cannot be undone.
-          </p>
-        </div>
-        <div className="med-modal__actions" style={{ padding: '0 28px 24px' }}>
-          <button type="button" className="med-btn med-btn--ghost" onClick={onClose}>Cancel</button>
-          <button type="button" className="med-btn med-btn--danger" onClick={onConfirm}>Delete</button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ─── Main Products Component ───────────────────────────── */
+/**
+ * Products - Halaman admin untuk mengelola Layanan/Produk (tabel services).
+ * Data tersinkron ke landing (guest) dan halaman booking (member) secara realtime.
+ */
 export default function Products() {
-  const [products, setProducts] = useState(initialProducts);
-  const [searchQuery, setSearch] = useState('');
-  const [categoryFilter, setCat] = useState('All');
-  const [showFilter, setShowFilter] = useState(false);
-  const [currentPage, setPage] = useState(1);
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [search, setSearch] = useState("");
 
-  // Modal states
-  const [addOpen, setAddOpen] = useState(false);
-  const [editTarget, setEditTarget] = useState(null);   // product being edited
-  const [viewTarget, setViewTarget] = useState(null);   // product being viewed
-  const [deleteTarget, setDelete] = useState(null);   // product to delete
+  const [isOpen, setIsOpen] = useState(false);
+  const [editingId, setEditingId] = useState(null);
+  const [saving, setSaving] = useState(false);
+  const [form, setForm] = useState(EMPTY);
 
-  const [form, setForm] = useState(EMPTY_FORM);
-  const [editForm, setEditForm] = useState(EMPTY_FORM);
+  // Muat daftar layanan dari Supabase
+  async function load() {
+    setLoading(true);
+    setError("");
+    try {
+      setItems(await getServices());
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
 
-  /* ── Filtering & Pagination ── */
+  useEffect(() => {
+    load();
+  }, []);
+
+  // Sinkron realtime: perubahan apa pun langsung tampil di sini juga
+  useRealtimeSync("services", load);
+
   const filtered = useMemo(() => {
-    const q = searchQuery.toLowerCase();
-    return products.filter(p => {
-      const matchSearch = !q || p.name.toLowerCase().includes(q) || p.category.toLowerCase().includes(q);
-      const matchCat = categoryFilter === 'All' || p.category === categoryFilter;
-      return matchSearch && matchCat;
+    const q = search.toLowerCase();
+    return items.filter((s) => !q || s.name?.toLowerCase().includes(q) || s.description?.toLowerCase().includes(q));
+  }, [items, search]);
+
+  function openAdd() {
+    setEditingId(null);
+    setForm(EMPTY);
+    setIsOpen(true);
+  }
+
+  function openEdit(s) {
+    setEditingId(s.id);
+    setForm({
+      name: s.name || "",
+      description: s.description || "",
+      price: formatRupiahInput(s.price),
+      image: s.image || "/img/product_treatment.png",
+      active: s.active !== false,
     });
-  }, [products, searchQuery, categoryFilter]);
+    setIsOpen(true);
+  }
 
-  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
-  const effectPage = Math.min(currentPage, totalPages);
-  const paged = useMemo(() => filtered.slice((effectPage - 1) * PAGE_SIZE, effectPage * PAGE_SIZE), [filtered, effectPage]);
-
-  /* ── Handlers ── */
-  function handleFormChange(e) { setForm(f => ({ ...f, [e.target.name]: e.target.value })); }
-  function handleEditFormChange(e) { setEditForm(f => ({ ...f, [e.target.name]: e.target.value })); }
-
-  function handleAdd(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    const stockNum = parseInt(form.stock, 10) || 0;
-    const newProduct = {
-      id: `PRD-${String(products.length + 1).padStart(3, '0')}`,
-      name: form.name.trim(),
-      category: form.category,
-      price: formatPrice(form.price) || `Rp ${form.price}`,
-      stock: stockNum,
-      status: deriveStatus(stockNum),
-      image: '/img/product_treatment.png',
-      description: form.description.trim(),
-    };
-    setProducts(prev => [newProduct, ...prev]);
-    setForm(EMPTY_FORM);
-    setAddOpen(false);
-    setPage(1);
+    setSaving(true);
+    setError("");
+    try {
+      const payload = {
+        name: form.name.trim(),
+        description: form.description.trim() || null,
+        price: form.price.trim() || null,
+        image: form.image.trim() || null,
+        active: Boolean(form.active),
+      };
+      if (editingId) {
+        await updateService(editingId, payload);
+      } else {
+        await createService(payload);
+      }
+      setIsOpen(false);
+      await load();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setSaving(false);
+    }
   }
 
-  function openEdit(product) {
-    setEditTarget(product);
-    setEditForm({
-      name: product.name,
-      category: product.category,
-      price: product.price.replace(/[^\d]/g, ''),
-      stock: String(product.stock),
-      description: product.description,
-    });
-  }
-
-  function handleUpdate(e) {
-    e.preventDefault();
-    const stockNum = parseInt(editForm.stock, 10) || 0;
-    setProducts(prev => prev.map(p =>
-      p.id === editTarget.id
-        ? {
-          ...p,
-          name: editForm.name.trim(),
-          category: editForm.category,
-          price: formatPrice(editForm.price) || `Rp ${editForm.price}`,
-          stock: stockNum,
-          status: deriveStatus(stockNum),
-          description: editForm.description.trim(),
-        }
-        : p
-    ));
-    setEditTarget(null);
-  }
-
-  function handleDelete() {
-    setProducts(prev => prev.filter(p => p.id !== deleteTarget.id));
-    setDelete(null);
+  async function handleDelete(s) {
+    if (!window.confirm(`Hapus layanan "${s.name}"?`)) return;
+    try {
+      await deleteService(s.id);
+      await load();
+    } catch (err) {
+      setError(err.message);
+    }
   }
 
   return (
-    <div className="med-products">
-      {/* ── Header ── */}
-      <div className="med-products__head">
+    <div className="med-customers">
+      <div className="med-customers__head">
         <div>
-          <h2 className="med-products__title">Products &amp; Treatments</h2>
-          <p className="med-products__subtitle">Manage your beauty services and treatment catalog ({products.length} items)</p>
+          <div className="med-customers__title">Products &amp; Layanan</div>
+          <div className="med-customers__subtitle">
+            Kelola layanan klinik ({items.length} layanan)
+            <br />
+            <span style={{ fontSize: "0.8rem" }}>
+              💡 Perubahan langsung tampil di halaman publik (guest) &amp; booking member.
+            </span>
+          </div>
         </div>
-        <div className="med-products__actions">
-          {/* Search */}
+        <div className="med-customers__actions">
           <div className="med-search">
             <svg className="med-search__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
-            <input
-              type="text" placeholder="Search products..."
-              value={searchQuery} onChange={e => { setSearch(e.target.value); setPage(1); }}
-              className="med-search__input"
-            />
+            <input type="text" placeholder="Cari layanan..." className="med-search__input" value={search} onChange={(e) => setSearch(e.target.value)} />
           </div>
-
-          {/* Filter */}
-          <div style={{ position: 'relative' }}>
-            <button className="med-btn med-btn--ghost" onClick={() => setShowFilter(v => !v)}>
-              <Filter size={16} /> Filter
-            </button>
-            {showFilter && (
-              <div className="med-filter-pop">
-                <p className="med-filter-pop__label">Category</p>
-                <select className="med-select" value={categoryFilter} onChange={e => { setCat(e.target.value); setPage(1); setShowFilter(false); }}>
-                  <option value="All">All Categories</option>
-                  {CATEGORIES.map(c => <option key={c}>{c}</option>)}
-                </select>
-              </div>
-            )}
-          </div>
-
-          <button className="med-btn med-btn--primary" onClick={() => setAddOpen(true)}>
-            <Plus size={16} /> Add Product
-          </button>
+          <button type="button" className="med-btn med-btn--primary" onClick={openAdd}>+ Add Layanan</button>
         </div>
       </div>
 
-      {/* ── Grid ── */}
-      <div className="med-products-grid">
-        {paged.length === 0 ? (
-          <div className="med-empty">
-            <Package size={40} />
-            <p>Produk tidak ditemukan</p>
-          </div>
-        ) : (
-          paged.map(product => (
-            <div key={product.id} className="med-product-card">
-              {/* Image */}
-              <div className="med-product-card__img" style={{ backgroundImage: `url(${product.image})` }}>
-                <img src={product.image} alt={product.name} onError={e => { e.target.src = '/img/product_treatment.png'; }} />
-                <span className={getStatusBadge(product.status)}>{getStatusText(product.status)}</span>
-              </div>
+      {error ? <div className="med-badge med-badge--danger" style={{ padding: "10px 14px" }}>{error}</div> : null}
 
-              {/* Info */}
-              <div className="med-product-card__body">
-                <span className="med-product-card__price">{product.price}</span>
-                <h3 className="med-product-card__name">{product.name}</h3>
-                <div className="med-product-card__actions">
-                  <button className="med-chip" onClick={() => setViewTarget(product)}>
-                    <Eye size={14} /> View
-                  </button>
-                  <button className="med-btn med-btn--ghost" onClick={() => openEdit(product)} aria-label="Edit" style={{ minHeight: '28px', padding: '4px 12px' }}>
-                    <Edit size={14} />
-                  </button>
-                  <button className="med-btn med-btn--ghost" onClick={() => setDelete(product)} aria-label="Delete" style={{ minHeight: '28px', padding: '4px 12px' }}>
-                    <Trash2 size={14} />
-                  </button>
+      <section className="med-tablecard">
+        <div className="med-tablewrap">
+          <table className="med-table">
+            <thead>
+              <tr>
+                <th>Gambar</th>
+                <th>Nama</th>
+                <th>Deskripsi</th>
+                <th>Harga</th>
+                <th>Status</th>
+                <th className="med-table__right">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {loading ? (
+                <tr><td colSpan={6}><div className="med-empty">Memuat data...</div></td></tr>
+              ) : filtered.length === 0 ? (
+                <tr><td colSpan={6}><div className="med-empty">Belum ada layanan</div></td></tr>
+              ) : (
+                filtered.map((s) => (
+                  <tr key={s.id}>
+                    <td>
+                      <img
+                        src={s.image || "/img/product_treatment.png"}
+                        alt={s.name}
+                        onError={(e) => { e.target.src = "/img/product_treatment.png"; }}
+                        style={{ width: 44, height: 44, objectFit: "cover", borderRadius: 8 }}
+                      />
+                    </td>
+                    <td className="med-td--strong">{s.name}</td>
+                    <td className="med-td--muted" style={{ maxWidth: 260 }}>{s.description || "-"}</td>
+                    <td className="med-td--strong">{s.price || "-"}</td>
+                    <td>
+                      <span className={s.active !== false ? "med-badge med-badge--success" : "med-badge med-badge--neutral"}>
+                        {s.active !== false ? "Aktif" : "Nonaktif"}
+                      </span>
+                    </td>
+                    <td className="med-table__right">
+                      <button type="button" className="med-chip" onClick={() => openEdit(s)}>Edit</button>
+                      <button type="button" className="med-btn med-btn--ghost" style={{ minHeight: "28px", padding: "4px 12px", marginLeft: "8px" }} onClick={() => handleDelete(s)}>Delete</button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {isOpen ? (
+        <div className="med-overlay" role="dialog" aria-modal="true">
+          <div className="med-modal">
+            <div className="med-modal__head">
+              <div className="med-modal__title">{editingId ? "Edit Layanan" : "Add Layanan"}</div>
+              <button type="button" className="med-modal__close" onClick={() => setIsOpen(false)}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+              </button>
+            </div>
+            <form className="med-form" onSubmit={handleSubmit}>
+              <div className="med-modal__body">
+                <div className="med-field">
+                  <label className="med-label">Nama Layanan <span className="med-req">*</span></label>
+                  <input className="med-input" value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} placeholder="Facial Treatment" required />
+                </div>
+                <div className="med-field">
+                  <label className="med-label">Deskripsi</label>
+                  <textarea className="med-textarea" rows={3} value={form.description} onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))} placeholder="Perawatan wajah premium..." />
+                </div>
+                <div className="med-field">
+                  <label className="med-label">Harga</label>
+                  <input className="med-input" value={form.price} onChange={(e) => setForm((f) => ({ ...f, price: formatRupiahInput(e.target.value) }))} placeholder="Rp 350.000" />
+                </div>
+                <div className="med-field">
+                  <label className="med-label">Gambar (path/URL)</label>
+                  <input className="med-input" value={form.image} onChange={(e) => setForm((f) => ({ ...f, image: e.target.value }))} placeholder="/img/product_treatment.png" />
+                </div>
+                <div className="med-field">
+                  <label className="med-label" style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    <input type="checkbox" checked={form.active} onChange={(e) => setForm((f) => ({ ...f, active: e.target.checked }))} />
+                    Tampilkan di halaman publik (aktif)
+                  </label>
                 </div>
               </div>
-            </div>
-          ))
-        )}
-      </div>
-
-      {/* ── Pagination ── */}
-      {filtered.length > PAGE_SIZE && (
-        <div className="med-dash-pagination">
-          {/* Prev */}
-          <button
-            className="med-page-btn"
-            onClick={() => setPage(p => Math.max(1, p - 1))}
-            disabled={effectPage === 1}
-            aria-label="Previous page"
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="15 18 9 12 15 6" />
-            </svg>
-            Prev
-          </button>
-
-          {/* Page numbers */}
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map(pg => (
-            <button
-              key={pg}
-              className={`med-page-num${effectPage === pg ? ' med-page-num--active' : ''}`}
-              onClick={() => setPage(pg)}
-              aria-label={`Page ${pg}`}
-              aria-current={effectPage === pg ? 'page' : undefined}
-            >{pg}</button>
-          ))}
-
-          {/* Next */}
-          <button
-            className="med-page-btn"
-            onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-            disabled={effectPage === totalPages}
-            aria-label="Next page"
-          >
-            Next
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="9 18 15 12 9 6" />
-            </svg>
-          </button>
+              <div className="med-modal__actions">
+                <button type="button" className="med-btn med-btn--ghost" onClick={() => setIsOpen(false)}>Cancel</button>
+                <button type="submit" className="med-btn med-btn--primary" disabled={saving}>{saving ? "Menyimpan..." : editingId ? "Save" : "Create"}</button>
+              </div>
+            </form>
+          </div>
         </div>
-      )}
-
-
-      {/* ── Add Modal ── */}
-      {addOpen && (
-        <ProductForm
-          title="Add New Product"
-          form={form}
-          onChange={handleFormChange}
-          onSubmit={handleAdd}
-          onClose={() => { setAddOpen(false); setForm(EMPTY_FORM); }}
-          submitLabel="Add Product"
-        />
-      )}
-
-      {/* ── Edit Modal ── */}
-      {editTarget && (
-        <ProductForm
-          title={`Edit — ${editTarget.name}`}
-          form={editForm}
-          onChange={handleEditFormChange}
-          onSubmit={handleUpdate}
-          onClose={() => setEditTarget(null)}
-          submitLabel="Save Changes"
-        />
-      )}
-
-      {/* ── View Modal ── */}
-      {viewTarget && (
-        <ViewModal
-          product={viewTarget}
-          onClose={() => setViewTarget(null)}
-          onEdit={openEdit}
-        />
-      )}
-
-      {/* ── Delete Confirm ── */}
-      {deleteTarget && (
-        <DeleteModal
-          product={deleteTarget}
-          onConfirm={handleDelete}
-          onClose={() => setDelete(null)}
-        />
-      )}
+      ) : null}
     </div>
   );
 }
