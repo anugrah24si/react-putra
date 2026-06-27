@@ -27,6 +27,7 @@ const MemberDetail = React.lazy(() => import("./pages/Main/MemberDetail"));
 const Analytics = React.lazy(() => import("./pages/Main/Analytics"));
 import RequireAdmin from "./components/RequireAdmin";
 import RequireAuth from "./components/RequireAuth";
+import ChatBot from "./components/chatbot/ChatBot";
 
 // Menu sidebar admin (Dashboard digantikan Analytics; Orders & Customers dihapus)
 const initialMenuItems = [
@@ -207,6 +208,9 @@ export default function App() {
                 {/* Global fallback */}
                 <Route path="*" element={<NotFound />} />
             </Routes>
+
+            {/* AI Chatbot (muncul di seluruh halaman) */}
+            <ChatBot />
         </Suspense>
     );
 }
